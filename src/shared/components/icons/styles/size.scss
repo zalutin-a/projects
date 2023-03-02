@@ -1,0 +1,10 @@
+@mixin icon-size($value) {
+  .icon-size-#{$value} {
+    @apply w-#{$value};
+    @apply h-#{$value};
+  }
+}
+
+@for $i from 1 through 10 {
+  @include icon-size($i);
+}

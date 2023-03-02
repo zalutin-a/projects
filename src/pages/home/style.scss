@@ -1,0 +1,10 @@
+.contain {
+  container-type: inline-size;
+  container-name: main;
+}
+
+@container main (max-width: 700px) {
+  .main {
+    grid-template: none;
+  }
+}
