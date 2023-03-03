@@ -9,15 +9,13 @@ function App() {
   const { theme, setThemeMode } = useThemeMode()
 
   const getMain = () => {
-    return !theme ? <p>Loading ...</p> : 
+    return !theme ? <p>Loading ...</p> : // TTODO change on real loader, show loader inside main
     <div className='bg-app-gray-300 text-zinc-400 dark:bg-app-gray-800 dark:text-neutral-400'>
       <Navigation config={NAVIGATION_ITEMS}></Navigation>
       <main>
         <Outlet/>
       </main>
     </div>
-  {/* <div id='app' className='absolute top-0 left-0'></div> */}
-
   }
 
   return (

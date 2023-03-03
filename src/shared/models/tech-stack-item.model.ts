@@ -9,4 +9,3 @@ export interface TechStackItem extends TechStackItemShort {
   projects: string;
   previewLink: string;
 }
-

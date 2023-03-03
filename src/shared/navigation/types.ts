@@ -5,8 +5,6 @@ export interface NavigationItemType {
   children: NavigationItemType[] | null;
 }
 
-export type navigationConfig = { config: NavigationItemType[] };
-
 export interface NavigationProps {
   config: NavigationItemType[];
 }

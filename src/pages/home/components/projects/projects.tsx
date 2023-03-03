@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
 import { ProjectItem } from "src/shared";
 import { ProjectCard } from "./project-card/project-card";
+
 
 export function Projects() {
   const [data, setData] = useState<ProjectItem[]>(null);

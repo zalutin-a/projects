@@ -1,8 +1,5 @@
-import { Children } from "react";
-import { ReactElement } from "react";
-import { createElement } from "react";
-import { useRef } from "react";
-import { cloneElement } from "react";
+import { Children, ReactElement, useRef, cloneElement } from "react";
+
 import { NavigationItem, useClickHandler } from "src/shared/index";
 import { MenuItems } from "./menu-items/menu-items";
 import { DropdownMenuProps } from "./types";
@@ -12,13 +9,12 @@ export function DropdownMenu({
   config,
   positionType,
   itemWithChildren,
-  addNameToFirstChild = true,
   itemComponent = <NavigationItem config={null}></NavigationItem>
 }: DropdownMenuProps) {
   const itemRef = useRef(null);
   const listRef = useRef(null);
   const dropdown = 
-    <DropdownMenu config={null} positionType={null} addNameToFirstChild={false} itemWithChildren={itemWithChildren}>
+    <DropdownMenu config={null} positionType={null} itemWithChildren={itemWithChildren}>
         {itemWithChildren}
     </DropdownMenu>;
 
@@ -35,7 +31,6 @@ export function DropdownMenu({
     }
     if (isClickOnDropdown) {
       if (isCurrentHandlerOnClickedDropdown) { //when click on opened dropdown should close it
-        // e.stopPropagation();
         return true;
       }
       return false; // keep opened dropdown that upper in tree
@@ -59,22 +54,16 @@ export function DropdownMenu({
   }
 
   const value = Children.map(children as ReactElement, (child, i) => {
-    return cloneElement(child,
-    {
-      className: (child?.props?.className ?? '') + ' dropdown-trigger relative ' + `dropdown-trigger_${openState ? 'open' : 'close'}`,
-      ref: itemRef,
-      config: config,
-      onClick: updateOpenState,
-      children: list(),
-      isOpen: openState,
-    },
-    // (addNameToFirstChild ? (
-    //     child.props.children,
-    //     (!!config.name ? <span>{config.name}</span> : <></>),
-    //     list()
-    //   ) 
-    //   : <></>
-    // )
+    return cloneElement(
+      child,
+      {
+        className: (child?.props?.className ?? '') + ' dropdown-trigger relative ' + `dropdown-trigger_${openState ? 'open' : 'close'}`,
+        ref: itemRef,
+        config: config,
+        onClick: updateOpenState,
+        children: list(),
+        isOpen: openState,
+      }
     )
   })
 

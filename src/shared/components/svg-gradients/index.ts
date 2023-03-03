@@ -1,2 +1,2 @@
-export { SVGLinearGradient } from './linear';
-export type { gradientStage, GradientConfig, LinearGradientConfig } from './types';
+export * from './linear';
+export * from './types';

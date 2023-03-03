@@ -10,5 +10,5 @@ export const Icon = forwardRef<HTMLLIElement, IconProps>(function Icon(props, re
         {ICON_MAP.get(type)}
       </span>
     </>
-)
+  )
 });

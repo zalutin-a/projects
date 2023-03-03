@@ -1,13 +1,9 @@
-import { Slider } from "src/shared/components/slider/slider";
+import { useEffect, useState } from "react";
+
+import { Slider, TechStackItem } from "src/shared/index";
 import { StackItem } from "./stack-item/stack-item";
 import { StackItemPopover } from "./stack-item-popover/stack-item-popover";
-import { StackTypeEnum } from "src/shared";
-import { useEffect } from "react";
-import { TechStackItem } from "src/shared/models/tech-stack-item.model";
-import { useState } from "react";
 
-
-// const TECH_STACK = Object.keys(StackTypeEnum).map(k => parseInt(k)).filter(item => !isNaN(item)); // just for development, fetch from API
 
 export function TechStack() {
   const [data, setData] = useState<TechStackItem[]>(null);

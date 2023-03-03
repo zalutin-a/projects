@@ -1,6 +1,8 @@
 import { PropsWithChildren } from "react"
+
 import { NavLink } from "react-router-dom"
-import { NavigationItemType } from "../types"
+import { NavigationItemType } from "../../types"
+
 
 export const NavigationItem = (props: PropsWithChildren<{config: NavigationItemType}>) => {
   const { config } = props;

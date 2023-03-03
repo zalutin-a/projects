@@ -11,3 +11,4 @@ export * from './popover-base';
 export * from './hover-popover';
 export * from './click-popover';
 export * from './dropdown-menu';
+export * from './slider';

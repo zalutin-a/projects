@@ -1,7 +1,6 @@
-import { DropdownMenu, Icon, NavigationMenuIcon } from "src/shared/index";
-import { NavigationItemDropdown } from "../navigation-item-dropdown/navigation-item-dropdown";
+import { DropdownMenu, NavigationItemDropdown, NavigationMenuIcon } from "src/shared/index";
 import { FlatMenu } from "./flat-menu/flat-menu";
-import {  NavigationMenuProps } from "./types";
+import { NavigationMenuProps } from "./types";
 
 export function NavigationMenu({config}: NavigationMenuProps) {
   const dropdownItem = <NavigationItemDropdown className={null} config={null} onClick={null} children={null}></NavigationItemDropdown>;

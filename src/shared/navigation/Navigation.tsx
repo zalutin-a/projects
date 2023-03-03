@@ -1,8 +1,6 @@
 import { NavigationProps } from "./types";
-import { NavigationItem } from './navigation-item/Navigation-item';
-import { SubMenu } from "./sub-menu/sub-menu";
 import { ThemeSwitcher } from "../components/theme-switcher";
-import { DropdownMenu, Icon, NavigationMenu, useClickHandler } from "../index";
+import { NavigationMenu } from "../index";
 
 export const Navigation = ({config}: NavigationProps) => {
   return (

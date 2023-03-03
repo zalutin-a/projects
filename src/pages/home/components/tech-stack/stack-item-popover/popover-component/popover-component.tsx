@@ -1,11 +1,12 @@
 import { useContext } from "react";
+
 import { AppContext } from "src/App";
 import { Icon } from "src/shared";
 import { StackItemPopoverComponentProps } from "./types";
 
+
 export function StackItemPopoverComponent({data}: StackItemPopoverComponentProps) {
   const { theme } = useContext(AppContext);
-
   return (
     <>
       <div className="animated_opasity bg-white dark:bg-app-dark flex gap-5 md:gap-7 rounded-md flex-col max-w-4xl max-h-[65vh] w-[250px] overflow-y-scroll md:overflow-y-auto md:w-[375px] md:max-h-fit items-center">

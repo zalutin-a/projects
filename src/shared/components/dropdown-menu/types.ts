@@ -1,10 +1,5 @@
-import { ReactElement } from "react";
-import { ForwardRefExoticComponent } from "react";
-import { ForwardedRef } from "react";
-import { LegacyRef } from "react";
-import { SyntheticEvent } from "react";
-import { ReactNode } from "react";
-import { navigationConfig, NavigationItemType } from "src/shared/index";
+import { ReactElement, ForwardRefExoticComponent, SyntheticEvent, ReactNode } from "react";
+import { NavigationItemType } from "src/shared/index";
 
 export type DropdownMenuPositions = 'down' | 'right';
 
@@ -21,10 +16,9 @@ export interface DropdownItemWithChildProps {
 }
 
 export interface DropdownMenuProps {
-  children: ReactNode | ForwardRefExoticComponent<DropdownItemWithChildProps>; // its have to be just one <li></li> element, without any children inside. its posible to add any styles for this li and this styles will be applied for every dropdown item
+  children: ReactNode;
   config: NavigationItemType;
   positionType: DropdownMenuPositions,
   itemComponent?: ReactElement;
   itemWithChildren?: DropdownItemWithChildren;
-  addNameToFirstChild?: boolean;
 }

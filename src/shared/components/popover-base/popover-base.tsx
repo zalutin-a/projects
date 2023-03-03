@@ -20,7 +20,7 @@ export function PopoverBase({rendredComponent, target, gap, outerGap = 10 }: Pop
   },[]);
   
   const getX = () => {
-    if (!containerWidth) {  //to avoid of posibile apiring of horisontal scroll bar
+    if (!containerWidth) {  //to avoid of posibile apearing of horisontal scroll bar
       return 0
     }
     const centerPosition = targetPosition.x + (target.current?.clientWidth / 2) - (containerWidth / 2);
@@ -56,19 +56,13 @@ export function PopoverBase({rendredComponent, target, gap, outerGap = 10 }: Pop
   }
 
   const component = () => {
-    // if (!containerHeight) {
-    //   return <></>
-    // } else {
       return (
         <>
-          {/* <div style={{top: window.scrollY}} className='w-screen h-screen bg-black/20 absolute'> */}
-            <div ref={container} style={containerPosition} className='absolute'>
-              {rendredComponent}
-            </div>
-          {/* </div> */}
+          <div ref={container} style={containerPosition} className='absolute'>
+            {rendredComponent}
+          </div>
         </>
       )
-    // }
   }
   
   const root = document.getElementById('app')

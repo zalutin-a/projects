@@ -1,7 +1,5 @@
 import { iconType } from "./types"
-import { ArrowLeft, ArrowRight, CallingIcon, DocumentIcon, FilterIcon, GitHubIcon, GraphIcon, LinkIcon, Menu, ThemeDayIcon, ThemeNightIcon, UsersIcon, } from './components'
-
-
+import { ArrowLeft, ArrowRight, CallingIcon, DocumentIcon, FilterIcon, GitHubIcon, GraphIcon, LinkIcon, Menu, ThemeDayIcon, ThemeNightIcon, UsersIcon, } from './components';
 
 export const ICON_MAP = {
   filter: <FilterIcon></FilterIcon>,

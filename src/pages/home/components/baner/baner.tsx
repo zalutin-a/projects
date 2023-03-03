@@ -1,5 +1,6 @@
 import { Button, HoverPopover, Icon } from "src/shared";
 
+
 export function Baner() {
   const clickHandler = () => {
     console.log('Click')
@@ -18,7 +19,7 @@ export function Baner() {
         </div>
       </div>
       <div className="flex justify-center md:justify-start adaptive-col-item_36">
-        <HoverPopover rendredComponent={<p>component</p>}>
+        <HoverPopover rendredComponent={<p>component</p>}> {/* TODO: remove after testing */}
           <Button clickHandler={clickHandler} color="red-400">
             <Icon type='users' size={5} color='zinc-100'></Icon>
             <span className="text-white ml-3">Find More</span>

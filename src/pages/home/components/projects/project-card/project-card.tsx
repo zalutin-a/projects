@@ -1,7 +1,9 @@
 import { useContext } from "react";
+
 import { AppContext } from "src/App";
 import { Icon } from "src/shared";
 import { ProjectCartProps } from "./types";
+
 
 export function ProjectCard({data}: ProjectCartProps) {
   const { theme } = useContext(AppContext);

@@ -1,18 +1,16 @@
 import { useContext, useState, useMemo } from "react";
 import { AppContext } from "../../../App";
 import { themeMode } from "../../hooks";
-
 import { Icon } from "../icons/icon";
 import { iconType } from "../icons/types";
 import { Switcher } from "../switcher";
-import { ThemeSwitcherProps } from "./types";
 
 const ICON_TYPE_MAP:{[mode: string]: Partial<iconType>}  = {
   light: 'themeDay',
   dark: 'themeNight',
 }
 
-export function ThemeSwitcher({}: ThemeSwitcherProps ) {
+export function ThemeSwitcher() {
   const { theme, setThemeMode } = useContext(AppContext);
   const [ iconType, setIconType ] = useState(ICON_TYPE_MAP[theme])
 

@@ -11,3 +11,4 @@ export interface ScalesInterface<T = any, P = any> {
     y: ScaleLinear<T, T, never>;
     x: ScaleBand<P> | ScaleLinear<T, T, never>;
   }
+  
