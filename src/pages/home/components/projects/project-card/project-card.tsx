@@ -1,18 +1,19 @@
 import { useContext } from "react";
 
 import { AppContext } from "src/App";
-import { Icon } from "src/shared";
+import { ButtonBase, Icon, UseModal } from "src/shared";
+import { ProjectCardModal } from "../index";
 import { ProjectCartProps } from "./types";
 
 
 export function ProjectCard({data}: ProjectCartProps) {
   const { theme } = useContext(AppContext);
-
+  const { openModal, modal  } = UseModal(<ProjectCardModal imgSrc={data.previewLink}></ProjectCardModal>)
   return (
     <>
       <div className="bg-white dark:bg-app-dark flex rounded-md flex-col max-w-4xl w-4/5 min-[890px]:w-[375px] items-center">
         <div className="w-full">
-          <img src={data.previewLink} alt="project preview" />
+          <ButtonBase clickHandler={openModal}><img src={data.previewLink} alt="project preview" /></ButtonBase>
         </div>
         <div className="flex adaptive-col-item_24 flex-col w-full p-7 pt-0 items-center">
           <div>
@@ -34,6 +35,7 @@ export function ProjectCard({data}: ProjectCartProps) {
           </div>
         </div>
       </div>
+      {modal}
     </>
   )
 }

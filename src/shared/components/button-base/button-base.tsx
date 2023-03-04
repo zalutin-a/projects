@@ -1,12 +1,14 @@
+import { forwardRef } from "react";
 import { ButtonBaseProps } from "./types";
 
 
-export function ButtonBase({clickHandler, children}: ButtonBaseProps) {
+export const ButtonBase = forwardRef<HTMLButtonElement, ButtonBaseProps>(function ButtonBase(props, ref) {
+  const {clickHandler, children, className } = props;
   return (
     <>
-      <button onClick={clickHandler}>
+      <button ref={ref} className={className} onClick={clickHandler}>
         {children}
       </button>
     </>
   )
-}
+});

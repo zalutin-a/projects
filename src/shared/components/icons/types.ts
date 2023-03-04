@@ -13,6 +13,7 @@ export type iconType = 'filter'
   | 'arrowLeft'
   | 'arrowRight'
   | 'menu'
+  | 'cross'
 
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 
@@ -27,11 +28,13 @@ export type iconSize =
   | 9 /* 36px */
   | 10 /* 40px */
 
-
-export interface IconProps {
-  type: iconType,
+export interface IconParams {
   size?: iconSize,
   color?: iconColor,
+}
+
+export interface IconProps extends IconParams {
+  type: iconType,
   className?: string,
   onClick?: (e: SyntheticEvent) => void,
 }

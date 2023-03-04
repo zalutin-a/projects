@@ -20,7 +20,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{theme, setThemeMode}}>
-      <div id='app' className={`App`}>
+      <div id='app' className={`app`}>
         {getMain()}
       </div>
     </AppContext.Provider>

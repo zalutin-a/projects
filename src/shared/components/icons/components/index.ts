@@ -10,3 +10,4 @@ export * from './link-icon';
 export * from './arrow-left';
 export * from './arrow-right';
 export * from './menu-icon';
+export * from './cross-icon';
