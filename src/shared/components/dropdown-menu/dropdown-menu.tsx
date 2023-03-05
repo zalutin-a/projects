@@ -46,7 +46,7 @@ export function DropdownMenu({
   const list = () => {
     return (
       openState
-        ? <ul style={menuPosition} ref={listRef} className={`dropdown-list flex text-left w-max min-w-full flex-col absolute`}>
+        ? <ul style={menuPosition} ref={listRef} className={`dropdown-list z-50 flex text-left w-max min-w-full flex-col absolute`}>
             <MenuItems itemComponent={itemComponent} itemWithChildren={dropdown} dropdownPosition="right" config={config.children}></MenuItems>
           </ul>
         : <></>

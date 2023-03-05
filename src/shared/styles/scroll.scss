@@ -1,0 +1,9 @@
+.scroll-lock {
+  height: auto;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.scroll-lock .app {
+  margin-right: 19px; //scroll bar width TODO: set as global var
+}
