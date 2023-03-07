@@ -11,7 +11,7 @@ export function ProjectCard({data}: ProjectCartProps) {
   const { openModal, modal  } = UseModal(<ProjectCardModal imgSrc={data.previewLink}></ProjectCardModal>)
   return (
     <>
-      <div className="bg-white dark:bg-app-dark flex rounded-md flex-col max-w-4xl w-4/5 min-[890px]:w-[375px] items-center">
+      <div className="bg-white dark:bg-app-dark flex rounded-md flex-col max-w-4xl w-11/12 min-[890px]:w-[375px] items-center">
         <div className="w-full">
           <ButtonBase clickHandler={openModal}><img src={data.previewLink} alt="project preview" /></ButtonBase>
         </div>

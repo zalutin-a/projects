@@ -11,3 +11,6 @@ export * from './arrow-left';
 export * from './arrow-right';
 export * from './menu-icon';
 export * from './cross-icon';
+export * from './instagram';
+export * from './facebook';
+export * from './linkedin';

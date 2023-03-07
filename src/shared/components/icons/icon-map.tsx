@@ -1,5 +1,5 @@
 import { iconType } from "./types"
-import { ArrowLeft, ArrowRight, CallingIcon, CrossIcon, DocumentIcon, FilterIcon, GitHubIcon, GraphIcon, LinkIcon, Menu, ThemeDayIcon, ThemeNightIcon, UsersIcon, } from './components';
+import { ArrowLeft, ArrowRight, CallingIcon, CrossIcon, DocumentIcon, FacebookIcon, FilterIcon, GitHubIcon, GraphIcon, InstagramIcon, LinkedinIcon, LinkIcon, Menu, ThemeDayIcon, ThemeNightIcon, UsersIcon, } from './components';
 
 export const ICON_MAP = {
   filter: <FilterIcon></FilterIcon>,
@@ -15,5 +15,8 @@ export const ICON_MAP = {
   arrowRight: <ArrowRight></ArrowRight>,
   menu: <Menu></Menu>,
   cross: <CrossIcon></CrossIcon>,
+  instagram: <InstagramIcon></InstagramIcon>,
+  facebook: <FacebookIcon></FacebookIcon>,
+  linkedin: <LinkedinIcon></LinkedinIcon>,
   get: (type: iconType) => ICON_MAP[type],
 }
