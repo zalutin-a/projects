@@ -57,7 +57,7 @@ export function DropdownMenu({
     return cloneElement(
       child,
       {
-        className: (child?.props?.className ?? '') + ' dropdown-trigger relative ' + `dropdown-trigger_${openState ? 'open' : 'close'}`,
+        className: (child.props?.className ?? '') + ' dropdown-trigger relative ' + `dropdown-trigger_${openState ? 'open' : 'close'}`,
         ref: itemRef,
         config: config,
         onClick: updateOpenState,

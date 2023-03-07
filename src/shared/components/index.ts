@@ -14,3 +14,5 @@ export * from './dropdown-menu';
 export * from './slider';
 export * from './modal';
 export * from './close-button';
+export * from './footer';
+export * from './soc-icons';

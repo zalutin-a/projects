@@ -14,7 +14,10 @@ export type iconType = 'filter'
   | 'arrowRight'
   | 'menu'
   | 'cross'
-
+  | 'instagram'
+  | 'facebook'
+  | 'linkedin'
+  
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 
 export type iconSize =
