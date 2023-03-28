@@ -17,6 +17,8 @@ export type iconType = 'filter'
   | 'instagram'
   | 'facebook'
   | 'linkedin'
+  | 'edit'
+  | 'arrowDown'
   
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 

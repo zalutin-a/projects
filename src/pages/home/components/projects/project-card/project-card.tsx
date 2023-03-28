@@ -8,7 +8,7 @@ import { ProjectCartProps } from "./types";
 
 export function ProjectCard({data}: ProjectCartProps) {
   const { theme } = useContext(AppContext);
-  const { openModal, modal  } = UseModal(<ProjectCardModal imgSrc={data.previewLink}></ProjectCardModal>)
+  const [ openModal, modal ] = UseModal(<ProjectCardModal imgSrc={data.previewLink}></ProjectCardModal>)
   return (
     <>
       <div className="bg-white dark:bg-app-dark flex rounded-md flex-col max-w-4xl w-11/12 min-[890px]:w-[375px] items-center">

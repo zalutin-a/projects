@@ -1,4 +1,4 @@
-$colors: "gray", "zinc", "red", "amber", "green", "teal", "purple", "rose";  //TODO: use only one var for icons and buttons
+$colors: "gray", "zinc", "red", "amber", "green", "teal", "purple", "rose", "blue";  //TODO: use only one var for icons and buttons
 $color_values: 100, 200, 300, 400, 500, 600, 700, 800;
 
 @mixin btn-color($color, $value) {

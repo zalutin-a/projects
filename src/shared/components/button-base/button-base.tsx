@@ -6,7 +6,7 @@ export const ButtonBase = forwardRef<HTMLButtonElement, ButtonBaseProps>(functio
   const {clickHandler, children, className } = props;
   return (
     <>
-      <button ref={ref} className={className} onClick={clickHandler}>
+      <button ref={ref} className={`${className ?? ''} inline-flex`} onClick={clickHandler}>
         {children}
       </button>
     </>

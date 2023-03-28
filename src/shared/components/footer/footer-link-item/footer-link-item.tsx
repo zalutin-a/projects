@@ -5,8 +5,8 @@ export function FooterLinkItem({config}: FooterLinkItemProps) {
     return config.children ? (
       <ul className="pl-3 sm:pl-0 sm:pt-0.5">
         {config.children.map(item => item.children
-          ? <li><FooterLinkItem config={item}></FooterLinkItem></li>
-          : <a href={item.path}><li>{item.name}</li></a>)}
+          ? <li key={item.name}><FooterLinkItem config={item}></FooterLinkItem></li>
+          : <a key={item.name} href={item.path}><li>{item.name}</li></a>)}
       </ul>
     )
     : <></>

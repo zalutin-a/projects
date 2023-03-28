@@ -2,10 +2,10 @@ import ReactDOM from 'react-dom';
 import { useState, useRef, ReactElement } from "react";
 
 import { ModalWindow } from "src/shared/index";
-import { UseModalParams, UseModalReturnObject } from "./types";
+import { UseModalParams, UseModalReturnType } from "./types";
 
 
-export function UseModal(...[component, backdropBlur, backdropShadow]: UseModalParams): UseModalReturnObject {
+export function UseModal(...[component, backdropBlur, backdropShadow]: UseModalParams): UseModalReturnType {
   const [isOpen, setIsOpen] = useState(false);
   const children = component as ReactElement;
   const modalPortal = useRef(document.getElementById('app'));
@@ -28,5 +28,5 @@ export function UseModal(...[component, backdropBlur, backdropShadow]: UseModalP
     modalPortal.current
   );
 
-  return {openModal, modal}
+  return [openModal, modal];
 }

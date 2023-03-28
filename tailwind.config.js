@@ -34,6 +34,9 @@ module.exports = {
           },
           dark: '#151B33'
         }
+      },
+      gridTemplateColumns: {
+        'promts': '35px minmax(auto,auto) minmax(100px,23%) minmax(65px,8%)',
       }
     },
     fontFamily: {

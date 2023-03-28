@@ -14,3 +14,5 @@ export * from './cross-icon';
 export * from './instagram';
 export * from './facebook';
 export * from './linkedin';
+export * from './edit';
+export * from './arrow-down';

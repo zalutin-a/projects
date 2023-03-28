@@ -6,4 +6,5 @@ export type buttonColor = `${colorsTypes}-${colorValues}`
 export interface ButtonProps extends ButtonBaseProps {
   color?: buttonColor;
   rounded?: boolean;
+  className?: string;
 }

@@ -18,7 +18,7 @@ export function Footer({config}: FoterProps) {
               </div>
             </div>
             <div className="flex flex-col shrink-0 sm:flex-row sm:gap-x-2.5">
-              {config.map(item => <FooterLinkItem config={item}></FooterLinkItem>)}
+              {config.map(item => <FooterLinkItem key={item.name} config={item}></FooterLinkItem>)}
             </div>
           </div>
           <div className="adaptive-col-item_36">

@@ -33,6 +33,12 @@ export const NAVIGATION_ITEMS = [
         config: null,
         path: '/projects/dashboard',
         children: null,
+      },
+      {
+        name: 'Calendar',
+        config: null,
+        path: '/projects/calendar/prompts',
+        children: null,
       }
     ],
   },

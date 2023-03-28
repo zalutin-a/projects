@@ -16,3 +16,5 @@ export * from './modal';
 export * from './close-button';
 export * from './footer';
 export * from './soc-icons';
+export * from './pagination';
+export * from './dropdown';

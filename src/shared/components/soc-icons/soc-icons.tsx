@@ -24,7 +24,7 @@ export function SocIcons({size, color='gray-800', direction = 'row'}: SocIconsPr
   return (
     <>
       <div className={`flex w-full justify-between flex-${direction}`}>
-        {SOC_ICONS.map(icon => <a href={icon.url} target='_blank'><Icon type={icon.type} {...{size, color}}></Icon></a>)} 
+        {SOC_ICONS.map(icon => <a key={icon.type} href={icon.url} target='_blank'><Icon type={icon.type} {...{size, color}}></Icon></a>)} 
       </div>
     </>
   )
