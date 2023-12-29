@@ -6,7 +6,7 @@ export const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps<any>>(fu
   const {value, name, onClick, selected, children} = props;
   return (
     <>
-      <li className="w-full cursor-pointer" ref={ref} onClick={() => onClick(value)} >
+      <li role="option" className="w-full cursor-pointer" ref={ref} onClick={() => onClick(value)} >
         {children ? cloneElement(
           children,
           {

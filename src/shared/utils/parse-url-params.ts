@@ -1,5 +1,5 @@
-export function parseUrlParams<P>(url: string): P {
-  const params = <P>{};
+export function getParamsFromUrl<P>(url: string): P {
+  const params = {} as P;
   
   const searchParams = new URLSearchParams(new URL(url).search);
   for (const [rawKey, rawValue] of searchParams.entries()) {
@@ -35,4 +35,30 @@ export function parseUrlParams<P>(url: string): P {
   }
 
   return params;
+}
+
+export function getQueryParamsFromObj(obj, parentKey = '') {
+  const queryParams = [];
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+    const newKey = parentKey ? `${parentKey}[${key}]` : key;
+    if (typeof value !== 'undefined' && value !== null) {
+      if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+          const arrayValue = value[i];
+          if (typeof arrayValue !== 'undefined' && arrayValue !== null) {
+            queryParams.push(`${encodeURIComponent(newKey)}[${i}]=${encodeURIComponent(arrayValue)}`);
+          }
+        }
+      } else if (typeof value === 'object') {
+        const nestedQueryParams = getQueryParamsFromObj(value, newKey);
+        if (nestedQueryParams.length > 0) {
+          queryParams.push(nestedQueryParams);
+        }
+      } else {
+        queryParams.push(`${encodeURIComponent(newKey)}=${encodeURIComponent(value)}`);
+      }
+    }
+  }
+  return queryParams.join('&');
 }

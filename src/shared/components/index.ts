@@ -18,3 +18,4 @@ export * from './footer';
 export * from './soc-icons';
 export * from './pagination';
 export * from './dropdown';
+export * from './hint';

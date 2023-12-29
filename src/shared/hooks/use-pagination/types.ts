@@ -1,6 +1,3 @@
-import { ActionCreator } from "@reduxjs/toolkit";
+import { PageCountParams } from "src/shared/index";
 
-export type paginationReducers = {
-  setPage: ActionCreator<any>,
-  setItemPerPage: ActionCreator<any>,
-}
+export type paginationReducer = (params: PageCountParams) => void;

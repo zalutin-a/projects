@@ -3,7 +3,7 @@ import { DropdownInput, useClickHandler } from "src/shared/index";
 import { DropdownItem } from "./dropdown-item/dropdow-item";
 import { DropdownProps } from "./types";
 
-export function Dropdown<D>({onSelect, children, options, itemComponent = null, selectedVlues = [], isMultiple = false, width = 237, placeholder }: DropdownProps<D>) {
+export function Dropdown<D>({onSelect, children, options, itemComponent = null, selectedVlues = [], isMultiple = false, width = 237, placeholder, disable = false }: DropdownProps<D>) {
   const itemRef = useRef(null);
   const listRef = useRef(null);
   const [ openState, updateOpenState ] = useClickHandler((e) => {
@@ -46,7 +46,7 @@ export function Dropdown<D>({onSelect, children, options, itemComponent = null, 
         ? 
           <div style={menuPosition} ref={listRef} className="dropdown-list z-50 absolute">
             <div style={{top: -20, left: (width / 2) - (10)}} className="w-0 h-0 border-[10px] border-transparent border-b-gray-300 absolute"></div>
-            <ul className={`flex text-left w-max min-w-full max-h-72 overflow-y-scroll flex-col`}>
+            <ul role="listbox" id="select-dropdown" className={`flex text-left w-max min-w-full max-h-72 overflow-y-scroll flex-col`}>
               {options.map(option => {
                 return <DropdownItem
                     key={option.name}
@@ -78,7 +78,7 @@ export function Dropdown<D>({onSelect, children, options, itemComponent = null, 
       }
     ) 
     : 
-    <DropdownInput className="relative" ref={itemRef} onClick={updateOpenState} isOpen={openState} selectedVlues={getSelectedNames()} width={width} placeholder={placeholder}>
+    <DropdownInput className="relative" disable={disable} ref={itemRef} onClick={updateOpenState} isOpen={openState} selectedVlues={getSelectedNames()} width={width} placeholder={placeholder}>
       {list()}
     </DropdownInput>
 

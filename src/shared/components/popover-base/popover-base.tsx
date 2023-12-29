@@ -58,7 +58,7 @@ export function PopoverBase({rendredComponent, target, gap, outerGap = 10 }: Pop
   const component = () => {
       return (
         <>
-          <div ref={container} style={containerPosition} className='absolute'>
+          <div ref={container} style={containerPosition} className='z-50 absolute'>
             {rendredComponent}
           </div>
         </>

@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
+import { useContext } from "react";
 
 import { ButtonBase, CalendarCategory, Dropdown, Icon } from "src/shared/index";
-import { RootState } from "../../store/store";
-import { CategoryItem } from "../index";
+import { CategoryItem, PromptsContext } from "../index";
 import { CategoryFilterProps } from "./types";
 
 
@@ -14,7 +13,7 @@ const categoryMaper = item => {
 }
 
 export function CategoryFilter({onFilterChange, selected, className = ""}: CategoryFilterProps) {  
-  const categories = useSelector((state: RootState) => state.calendarData.categories);
+  const { categories } = useContext(PromptsContext).state.curent;
 
   const mapedCategories = categories.map(categoryMaper)
 
@@ -29,7 +28,7 @@ export function CategoryFilter({onFilterChange, selected, className = ""}: Categ
         {selected.map(id => <CategoryItem
           key={id}
           removeHandler={id => onChange(selected.filter(item => item !== id))}
-          id={id}
+          category={categories.find(cat => cat.id === id)}
           isEditMode={true}
           active={true}></CategoryItem>
         )}
@@ -47,7 +46,7 @@ export function CategoryFilter({onFilterChange, selected, className = ""}: Categ
   return (
     <>
       <div className={`${className} flex flex-col gap-5`}>
-        <div className="flex flex-wrap items-center gap-2 w-full">
+        <div className="flex justify-between flex-wrap items-center gap-2 w-[420px]">
           <span>Filter by Category: </span>
           <Dropdown<CalendarCategory> isMultiple={true} onSelect={onChange} selectedVlues={selected} options={mapedCategories} placeholder="Select categories"></Dropdown>
         </div>

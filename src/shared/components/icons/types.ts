@@ -19,6 +19,13 @@ export type iconType = 'filter'
   | 'linkedin'
   | 'edit'
   | 'arrowDown'
+  | 'tiles'
+  | 'list'
+  | 'check'
+  | 'error'
+  | 'success'
+  | 'warning'
+  | 'info'
   
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 

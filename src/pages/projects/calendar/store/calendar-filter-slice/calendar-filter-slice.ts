@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { calendarFilterSlice } from './types'
 import { CalendarTableFilters } from '../../types';
-import { parseUrlParams } from 'src/shared/index';
 import { CalendarTableParams } from '../../index';
+import { getParamsFromUrl } from 'src/shared/index';
 
 export const CalendarcalendarFilterSlice = createSlice({
   name: 'calendarFilter',
   initialState: {
-    ...(parseUrlParams<CalendarTableParams>(window.location.href).filter || {})
+    ...(getParamsFromUrl<CalendarTableParams>(window.location.href).filter || {})
   },
   reducers: {
     setCalendarFilter: (state: calendarFilterSlice, action: PayloadAction<Partial<CalendarTableFilters>>) => {

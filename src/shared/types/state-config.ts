@@ -6,7 +6,7 @@ export interface StateConfig {
   name: string;
   fromUrl: boolean;
   initValue: any;
-  reloadPage: boolean;
+  reloadPage?: boolean;
   reducer?: appReducer; // TODO remove "?"
-  validator?: (value: any) => any;
+  validator?: (value: any) => boolean;
 }

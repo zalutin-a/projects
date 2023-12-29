@@ -2,9 +2,8 @@ import App from "src/App";
 import { About } from "src/pages/about/about";
 import { Contacts } from "src/pages/contacts/Contacts";
 import { Home } from "src/pages/home/Home";
-import { CategoriesTab } from "src/pages/projects/calendar/categories";
 import { Dashboard } from "src/pages/projects/dashboard/dashboard";
-import { CalendarProject, PromptsTab } from "src/pages/projects/index";
+import { CalendarProject, CategoriesTab, PagesTab, PromptsTab } from "src/pages/projects/index";
 import { Project2 } from "src/pages/projects/project-2/project-2";
 import { TechStack } from "src/pages/tech-stack/tech-stack";
 
@@ -13,7 +12,7 @@ export const ROUTER_OBJECT =
     {
       element: <App></App>,
       children: [
-        {
+        { 
           element: <Home></Home>,
           path: '/',
         },
@@ -47,7 +46,13 @@ export const ROUTER_OBJECT =
             },
             {
               element: <CategoriesTab></CategoriesTab>,
+              loader: () => true,
               path: '/projects/calendar/categories',
+            },
+            {
+              element: <PagesTab></PagesTab>,
+              loader: () => true,
+              path: '/projects/calendar/pages',
             },
           ], 
         },

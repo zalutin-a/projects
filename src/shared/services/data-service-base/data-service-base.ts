@@ -2,7 +2,7 @@ import { HTTPService } from "../index";
 import { setFunction } from "./types";
 
 export abstract class DataServiceBase {
-  private http: HTTPService;
+  protected http: HTTPService;
   protected lastFetch = () => {};
   protected abstract baseUrl: string;
   abstract setUrl: (url: string) => void;

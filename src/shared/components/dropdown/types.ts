@@ -19,6 +19,7 @@ export interface DropdownInputProps<D> {
   selectedVlues?: D[];
   width?: number;
   placeholder?: string;
+  disable?: boolean;
 }
 
 export interface DropdownProps<D> {
@@ -30,4 +31,5 @@ export interface DropdownProps<D> {
   itemComponent?: ReactElement<DropdownItemProps<D>>;
   width?: number;
   placeholder?: string;
+  disable?: boolean;
 }

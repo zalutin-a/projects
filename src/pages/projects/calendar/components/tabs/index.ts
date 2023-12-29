@@ -1,2 +1,3 @@
-export * from './tabs';
-export * from './types';
+export * from './categoties';
+export * from './prompts';
+export * from './pages';

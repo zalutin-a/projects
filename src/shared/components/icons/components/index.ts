@@ -16,3 +16,10 @@ export * from './facebook';
 export * from './linkedin';
 export * from './edit';
 export * from './arrow-down';
+export * from './tiles-icon';
+export * from './list-icon'
+export * from './check-icon';
+export * from './error-icon';
+export * from './success-icon';
+export * from './warning-icon';
+export * from './info-icon';

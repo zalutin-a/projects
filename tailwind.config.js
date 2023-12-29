@@ -1,4 +1,5 @@
 module.exports = {
+  mode: 'jit',
   darkMode: 'class',
   content: ["./src/**/*.{html,js,tsx}", "./public/*.html"],
   theme: {
@@ -36,7 +37,9 @@ module.exports = {
         }
       },
       gridTemplateColumns: {
-        'promts': '35px minmax(auto,auto) minmax(100px,23%) minmax(65px,8%)',
+        'promts': '110px minmax(auto,auto) minmax(100px,23%) minmax(65px,8%)',
+        'categories': '35px minmax(auto,auto) minmax(65px,8%)',
+        'calendar': '12% 12% 12% 12% 12% 12% 12%'
       }
     },
     fontFamily: {

@@ -1,4 +1,4 @@
-import { Tabs } from "../tabs/tabs";
+import { Tabs } from "../tabs-component/tabs";
 
 const BASE_URL = '/projects/calendar/';
 const TABS_CONFIG = [

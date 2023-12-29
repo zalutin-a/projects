@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { DataServiceBase, setFunction } from "src/shared/index";
 import { useNavigate } from "react-router-dom";
 
@@ -8,8 +8,8 @@ export function useDataService<C extends DataServiceBase>(dataService: new (setI
   const setUrl = (fullUrl: string) => {
     navigate(fullUrl)
   };
-  
-  const service = useRef(new dataService(setIsLoading, setUrl))
 
-  return [service.current, isLoading];
+  const service = useMemo(() => new dataService(setIsLoading, setUrl), [])
+  console.log('dataservice init')
+  return [service, isLoading];
 }

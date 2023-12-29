@@ -57,6 +57,9 @@ export class HTTPService {
     try {
       this.setIsLoading(true);
       const res = await fetch(urlWithParams, fetchParams);
+      if(res.status >= 300) {
+        throw (await res.json())
+      }
       let data = {};
       if (fetchParams.method === 'GET') {
         data = await res.json();

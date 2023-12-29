@@ -1,83 +1,43 @@
-export {}
-// import { StateConfig } from "src/shared/index";
-// import { useDispatch } from 'react-redux';
-// import { useRef } from "react";
-// import { useParams } from "react-router-dom";
+import { useReducer, useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-// export class State {
-//   private config: StateConfig[];
-//   private dispatch: ReturnType<typeof useDispatch>;
-//   private params: ReturnType<typeof useParams>;
-//   state: {[name: string]: any} = {};
+import { getParamsFromUrl, getQueryParamsFromObj, StateConfig } from "src/shared/index";
+import { State, stateAction, stateDispatch } from "./types";
 
-//   constructor(config: StateConfig[], dispatch: ReturnType<typeof useDispatch>, params: ReturnType<typeof useParams>) {
-//     this.config = config;
-//     this.dispatch = dispatch;
-//     this.params = this.getParams();
-//     this.initState();
-//   }
+function validateValue<S>(config: StateConfig[], actionName: keyof S, actionValue: any ) {
+  const actionConfig = config.find(item => item.name === actionName);
+  if (actionConfig?.validator) {
+    return actionConfig.validator(actionValue) ? actionValue : actionConfig.initValue;
+  }
+  return actionValue
+}
 
-//   private initState() {
-//     this.config.forEach(this.stateItemCreator.bind(this))
-//   }
+function initState<S>(config: StateConfig[]): S {
+  const state = {} as S;
+  const params = getParamsFromUrl<any>(window.location.href);
+  config.forEach(item => {
+    state[item.name] = item.fromUrl && !!params[item.name] ? validateValue(config, item.name, params[item.name]) : item.initValue;
+  });
+  return state;
+}
 
-//   private stateItemCreator(item: StateConfig){
-//     this.state[item.name] = {
-//       dispatch: (value: any) => this.dispatch(item.reducer(value))
-//     }
-//     if (item.reducer) {
-//       this.dispatch(item.reducer(item.fromUrl ? this.params[item.name] ?? item.initValue : item.initValue))
-//     }
-//   }
+export function useAppState<S>(config: StateConfig[]): [State<S>] {
+  const navigate = useNavigate();
+  const initializer = () => initState<S>(config);
+  let location = useLocation();
+  console.log('state init')
 
-//   private getParams() {
-//     const params = {};
-    
-//     const searchParams = new URLSearchParams(new URL(window.location.href).search);
-//     for (const [rawKey, rawValue] of searchParams.entries()) {
-//       const keys = rawKey.split(/[\[\]]+/).filter(Boolean);
-//       let currentObj = params;
-  
-//       const value = Number(rawValue);
-//       const isNaNValue = isNaN(value);
-  
-//       for (let i = 0; i < keys.length; i++) {
-//         const key = keys[i];
-//         const isLast = i === keys.length - 1;
-  
-//         if (isLast) {
-//           if (Array.isArray(currentObj[key])) {
-//             currentObj[key].push(isNaNValue ? rawValue : value);
-//           } else if (currentObj[key]) {
-//             currentObj[key] = [currentObj[key], isNaNValue ? rawValue : value];
-//           } else {
-//             currentObj[key] = isNaNValue ? rawValue : value;
-//           }
-//         } else {
-//           if (!currentObj[key]) {
-//             if (/^\d+$/.test(keys[i + 1])) {
-//               currentObj[key] = [];
-//             } else {
-//               currentObj[key] = {};
-//             }
-//           }
-//           currentObj = currentObj[key];
-//         }
-//       }
-//     }
-  
-//     return params;
-//   }
-// }
+  const [state, dispatch] = useReducer((state: S, action: stateAction<keyof S>): S => {
+    return {...state, [action.type]: validateValue(config, action.type, action.payload) }
+  }, null, initializer)
 
+  const urlDependsValues = useMemo(() => config.filter(item => item.fromUrl).map(item => item.name),[config]);
 
-// export function useAppState(config: StateConfig[], dispatch ) {
-//   // const isFirstInit = useRef(false);
-//   const params = useParams();
-//   const state = useRef(null)
-//   if ( !state.current) {
-//     state.current = new State(config, dispatch, params).state
-//   }
+  useEffect(() => {
+    const params = {}
+    urlDependsValues.forEach(name => params[name] = state[name]);
+    navigate('?' + getQueryParamsFromObj(params))
+  }, [...urlDependsValues.map(name => state[name]), location.search]);
 
-//   return [state.current];
-// }
+  return [{curent: state, dispatch}];
+}

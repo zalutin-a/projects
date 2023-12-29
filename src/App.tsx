@@ -1,12 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import { createContext } from 'react'
 import './App.scss';
-import { NAVIGATION_ITEMS, Navigation, AppContextType, useThemeMode, Footer } from './shared';
+import { NAVIGATION_ITEMS, Navigation, AppContextType, useThemeMode, Footer, useNotification } from './shared';
 
-export const AppContext = createContext<AppContextType>({} as AppContextType)
+export const AppContext = createContext<AppContextType>({} as AppContextType) //todo: use theme and setThemeMode as one object
 
 function App() {
   const { theme, setThemeMode } = useThemeMode()
+  const [notificationService, notificationContainer] = useNotification();
 
   const getMain = () => {
     return !theme ? <p>Loading ...</p> : // TTODO change on real loader, show loader inside main
@@ -16,13 +17,17 @@ function App() {
         <Outlet/>
       </main>
       <Footer config={NAVIGATION_ITEMS}></Footer>
+      {/* {notificationContainer} */}
     </div>
   }
 
   return (
-    <AppContext.Provider value={{theme, setThemeMode}}>
+    <AppContext.Provider value={{theme, setThemeMode, notificationService}}> 
       <div id='app' className={`app`}>
-        {getMain()}
+        <>
+          {getMain()}
+          {notificationContainer}
+        </>
       </div>
     </AppContext.Provider>
   )
