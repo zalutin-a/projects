@@ -1,14 +1,12 @@
 import { useContext } from "react";
-import { useSelector } from "react-redux";
 
 import { CalendarCategory } from "src/shared/index";
-import { RootState } from "../../store/store";
-import { CategoryItem, PromptsContext, PromptsState } from "../index";
+import { CategoryItem, StatementsContext } from "../index";
 import { CategoryFormProps } from "./types";
 
 
 export function CategoryForm({isEditMode = false, selected = [], setSelected, className = ""}: CategoryFormProps) {
-  const { categories } = useContext(PromptsContext).state.curent;
+  const { categories } = useContext(StatementsContext).state.curent;
   const onRemoveCategory = (removedCategoryId: CalendarCategory) => {
     setSelected(selected => {
       return selected.filter(id => id !== removedCategoryId);

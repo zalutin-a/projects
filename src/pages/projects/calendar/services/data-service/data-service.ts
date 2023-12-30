@@ -11,16 +11,17 @@ export class DataService extends DataServiceBase {
     console.log('dataservice-constructor ')
   }
 
+  //todo to remove?
   public getPages(callbacks: FetchCalback, params: CalendarTableParams) {
     this.getData(this.baseUrl + 'pages', callbacks, params);
     this.setUrl('projects/calendar/pages?' + this.http.getQueryParams(params))
     this.lastFetch = () => this.getData(this.baseUrl + 'pages', callbacks, params);
   }
 
-  public getPrompts(callbacks: FetchCalback, params: CalendarTableParams) {
-    this.getData(this.baseUrl + 'prompts', callbacks, params);
-    this.setUrl('projects/calendar/prompts?' + this.http.getQueryParams(params))
-    this.lastFetch = () => this.getData(this.baseUrl + 'prompts', callbacks, params);
+  public getStatements(callbacks: FetchCalback, params: CalendarTableParams) {
+    this.getData(this.baseUrl + 'statements', callbacks, params);
+    this.setUrl('projects/calendar/statements?' + this.http.getQueryParams(params))
+    this.lastFetch = () => this.getData(this.baseUrl + 'statements', callbacks, params);
   }
 
   public getAllCategories(callbacks: FetchCalback) {
@@ -34,6 +35,6 @@ export class DataService extends DataServiceBase {
   }
 
   public getCount(callbacks: FetchCalback) {
-    this.getData(this.baseUrl + 'prompts/count', callbacks);
+    this.getData(this.baseUrl + 'statements/count', callbacks);
   }
 }

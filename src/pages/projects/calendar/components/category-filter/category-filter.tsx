@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { ButtonBase, CalendarCategory, Dropdown, Icon } from "src/shared/index";
-import { CategoryItem, PromptsContext } from "../index";
+import { CategoryItem, StatementsContext } from "../index";
 import { CategoryFilterProps } from "./types";
 
 
@@ -13,7 +13,7 @@ const categoryMaper = item => {
 }
 
 export function CategoryFilter({onFilterChange, selected, className = ""}: CategoryFilterProps) {  
-  const { categories } = useContext(PromptsContext).state.curent;
+  const { categories } = useContext(StatementsContext).state.curent;
 
   const mapedCategories = categories.map(categoryMaper)
 

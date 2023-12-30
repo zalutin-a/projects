@@ -3,7 +3,7 @@ import { About } from "src/pages/about/about";
 import { Contacts } from "src/pages/contacts/Contacts";
 import { Home } from "src/pages/home/Home";
 import { Dashboard } from "src/pages/projects/dashboard/dashboard";
-import { CalendarProject, CategoriesTab, PagesTab, PromptsTab } from "src/pages/projects/index";
+import { CalendarProject, CategoriesTab, PagesTab, StatementsTab } from "src/pages/projects/index";
 import { Project2 } from "src/pages/projects/project-2/project-2";
 import { TechStack } from "src/pages/tech-stack/tech-stack";
 
@@ -41,8 +41,8 @@ export const ROUTER_OBJECT =
           // path: '/projects/calendar',
           children: [
             {
-              element: <PromptsTab></PromptsTab>,
-              path: '/projects/calendar/prompts',
+              element: <StatementsTab></StatementsTab>,
+              path: '/projects/calendar/statements',
             },
             {
               element: <CategoriesTab></CategoriesTab>,

@@ -1,12 +1,8 @@
-import { Provider, useDispatch } from "react-redux";
-import { createContext, useEffect } from 'react';
+import { createContext } from 'react';
 import { useActionService, useDataService } from "src/shared/index";
-import { ActionService, DataService } from "../index";
-
-import { store } from "./store/store";
+import { ActionService, DataService } from "./services";
 import { Outlet } from "react-router-dom";
 import { CalendarHeader } from "./components/calendar-header/calendar-header";
-import { setCategories } from "./store/index";
 
 
 export type calendarContext = {actionService: ActionService, dataService: DataService}

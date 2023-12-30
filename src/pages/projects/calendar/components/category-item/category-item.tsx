@@ -1,12 +1,7 @@
-import { useContext } from "react";
 import { Icon } from "src/shared/index";
-import { RootState } from "../../store/store";
-import { PromptsContext } from "../index";
 import { CategoryItemProps } from "./types";
 
 export function CategoryItem({clickHandler, removeHandler, category, className, isEditMode = false, active = false}: CategoryItemProps) {
-  // const { categories } = useContext(stateContext).state.curent;
-
   const onRemoveClick = () => {
     if (removeHandler) {
       removeHandler(category.id);

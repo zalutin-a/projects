@@ -1,8 +1,8 @@
 import { StateConfig } from "src/shared/index";
 
-export const promptsStateConfig: StateConfig[] = [
+export const statementsStateConfig: StateConfig[] = [
   {
-    name: "prompts",
+    name: "statement",
     fromUrl: false,
     initValue: [],
   },

@@ -1,4 +1,4 @@
-import { ActionServiceBase, API_URL, CalendarCategory, CalendarCategoryModel, CalendarPromtModel, FetchCalback, setFunction } from "src/shared/index";
+import { ActionServiceBase, API_URL, CalendarCategoryModel, CalendarStatementModel, FetchCalback, setFunction } from "src/shared/index";
 
 export class ActionService extends ActionServiceBase{
   baseUrl = API_URL + 'calendar/';
@@ -8,25 +8,25 @@ export class ActionService extends ActionServiceBase{
     console.log('Actionservice constructor')
   }
 
-  public updatePrompt(data: CalendarPromtModel, callbacks: FetchCalback) {
+  public updateStatement(data: CalendarStatementModel, callbacks: FetchCalback) {
     this.http.PATCH(
-      this.baseUrl + 'prompts',
+      this.baseUrl + 'statements',
       data,
       callbacks
     );
   }
 
-  public addPrompt(data: Partial<CalendarPromtModel>, callbacks: FetchCalback) {
+  public addStatement(data: Partial<CalendarStatementModel>, callbacks: FetchCalback) {
     this.http.POST(
-      this.baseUrl + 'prompts',
+      this.baseUrl + 'statements',
       data,
       callbacks
     );
   }
 
-  public deletePromt(data: {id: string}, callbacks: FetchCalback) {
+  public deleteStatement(data: {id: string}, callbacks: FetchCalback) {
     this.http.DELETE(
-      this.baseUrl + 'prompts',
+      this.baseUrl + 'statements',
       data,
       callbacks
     );

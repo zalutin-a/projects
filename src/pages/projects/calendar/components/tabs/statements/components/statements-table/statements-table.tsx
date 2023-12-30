@@ -1,21 +1,21 @@
 import { useContext } from 'react'
-import { PromtsTableProp } from "./types";
+import { StatementsTableProp } from "./types";
 import { ActionCell } from "./action-cell";
-import { CategoryItem, PromptsContext, TableCell } from "../../../../index";
+import { CategoryItem, StatementsContext, TableCell } from "../../../../index";
 
-export function PromptsTable({data, className}: PromtsTableProp) {
-  const { categories } = useContext(PromptsContext).state.curent;
+export function StatementsTable({data, className}: StatementsTableProp) {
+  const { categories } = useContext(StatementsContext).state.curent;
 
   
   return (
     <>
       <div className={`${className} bg-white dark:bg-app-dark`}>
-        	<div className={`grid grid-cols-promts font-bold dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-500 border-t-2 border-b-2 border-x-2 border-gray-400`}>
+        	<div className={`grid grid-cols-statements font-bold dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-500 border-t-2 border-b-2 border-x-2 border-gray-400`}>
             <TableCell x="center">
               <span>Date</span>
             </TableCell>
             <TableCell>
-              <span>Prompt</span>
+              <span>Statement</span>
             </TableCell>
             <TableCell>
               <span>Categories</span>
@@ -26,19 +26,19 @@ export function PromptsTable({data, className}: PromtsTableProp) {
           </div>
         {data?.map((item, i) => {
             return (
-              <div key={item.id} className={`grid grid-cols-promts border-b-2 border-x-2 border-gray-400`}>
+              <div key={item.id} className={`grid grid-cols-statements border-b-2 border-x-2 border-gray-400`}>
                 <TableCell x="center">
                   <span>{item.date ?? ''}</span>
                 </TableCell>
                 <TableCell>
-                  <span>{item.promt}</span>
+                  <span>{item.value}</span>
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-2 w-full">
                     {item.categories.map(id => <CategoryItem key={id} category={categories.find(cat => cat.id === id)} ></CategoryItem>)}
                   </div>
                 </TableCell>
-                <ActionCell prompt={item}></ActionCell>
+                <ActionCell statement={item}></ActionCell>
               </div>
             )
           })}

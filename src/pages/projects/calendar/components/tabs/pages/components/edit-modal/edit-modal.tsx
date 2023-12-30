@@ -2,7 +2,7 @@ import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
 import { PagesContext } from "src/pages/projects/index";
 import { BackdropComponent, Button, CloseButton, errors, NOTIFICATIONS_MAP, ServerError, } from "src/shared/index";
-import { EditPromptForm } from "./index";
+import { EditStatementForm } from "./index";
 import { editModalProps } from "./types";
 
 
@@ -13,7 +13,7 @@ export function EditModal({page, closeModal}: editModalProps) {
   const [error, setError] = useState<errors>(null);
   const [image, setImage] = useState(editedPage.img)
   const [holiday, setHoliday] = useState(editedPage.holiday)
-  const [promptEditMode, setPromptEditMode ] = useState(false)
+  const [statementEditMode, setStatementEditMode ] = useState(false)
 
   const onImageChange = (e: SyntheticEvent<HTMLInputElement>) => {
     if(error === errors.usingAssignedImage) { //TODO: think about better way to reset error
@@ -26,17 +26,17 @@ export function EditModal({page, closeModal}: editModalProps) {
     setHoliday(e.currentTarget.value)
   }
 
-  const updatePromtEditMode = (state: boolean) => {
-    if(error === errors.promptEditMode && !state) { //TODO: think about better way to reset error
+  const updateStatementEditMode = (state: boolean) => {
+    if(error === errors.statementEditMode && !state) { //TODO: think about better way to reset error
       setError(null);
     }
-    setPromptEditMode(state)
+    setStatementEditMode(state)
   }
 
   const beforeClose = () =>{
-    if (promptEditMode) {
-      setError(errors.promptEditMode);
-      notificationService.show({...NOTIFICATIONS_MAP[errors.promptEditMode], onClose: () => setError(null)});
+    if (statementEditMode) {
+      setError(errors.statementEditMode);
+      notificationService.show({...NOTIFICATIONS_MAP[errors.statementEditMode], onClose: () => setError(null)});
       return false;
     }
     return true;
@@ -106,9 +106,9 @@ export function EditModal({page, closeModal}: editModalProps) {
             <input onChange={onHolidayChange} value={holiday} className='mt-4 dark:bg-app-dark p-3 w-full' type="text" placeholder="add holyday ..."/>
           </div>
           <div className="mt-8">
-            <h4 className="mb-4">Prompt</h4>
-            <fieldset className={`${error === errors.promptEditMode || error === errors.usingAssignedPrompt ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
-              <EditPromptForm editMode={promptEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updatePromtEditMode} page={editedPage}></EditPromptForm>
+            <h4 className="mb-4">Statement</h4>
+            <fieldset className={`${error === errors.statementEditMode || error === errors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
+              <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
             </fieldset>
           </div>
           <div className="flex justify-end mt-8 gap-x-5 dark:text-zinc-600">

@@ -37,10 +37,10 @@ export function PagesCalendarItem({page}: pagesCalendarItemProps) {
             </div>
           </div>
           <div className="flex w-full adaptive-col-item_8">
-              <strong className="shrink-0">Holyday:</strong> <span title={page.holiday ?? 'No assigned prompt'} className="adaptive-row-item_6 text-overflow_flex">{page.holiday ?? 'No assigned holydayI'}</span>
+              <strong className="shrink-0">Holiday:</strong> <span title={page.holiday ?? 'No assigned holiday'} className="adaptive-row-item_6 text-overflow_flex">{page.holiday ?? 'No assigned holiday'}</span>
           </div>
           <div className="flex w-full adaptive-col-item_8">
-              <strong className="shrink-0">Prompt:</strong> <span title={page.prompt?.prompt ?? 'No assigned prompt'} className="adaptive-row-item_6 text-overflow_flex">{page.prompt?.prompt ?? 'No assigned prompt'}</span>
+              <strong className="shrink-0">Statement:</strong> <span title={page.statement?.value ?? 'No assigned statement'} className="adaptive-row-item_6 text-overflow_flex">{page.statement?.value ?? 'No assigned statement'}</span>
           </div>
         </div>
       </div>

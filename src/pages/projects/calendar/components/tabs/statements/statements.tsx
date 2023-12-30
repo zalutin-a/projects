@@ -1,17 +1,19 @@
-import { useContext, useEffect, createContext, useState } from "react";
+import { createContext, useState, useContext, useEffect } from 'react';
 
-import { Button, CalendarPrompts, PageCountParams, State, stateAction, useAppState, UseModal, usePagination } from "src/shared/index";
-import { CategoryFilter, DateFilter, PromptsState, promptsStateConfig } from "../../index";
-import { CalendarContext, CalendarTableFilters } from "../../../index";
-import { PromptsTable, EditModal } from "./components";
+import { State, useAppState, UseModal, usePagination, PageCountParams, CalendarStatements, Button } from "src/shared/index";
+import { CalendarContext } from '../../../calendar';
+import { CalendarTableFilters } from '../../../types';
+import { CategoryFilter, DateFilter } from '../../index';
+import { EditModal, StatementsTable } from './components/index';
+import { StatementsState, statementsStateConfig } from './index';
 
-export type promptsContext = {state: State<PromptsState>}
-export const PromptsContext = createContext<promptsContext>({} as promptsContext)
 
-export function PromptsTab() {
-  const [ promptsCount, setPromptsCount ] = useState(0)
-  const [ state ] = useAppState<PromptsState>(promptsStateConfig);
+export type statementsContext = {state: State<StatementsState>}
+export const StatementsContext = createContext<statementsContext>({} as statementsContext);
 
+export function StatementsTab() {
+  const [ statementsCount, setStatementsCount ] = useState(0)
+  const [ state ] = useAppState<StatementsState>(statementsStateConfig);
   const {pagination, setPagesCount} = usePagination(
     {page: state.curent.page, itemPerPage: state.curent.itemPerPage},
     (config: PageCountParams) => {
@@ -28,11 +30,11 @@ export function PromptsTab() {
 
 
   useEffect(() => {
-    dataService.getPrompts(
-      {onSuccess: (data: CalendarPrompts) => {
+    dataService.getStatements(
+      {onSuccess: (data: CalendarStatements) => {
           setPagesCount(data.pagesCount);
-          setPromptsCount(data.promptsCount);
-          state.dispatch({type: 'prompts', payload: data.prompts});
+          setStatementsCount(data.statementsCount);
+          state.dispatch({type: 'statements', payload: data.statements});
         }
       },
       {page: state.curent.page, itemPerPage: state.curent.itemPerPage, filter: state.curent.filter}
@@ -45,21 +47,21 @@ export function PromptsTab() {
 
   return (
     <>
-      <PromptsContext.Provider value={{state}}>
+      <StatementsContext.Provider value={{state}}>
         <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
           <div className="flex flex-col gap-y-5">
             <DateFilter onFilterChange={onFilterChange} selected={state.curent.filter.date}></DateFilter>
             <CategoryFilter onFilterChange={onFilterChange} selected={state.curent.filter.category || []}></CategoryFilter>
           </div>
           <div className="flex items-center mt-8 justify-between">
-            <h3>Found {promptsCount} prompt{`${promptsCount > 1 ? 's' : ''}`}</h3>
-            <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add prompt</Button>
+            <h3>Found {statementsCount} statements{`${statementsCount > 1 ? 's' : ''}`}</h3>
+            <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>
           </div>
-          <PromptsTable className="mt-8" data={state.curent.prompts}></PromptsTable>
+          <StatementsTable className="mt-8" data={state.curent.statements}></StatementsTable>
           <div className="flex justify-center mt-8">{pagination}</div>
           {editModal}
         </div>
-      </PromptsContext.Provider>
+      </StatementsContext.Provider>
     </>
   )
 }

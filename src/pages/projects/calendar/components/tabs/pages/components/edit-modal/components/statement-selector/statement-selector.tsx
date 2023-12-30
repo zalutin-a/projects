@@ -1,31 +1,30 @@
 import { useContext, useState } from 'react';
 import { AppContext } from 'src/App';
 import { PagesContext } from '../../../../pages';
-import { CalendarPageModel, Dropdown, errors, Hint, HoverPopover, Icon, ServerError, ValueName } from 'src/shared/index';
-import { promptSelectorProps } from "./types";
+import { CalendarPageModel, Dropdown, errors, Hint, HoverPopover, Icon, ServerError } from 'src/shared/index';
+import { StatementSelectorProps } from './types';
 
-export function PromptSelector({page, onSave, setEditMode, setPage, prompts, isCategorySelected, setError, error}: promptSelectorProps) {
+export function StatementSelector({page, setEditMode, setPage, statements, isCategorySelected, setError, error}: StatementSelectorProps) {
   const { notificationService } = useContext(AppContext);
   const { actionService } = useContext(PagesContext);
-  const [selectedPrompt, setSelectedPrompt] = useState([]);
+  const [selectedStatement, setSelectedStatement] = useState([]);
   const { theme } = useContext(AppContext);
 
   const save = () => {
-    if (selectedPrompt.length) {
-      const prompt = prompts.find(prompt => prompt.id === selectedPrompt[0])
-      //TODO: handle case when no prompt selected
-      const newPrompt = {  //TODO change after fix promt => prompt (use const page = {...page, prompt})
-        prompt: prompt.promt,
-        id: prompt.id,
+    if (selectedStatement.length) {
+      const statement = statements.find(statement => statement.id === selectedStatement[0])
+      const updatedPage: CalendarPageModel = {
+        ...page,
+        statement: {
+          value: statement.value,
+          id: statement.id,
+        }
       }
       actionService.checkPageFields(
-        {
-          ...page,
-          prompt: newPrompt
-        },
+        updatedPage,
         {
           onSuccess: () => {
-              setPage({...page, prompt: newPrompt})
+              setPage(updatedPage)
               setEditMode(false)
             },
             onError: (error: ServerError) => {
@@ -35,17 +34,16 @@ export function PromptSelector({page, onSave, setEditMode, setPage, prompts, isC
         },
       )
     } else {
-      setPage({...page, prompt: null})
+      setPage({...page, statement: null})
       setEditMode(false)
     }
-
   }
 
-  const onPromptSelect = (prompt) => {
-    if(error === errors.usingAssignedPrompt) {
+  const onStatementSelect = (statement) => {
+    if(error === errors.usingAssignedStatement) {
       setError(null);
     }
-    setSelectedPrompt(prompt)
+    setSelectedStatement(statement)
   }
 
   return (
@@ -54,7 +52,14 @@ export function PromptSelector({page, onSave, setEditMode, setPage, prompts, isC
       <div className='flex justify-between'>
         <HoverPopover rendredComponent={ !isCategorySelected ? <Hint message="Please select category"></Hint> : <></> }>
           <fieldset className='disabled:opacity-50' disabled={!isCategorySelected}> 
-            <Dropdown<any> width={500} disable={!isCategorySelected} onSelect={onPromptSelect} selectedVlues={selectedPrompt} options={prompts?.map(item => ({value: item.id, name: item.promt}))} placeholder="Select prompt"></Dropdown>
+            <Dropdown<any>
+              width={500}
+              disable={!isCategorySelected}
+              onSelect={onStatementSelect}
+              selectedVlues={selectedStatement}
+              options={statements?.map(statement => ({value: statement.id, name: statement.value}))}
+              placeholder="Select Statement"
+            ></Dropdown>
           </fieldset>
         </HoverPopover>
         <div className='flex'>

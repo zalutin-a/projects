@@ -1,6 +1,6 @@
-import { CalendarCategoryModel, CalendarPromtModel } from "src/shared/index";
+import { CalendarCategoryModel, CalendarStatementModel } from "src/shared/index";
 
 export interface CalendarDataSlice {
-  prompts: CalendarPromtModel[];
+  statements: CalendarStatementModel[];
   categories: CalendarCategoryModel[];
 }

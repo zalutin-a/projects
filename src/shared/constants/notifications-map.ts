@@ -6,5 +6,5 @@ export type notificationMap = {
 };
 
 export const NOTIFICATIONS_MAP: notificationMap = {
-  [errors.promptEditMode]: {type: 'Warning', message: "Please Save Prompt before continue!"},
+  [errors.statementEditMode]: {type: 'Warning', message: "Please Save Statement before continue!"},
 }

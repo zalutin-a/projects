@@ -1,4 +1,4 @@
-import { CalendarCategoryModel, CalendarPromtModel } from "src/shared/index";
+import { CalendarCategoryModel } from "src/shared/index";
 
 export interface ActionCellProps {
   category: CalendarCategoryModel;

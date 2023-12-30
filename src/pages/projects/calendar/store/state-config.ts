@@ -6,7 +6,7 @@ import { setCalendarFilter, setItemPerPage, setPage } from "./index";
 
 export const calendarStateConfig: StateConfig[] = [
   {
-    name: "prompts",
+    name: "statements",
     fromUrl: false,
     initValue: [],
     reloadPage: true,

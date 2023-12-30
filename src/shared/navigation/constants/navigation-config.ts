@@ -37,7 +37,7 @@ export const NAVIGATION_ITEMS = [
       {
         name: 'Calendar',
         config: null,
-        path: '/projects/calendar/prompts',
+        path: '/projects/calendar/statements',
         children: null,
       }
     ],

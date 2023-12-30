@@ -1,3 +1,3 @@
-export * from './prompt-selector';
+export * from './statement-selector';
 export * from './category-selector';
-export * from './edit-prompt-form';
+export * from './edit-statement-form';

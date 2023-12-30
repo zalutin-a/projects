@@ -5,7 +5,7 @@ export enum calendarDateFilter {
   withoutDate,
 }
 
-export interface PromptsTableFilters {
+export interface StatementsTableFilters {
   category?: CalendarCategory[];
   date?: calendarDateFilter;
 }

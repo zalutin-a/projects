@@ -2,7 +2,7 @@ import { Tabs } from "../tabs-component/tabs";
 
 const BASE_URL = '/projects/calendar/';
 const TABS_CONFIG = [
-  {path: BASE_URL + 'prompts', name: 'Prompts'},
+  {path: BASE_URL + 'statements', name: 'Statements'},
   {path: BASE_URL + 'categories', name: 'Categories'},
   {path: BASE_URL + 'pages', name: 'Pages'},
 ]

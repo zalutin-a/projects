@@ -1,3 +1,3 @@
 export * from './category';
-export * from './promt';
+export * from './statement';
 export * from './page';

@@ -1,4 +1,4 @@
-import { ActionServiceBase, API_URL, CalendarCategory, CalendarCategoryModel, CalendarPageModel, CalendarPromtModel, FetchCalback, setFunction } from "src/shared/index";
+import { ActionServiceBase, API_URL, CalendarCategory, CalendarCategoryModel, CalendarPageModel, CalendarStatementModel, FetchCalback, setFunction } from "src/shared/index";
 
 export class PagesActionService extends ActionServiceBase{
   baseUrl = API_URL + 'calendar/';

@@ -1,9 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
 import { CalendarPageModel, errors } from "src/shared/index";
 
-export type editPromptFormProps = {
+export type editStatementFormProps = {
   page: CalendarPageModel;
-  setEditMode: (state: boolean) => void// Dispatch<SetStateAction<boolean>>;
+  setEditMode: (state: boolean) => void;
   editMode: boolean;
   setError: (error: errors) => void;
   error: errors;

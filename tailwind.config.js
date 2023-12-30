@@ -37,7 +37,7 @@ module.exports = {
         }
       },
       gridTemplateColumns: {
-        'promts': '110px minmax(auto,auto) minmax(100px,23%) minmax(65px,8%)',
+        'statements': '110px minmax(auto,auto) minmax(100px,23%) minmax(65px,8%)',
         'categories': '35px minmax(auto,auto) minmax(65px,8%)',
         'calendar': '12% 12% 12% 12% 12% 12% 12%'
       }

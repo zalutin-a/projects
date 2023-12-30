@@ -22,13 +22,13 @@ export class PagesDataService extends DataServiceBase {
     this.getData(this.baseUrl + 'categories', callbacks);
   }
 
-  public getPrompts(callbacks: FetchCalback, category: CalendarCategory) {
+
+  //TODO: change method and url after implementation of api
+  public getStatements(callbacks: FetchCalback, category: CalendarCategory) {
     const params = {
       filter: { category: [category]},
       itemPerPage: 1000,
     }
-    this.getData(this.baseUrl + 'prompts', callbacks, params);
-    // this.setUrl('projects/calendar/prompts?' + this.http.getQueryParams(params))
-    // this.lastFetch = () => this.getData(this.baseUrl + 'prompts', callbacks, params);
+    this.getData(this.baseUrl + 'statements', callbacks, params);
   }
 }

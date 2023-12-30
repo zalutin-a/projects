@@ -1,4 +1,4 @@
-import { CalendarPromptShortModel } from "./promt";
+import { IdValue } from "src/shared/index";
 
 export interface CalendarPageModel {
   id: string,
@@ -6,7 +6,7 @@ export interface CalendarPageModel {
   month: number,
   year: number,
   day: number;
-  prompt: CalendarPromptShortModel,
+  statement: IdValue,
   img: string,
   comment: string,
   holiday: string,

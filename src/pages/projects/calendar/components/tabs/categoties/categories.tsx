@@ -14,7 +14,7 @@ export function CategoriesTab() {
       page: state.curent.page || 1,
       itemPerPage: state.curent.itemPerPage || 20,
     });
-  },[state.curent.page]);  // todo separete data and action services with prompts tab
+  },[state.curent.page]);  // todo separete data and action services with statements tab
 
   return (
     <>

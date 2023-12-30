@@ -8,7 +8,7 @@ import { commentsModalProps } from "./types";
 
 export function CommentsModal({page, closeModal}: commentsModalProps) {
   const [comment, setComment] = useState('')
-  const { dataService, actionService, } = useContext(CalendarContext);
+  // const { dataService, actionService, } = useContext(CalendarContext);
 
   const onChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
     setComment(e.currentTarget.value)

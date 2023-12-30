@@ -1,3 +1,3 @@
 export * from './categoties';
-export * from './prompts';
+export * from './statements';
 export * from './pages';

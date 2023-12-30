@@ -9,10 +9,10 @@ export function PageModal({page}: pageModalProps) {
         </div>
         <div className="bg-white dark:bg-app-dark p-5">
           <div className="flex w-full adaptive-col-item_8">
-              <strong className="min-w-[65px]">Holyday:</strong><span className="adaptive-row-item_6">{page.holiday ?? 'No assigned holyday'}</span>
+              <strong className="min-w-[65px]">Holiday:</strong><span className="adaptive-row-item_6">{page.holiday ?? 'No assigned holiday'}</span>
           </div>
           <div className="flex w-full adaptive-col-item_8">
-              <strong className="min-w-[65px]">Prompt:</strong><span className="adaptive-row-item_6">{page.prompt?.prompt ?? 'No assigned prompt'}</span>
+              <strong className="min-w-[65px]">Statement:</strong><span className="adaptive-row-item_6">{page.statement.value ?? 'No assigned statement'}</span>
           </div>
         </div>
       </div>
