@@ -12,7 +12,7 @@ export class PagesDataService extends DataServiceBase {
     console.log('dataservice-constructor ');
   }
 
-  public getPages(callbacks: FetchCalback, params: CalendarPagesParams) {
+  public getPages(params: CalendarPagesParams, callbacks: FetchCalback,) {
     this.getData(this.baseUrl + 'pages', callbacks, params);
     this.setUrl('?' + this.http.getQueryParams(params))
     this.lastFetch = () => this.getData(this.baseUrl + 'pages', callbacks, params);
@@ -22,12 +22,9 @@ export class PagesDataService extends DataServiceBase {
     this.getData(this.baseUrl + 'categories', callbacks);
   }
 
-
-  //TODO: change method and url after implementation of api
   public getStatements(callbacks: FetchCalback, category: CalendarCategory) {
     const params = {
       filter: { category: [category]},
-      itemPerPage: 1000,
     }
     this.getData(this.baseUrl + 'statements', callbacks, params);
   }

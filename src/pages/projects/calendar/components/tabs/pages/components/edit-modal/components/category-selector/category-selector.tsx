@@ -1,12 +1,10 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { CategoryItem, PagesContext } from 'src/pages/projects/index';
-import { Dropdown, Slider } from 'src/shared/index';
+import { Slider } from 'src/shared/index';
 import { categorySelectorProps } from "./types";
 
 export function CategorySelector({onCategorySelect, selectedCategory}: categorySelectorProps) {
   const {categories} = useContext(PagesContext).state.curent;
-  const [selectedCategories, setselectedCategories] = useState([])
-
 
   return (
     <>

@@ -18,9 +18,9 @@ export const pagesStateConfig: StateConfig[] = [
     initValue: 0,
     validator: (value) => !isNaN(+value),
   },
-  // {
-  //   name: "filter",
-  //   fromUrl: true,
-  //   initValue: {},
-  // },
-]
+  {
+    name: "id",
+    fromUrl: true,
+    initValue: null,
+  }
+];

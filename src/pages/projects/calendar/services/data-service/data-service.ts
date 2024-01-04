@@ -11,12 +11,12 @@ export class DataService extends DataServiceBase {
     console.log('dataservice-constructor ')
   }
 
-  //todo to remove?
-  public getPages(callbacks: FetchCalback, params: CalendarTableParams) {
-    this.getData(this.baseUrl + 'pages', callbacks, params);
-    this.setUrl('projects/calendar/pages?' + this.http.getQueryParams(params))
-    this.lastFetch = () => this.getData(this.baseUrl + 'pages', callbacks, params);
-  }
+  // //todo to remove?
+  // public getPages(callbacks: FetchCalback, params: CalendarTableParams) {
+  //   this.getData(this.baseUrl + 'pages', callbacks, params);
+  //   this.setUrl('projects/calendar/pages?' + this.http.getQueryParams(params))
+  //   this.lastFetch = () => this.getData(this.baseUrl + 'pages', callbacks, params);
+  // }
 
   public getStatements(callbacks: FetchCalback, params: CalendarTableParams) {
     this.getData(this.baseUrl + 'statements', callbacks, params);

@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
 import { AppContext } from 'src/App';
-import { CalendarCategory, CalendarStatements, Hint, HoverPopover, Icon } from 'src/shared/index';
+import { CalendarCategory, CalendarStatementModel, CalendarStatements, Hint, HoverPopover, Icon } from 'src/shared/index';
 import { PagesContext } from "../../../../pages";
 import { CategorySelector, editStatementFormProps, StatementSelector } from "../index";
 
 export function EditStatementForm({page, editMode, setEditMode, setError, setPage, error}: editStatementFormProps) {
   const { dataService } = useContext(PagesContext);
   const [ category, setCategory ] = useState<CalendarCategory>(0)
-  const [ filteredStatements, setFilteredStatements ] = useState([]) // todo add type
+  const [ filteredStatements, setFilteredStatements ] = useState<CalendarStatementModel[]>([])
   const { theme } = useContext(AppContext);
 
 
@@ -26,7 +26,15 @@ export function EditStatementForm({page, editMode, setEditMode, setError, setPag
     return editMode ? (
       <div className='flex flex-col gap-y-6'>
         <CategorySelector selectedCategory={category} onCategorySelect={onCategorySelect}></CategorySelector>
-        <StatementSelector page={page} error={error} setPage={setPage} setError={setError} setEditMode={setEditMode} statements={filteredStatements} isCategorySelected={category >= 0}></StatementSelector>
+        <StatementSelector
+          page={page}
+          error={error}
+          setPage={setPage}
+          setError={setError}
+          setEditMode={setEditMode}
+          statements={filteredStatements}
+          isCategorySelected={category >= 0}//todo: change category(start from 1)
+        ></StatementSelector>
       </div>
     ) : (
       <div className='flex flex-col gap-y-6'>
@@ -38,8 +46,6 @@ export function EditStatementForm({page, editMode, setEditMode, setError, setPag
         </div>
       </div>
     )
-
-
   }
 
   return (

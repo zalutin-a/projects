@@ -4,5 +4,6 @@ export interface PagesState {
   categories: CalendarCategoryModel[];
   pages: CalendarPageModel[];
   month: months;
-  year: Number;
+  year: number;
+  id: string;
 }

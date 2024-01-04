@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import dompurify from 'dompurify';
 import { Button, buttonColor, Icon, iconColor, iconType } from "src/shared/index";
 import { NotificationProps, notificationColors } from "./types";
 
@@ -32,7 +33,7 @@ export function NotificationComponent({type, message, close, action, onClose}: N
         <Icon className="justify-self-center" type={type?.toLowerCase() as iconType} size={6} color={`${color}-600` as iconColor}></Icon>
         <div className="flex flex-col ml-2">
           <h4>{type}</h4>
-          {message}
+          <div dangerouslySetInnerHTML={{__html: dompurify.sanitize(message)}}></div> 
           {action ? <Button className="text-app-gray-800 mt-4" color={`${color}-600` as buttonColor} clickHandler={onAction}>{action.name}</Button> : null}
         </div>
         <Icon onClick={onNotificationClose} className="justify-self-center" type='cross' size={6}></Icon>

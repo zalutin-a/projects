@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { State, stateDispatch, useActionService, useAppState, useDataService } from "src/shared/index";
+import { State, useActionService, useAppState, useDataService } from "src/shared/index";
 import { MonthPicker, viewMode, ViewSwitcher } from "./components/index";
 import { PagesContainer } from "./components/pages-container/pages-container";
 import { PagesState, pagesStateConfig } from "./index";
@@ -8,7 +8,6 @@ import { PagesActionService, PagesDataService } from "./services/index";
 
 export type pagesContext = { actionService: PagesActionService, dataService: PagesDataService, state: State<PagesState>}
 export const PagesContext = createContext<pagesContext>({} as pagesContext)
-
 
 export function PagesTab() {
   const [state] = useAppState<PagesState>(pagesStateConfig);
@@ -21,11 +20,16 @@ export function PagesTab() {
   },[]); 
 
   useEffect(() => {
-    dataService.getPages({onSuccess: (data) => state.dispatch({type: 'pages', payload: data})}, {
-      year: state.curent.year,
-      month: state.curent.month,
-    });
-  },[state.curent.month, state.curent.year]);
+    dataService.getPages({
+        year: state.curent.year,
+        month: state.curent.month,
+        id: state.curent.id,
+      },
+      {
+        onSuccess: (data) => state.dispatch({type: 'pages', payload: data})
+      }
+    );
+  },[state.curent.month, state.curent.year, state.curent.id]);
 
   return (
     <>

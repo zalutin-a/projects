@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 import { AppNotification, notificationType } from "../../types"
 
 export interface NotificationProps extends AppNotification {

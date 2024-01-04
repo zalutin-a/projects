@@ -1,4 +1,5 @@
 export interface CalendarPagesParams {
-  year: Number;
-  month: Number;
+  year: number;
+  month: number;
+  id?: string;
 }

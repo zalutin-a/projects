@@ -7,7 +7,7 @@ import { StatementSelectorProps } from './types';
 export function StatementSelector({page, setEditMode, setPage, statements, isCategorySelected, setError, error}: StatementSelectorProps) {
   const { notificationService } = useContext(AppContext);
   const { actionService } = useContext(PagesContext);
-  const [selectedStatement, setSelectedStatement] = useState([]);
+  const [selectedStatement, setSelectedStatement] = useState<string[]>([]);
   const { theme } = useContext(AppContext);
 
   const save = () => {
@@ -47,7 +47,6 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
   }
 
   return (
-    // Todo: fix desable state after changing dropdown 
     <>
       <div className='flex justify-between'>
         <HoverPopover rendredComponent={ !isCategorySelected ? <Hint message="Please select category"></Hint> : <></> }>

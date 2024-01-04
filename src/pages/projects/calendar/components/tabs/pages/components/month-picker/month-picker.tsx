@@ -8,7 +8,8 @@ const monthsMap = Object.entries(MONTHS_MAP).map(([name, value]) => ({name, valu
 export function MonthPicker({}: monthPickerProps) {
   const { state } = useContext(PagesContext);
   const onMonthSelected = ([value]: months[]) => {
-    state.dispatch({type: 'month', payload: value})
+    state.dispatch({type: 'month', payload: value}); //TODO: make it possible to use array of objects ([{type: 1, payload: 1}, {type: 2, payload: 2}])
+    state.dispatch({type: 'id', payload: null});
   }
   return (
     <>

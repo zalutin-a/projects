@@ -8,7 +8,7 @@ export type notificatonAction = {
   onAction?: () => void,
 }
 
-export type notificationMessage =  string | ReactElement
+export type notificationMessage =  string | ReactElement;
 
 export interface AppNotification {
   type: notificationType,
