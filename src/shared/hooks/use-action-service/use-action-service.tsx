@@ -1,11 +1,11 @@
-import { useRef, useState, useMemo } from "react";
-import { ActionServiceBase, setFunction } from "src/shared/index";
+import { useState, useMemo } from "react";
+import { ActionServiceBase, FetchService, setFunction } from "src/shared/index";
 
 
-export function useActionService<C extends ActionServiceBase>(actionService: new (setIsLoading: setFunction<boolean>) => C ): [service: C, isLoading: boolean] {
+export function useActionService<C extends ActionServiceBase>(actionService: new (setIsLoading: setFunction<boolean>) => C ): FetchService<C> {
   const [isLoading, setIsLoading ] = useState(false);
   console.log('Actionservice init')
 
   const service = useMemo(() => new actionService(setIsLoading), [])
-  return [service, isLoading];
+  return {http: service, isLoading};
 }

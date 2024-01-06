@@ -12,3 +12,4 @@ export * from './months';
 export * from './categories';
 export * from './server-error';
 export * from './id-value';
+export * from './fetch-service';

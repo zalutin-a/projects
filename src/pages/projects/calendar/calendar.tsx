@@ -1,16 +1,16 @@
 import { createContext } from 'react';
-import { useActionService, useDataService } from "src/shared/index";
+import { FetchService, useActionService, useDataService } from "src/shared/index";
 import { ActionService, DataService } from "./services";
 import { Outlet } from "react-router-dom";
 import { CalendarHeader } from "./components/calendar-header/calendar-header";
 
 
-export type calendarContext = {actionService: ActionService, dataService: DataService}
+export type calendarContext = {actionService: FetchService<ActionService>, dataService: FetchService<DataService>}
 export const CalendarContext = createContext<calendarContext>({} as calendarContext)
 
 export function CalendarProject() {
-  const [dataService, isDataLoading] = useDataService<DataService>(DataService);
-  const [actionService, isActionLoading] = useActionService<ActionService>(ActionService);
+  const dataService = useDataService<DataService>(DataService);
+  const actionService = useActionService<ActionService>(ActionService);
   return (
     <>
       {/* <Provider store={store}> */}

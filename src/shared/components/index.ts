@@ -19,3 +19,4 @@ export * from './soc-icons';
 export * from './pagination';
 export * from './dropdown';
 export * from './hint';
+export * from './loader';

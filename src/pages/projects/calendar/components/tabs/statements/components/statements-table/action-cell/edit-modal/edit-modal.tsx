@@ -27,7 +27,7 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
   }
 
   const onConfirm = () => {
-    const method = isNewMode ? actionService.addStatement.bind(actionService) : actionService.updateStatement.bind(actionService);
+    const method = isNewMode ? actionService.http.addStatement.bind(actionService) : actionService.http.updateStatement.bind(actionService);
     method(
       {
         ...(isNewMode ? {} : {id: statement.id} ),
@@ -38,7 +38,7 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
       },
       {
         onSuccess: () => {
-          dataService.reloadData();
+          dataService.http.reloadData();
           closeModal();
         },
         onError: (e: Error) => {

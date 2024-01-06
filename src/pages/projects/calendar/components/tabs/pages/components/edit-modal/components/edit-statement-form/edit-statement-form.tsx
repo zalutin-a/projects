@@ -12,7 +12,7 @@ export function EditStatementForm({page, editMode, setEditMode, setError, setPag
 
 
   useEffect(() => {
-    dataService.getStatements({
+    dataService.http.getStatements({
       onSuccess: (data: CalendarStatements) => setFilteredStatements(data.statements)},
       category
     )

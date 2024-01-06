@@ -16,12 +16,12 @@ export function EditModal({category, closeModal, isNewMode = false}: EditModalPr
   }
 
   const onConfirm = () => {
-    const method = isNewMode ? actionService.addCategory.bind(actionService) : actionService.updateCategory.bind(actionService);
+    const method = isNewMode ? actionService.http.addCategory.bind(actionService) : actionService.http.updateCategory.bind(actionService);
     method(
       {...(isNewMode ? {} : {id: category.id} ), name: editedCategory},
       {
         onSuccess: () => {
-          dataService.reloadData();
+          dataService.http.reloadData();
           closeModal();
         }
       }

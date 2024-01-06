@@ -17,7 +17,6 @@ function App() {
         <Outlet/>
       </main>
       <Footer config={NAVIGATION_ITEMS}></Footer>
-      {/* {notificationContainer} */}
     </div>
   }
 

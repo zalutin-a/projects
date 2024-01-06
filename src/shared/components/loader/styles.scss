@@ -1,0 +1,11 @@
+.loader {
+  // position: absolute;
+  left: calc(50% - 50px);
+  width: 100px;
+  height: 100px;
+}
+
+.spiner {
+  @apply fill-cyan-600;
+}
+

@@ -20,7 +20,7 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
           id: statement.id,
         }
       }
-      actionService.checkPageFields(
+      actionService.http.checkPageFields(
         updatedPage,
         {
           onSuccess: () => {

@@ -6,11 +6,11 @@ import { DeleteModalProps } from "./types";
 export function DeleteModal({id, closeModal}: DeleteModalProps) {
   const { dataService, actionService } = useContext(CalendarContext);
   const onConfirm = () => {
-    actionService.deleteStatement(
+    actionService.http.deleteStatement(
       { id: id },
       {
         onSuccess: () => {
-          dataService.reloadData();
+          dataService.http.reloadData();
           closeModal();
         }
       }

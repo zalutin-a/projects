@@ -43,7 +43,7 @@ export function EditModal({page, closeModal}: editModalProps) {
   }
 
   const updatePage = () => {
-    actionService.updatePage(
+    actionService.http.updatePage(
       {
         ...editedPage,
         img: image,
@@ -51,7 +51,7 @@ export function EditModal({page, closeModal}: editModalProps) {
       },
       {
         onSuccess: () => {
-          dataService.reloadData();
+          dataService.http.reloadData();
           closeModal();
         },
         onError: (error: ServerError) => {
@@ -64,7 +64,7 @@ export function EditModal({page, closeModal}: editModalProps) {
 
   const onConfirm = () => {
     if (beforeClose()) {
-      actionService.checkPageFields(
+      actionService.http.checkPageFields(
         {
           ...editedPage,
           img: image,

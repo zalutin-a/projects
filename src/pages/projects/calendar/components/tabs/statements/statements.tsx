@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 
-import { State, useAppState, UseModal, usePagination, PageCountParams, CalendarStatements, Button } from "src/shared/index";
+import { State, useAppState, UseModal, usePagination, PageCountParams, CalendarStatements, Button, Loader } from "src/shared/index";
 import { CalendarContext } from '../../../calendar';
 import { CalendarTableFilters } from '../../../types';
 import { CategoryFilter, DateFilter } from '../../index';
@@ -12,8 +12,10 @@ export type statementsContext = {state: State<StatementsState>}
 export const StatementsContext = createContext<statementsContext>({} as statementsContext);
 
 export function StatementsTab() {
-  const [ statementsCount, setStatementsCount ] = useState(0)
   const [ state ] = useAppState<StatementsState>(statementsStateConfig);
+  const { dataService, actionService } = useContext(CalendarContext);
+  const [ statementsCount, setStatementsCount ] = useState(0);
+  const [ openEditModal, editModal ] = UseModal(<EditModal isNewMode={true}></EditModal>);
   const {pagination, setPagesCount} = usePagination(
     {page: state.curent.page, itemPerPage: state.curent.itemPerPage},
     (config: PageCountParams) => {
@@ -21,16 +23,14 @@ export function StatementsTab() {
       state.dispatch({type: 'itemPerPage', payload: config.itemPerPage});
     }
   );
-  const { dataService } = useContext(CalendarContext);
-  const [ openEditModal, editModal ] = UseModal(<EditModal isNewMode={true}></EditModal>);
 
   useEffect(() => {
-    dataService.getAllCategories({onSuccess: (data) => state.dispatch({type: 'categories', payload: data})});
+    dataService.http.getAllCategories({onSuccess: (data) => state.dispatch({type: 'categories', payload: data})});
   },[]); 
 
 
   useEffect(() => {
-    dataService.getStatements(
+    dataService.http.getStatements(
       {onSuccess: (data: CalendarStatements) => {
           setPagesCount(data.pagesCount);
           setStatementsCount(data.statementsCount);
@@ -47,21 +47,23 @@ export function StatementsTab() {
 
   return (
     <>
-      <StatementsContext.Provider value={{state}}>
-        <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
-          <div className="flex flex-col gap-y-5">
-            <DateFilter onFilterChange={onFilterChange} selected={state.curent.filter.date}></DateFilter>
-            <CategoryFilter onFilterChange={onFilterChange} selected={state.curent.filter.category || []}></CategoryFilter>
+      <Loader active={dataService.isLoading || actionService.isLoading}>
+        <StatementsContext.Provider value={{state}}>
+          <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
+            <div className="flex flex-col gap-y-5">
+              <DateFilter onFilterChange={onFilterChange} selected={state.curent.filter.date}></DateFilter>
+              <CategoryFilter onFilterChange={onFilterChange} selected={state.curent.filter.category || []}></CategoryFilter>
+            </div>
+            <div className="flex items-center mt-8 justify-between">
+              <h3>Found {statementsCount} statements{`${statementsCount > 1 ? 's' : ''}`}</h3>
+              <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>
+            </div>
+            <StatementsTable className="mt-8" data={state.curent.statements}></StatementsTable>
+            <div className="flex justify-center mt-8">{pagination}</div>
+            {editModal}
           </div>
-          <div className="flex items-center mt-8 justify-between">
-            <h3>Found {statementsCount} statements{`${statementsCount > 1 ? 's' : ''}`}</h3>
-            <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>
-          </div>
-          <StatementsTable className="mt-8" data={state.curent.statements}></StatementsTable>
-          <div className="flex justify-center mt-8">{pagination}</div>
-          {editModal}
-        </div>
-      </StatementsContext.Provider>
+        </StatementsContext.Provider>
+      </Loader>
     </>
   )
 }
