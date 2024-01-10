@@ -20,7 +20,7 @@ export function PagesCalendarItem({page}: pagesCalendarItemProps) {
       <div onMouseOver={() => setIconsVisible(true)} onMouseLeave={() => setIconsVisible(false)} className="bg-white dark:bg-app-dark flex rounded-md flex-col items-center"> 
       {/* max-w-4xl w-11/12 min-[890px]:w-[220px] */}
         <div onClick={openPageModal} className="cursor-pointer w-full h-[200px] z-10">
-          <img className="object-cover w-full h-full" src={page.img || "/images/blank-image.jpg"} alt="project preview" />
+          <img className="object-cover w-full h-full" src={page.img || "/images/blank-image.jpg"} alt="page preview" />
         </div>
         <div className="flex adaptive-col-item_10 flex-col w-full p-4 pt-0 items-center">
           <div className="relative flex justify-between gap-4 adaptive-col-item_8 w-full">
