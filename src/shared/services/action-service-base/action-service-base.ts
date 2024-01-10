@@ -1,10 +1,11 @@
-import { HTTPService, setFunction } from "../index";
+import { setFetchLoading } from "src/shared/index";
+import { HTTPService } from "../index";
 
 export abstract class ActionServiceBase {
   protected http: HTTPService;
   protected abstract baseUrl: string;
 
-  constructor(setIsLoading: setFunction<boolean>) {
+  constructor(setIsLoading: setFetchLoading) {
     this.http = new HTTPService(setIsLoading);
   }
 }

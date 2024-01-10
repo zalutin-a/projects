@@ -1,14 +1,14 @@
 import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
 import { PagesContext } from "src/pages/projects/index";
-import { BackdropComponent, Button, CloseButton, errors, NOTIFICATIONS_MAP, ServerError, } from "src/shared/index";
+import { BackdropComponent, Button, CloseButton, errors, Loader, NOTIFICATIONS_MAP, ServerError, } from "src/shared/index";
 import { EditStatementForm } from "./index";
 import { editModalProps } from "./types";
 
 
 export function EditModal({page, closeModal}: editModalProps) {
   const { notificationService } = useContext(AppContext);
-  const { actionService, dataService, state } = useContext(PagesContext);
+  const { actionService, dataService } = useContext(PagesContext);
   const [editedPage, setEditedPage] = useState({...page});
   const [error, setError] = useState<errors>(null);
   const [image, setImage] = useState(editedPage.img)
@@ -107,9 +107,13 @@ export function EditModal({page, closeModal}: editModalProps) {
           </div>
           <div className="mt-8">
             <h4 className="mb-4">Statement</h4>
-            <fieldset className={`${error === errors.statementEditMode || error === errors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
-              <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
-            </fieldset>
+            <div className="min-h-[95px]">
+              <Loader active={dataService.isLoading(dataService.http.getStatements) || actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
+                <fieldset className={`${error === errors.statementEditMode || error === errors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
+                  <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
+                </fieldset>
+              </Loader>
+            </div>
           </div>
           <div className="flex justify-end mt-8 gap-x-5 dark:text-zinc-600">
             <Button color='gray-300' clickHandler={onCancel}>Cancel</Button>

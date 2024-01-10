@@ -13,7 +13,7 @@ export const StatementsContext = createContext<statementsContext>({} as statemen
 
 export function StatementsTab() {
   const [ state ] = useAppState<StatementsState>(statementsStateConfig);
-  const { dataService, actionService } = useContext(CalendarContext);
+  const { dataService } = useContext(CalendarContext);
   const [ statementsCount, setStatementsCount ] = useState(0);
   const [ openEditModal, editModal ] = UseModal(<EditModal isNewMode={true}></EditModal>);
   const {pagination, setPagesCount} = usePagination(
@@ -47,23 +47,25 @@ export function StatementsTab() {
 
   return (
     <>
-      <Loader active={dataService.isLoading || actionService.isLoading}>
-        <StatementsContext.Provider value={{state}}>
-          <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
-            <div className="flex flex-col gap-y-5">
-              <DateFilter onFilterChange={onFilterChange} selected={state.curent.filter.date}></DateFilter>
-              <CategoryFilter onFilterChange={onFilterChange} selected={state.curent.filter.category || []}></CategoryFilter>
-            </div>
-            <div className="flex items-center mt-8 justify-between">
-              <h3>Found {statementsCount} statements{`${statementsCount > 1 ? 's' : ''}`}</h3>
-              <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>
-            </div>
-            <StatementsTable className="mt-8" data={state.curent.statements}></StatementsTable>
-            <div className="flex justify-center mt-8">{pagination}</div>
-            {editModal}
+      <StatementsContext.Provider value={{state}}>
+        <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
+          <div className="flex flex-col gap-y-5">
+            <DateFilter onFilterChange={onFilterChange} selected={state.curent.filter.date}></DateFilter>
+            <CategoryFilter onFilterChange={onFilterChange} selected={state.curent.filter.category || []}></CategoryFilter>
           </div>
-        </StatementsContext.Provider>
-      </Loader>
+          <div className='min-h-[65svh]'>
+            <Loader active={dataService.isLoading(dataService.http.getStatements, dataService.http.getAllCategories)}>
+              <div className="flex items-center mt-8 justify-between">
+                <h3>Found {statementsCount} statements{`${statementsCount > 1 ? 's' : ''}`}</h3>
+                <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>
+              </div>
+              <StatementsTable className="mt-8" data={state.curent.statements}></StatementsTable>
+              <div className="flex justify-center mt-8">{pagination}</div>
+            </Loader>
+          </div>
+          {editModal}
+        </div>
+      </StatementsContext.Provider>
     </>
   )
 }

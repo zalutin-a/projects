@@ -1,11 +1,37 @@
+// Loader sizes in px
+$loader-small: 30;
+$loader-medium: 60;
+$loader-large: 100;
+
+@mixin loader-position($size) {
+  left: calc(50% - #{$size / 2}px);
+  top: calc(50% - #{$size / 2}px);
+}
+
+@mixin loader-size($size) {
+  width: #{$size}px;
+  height: #{$size}px;
+}
+
 .loader {
-  // position: absolute;
-  left: calc(50% - 50px);
-  width: 100px;
-  height: 100px;
+  position: absolute;
+
+  &_small {
+    @include loader-size($loader-small);
+    @include loader-position($loader-small);
+  }
+
+  &_medium {
+    @include loader-size($loader-medium);
+    @include loader-position($loader-medium)
+  }
+
+  &_large {
+    @include loader-size($loader-large);
+    @include loader-position($loader-large)
+  }
 }
 
 .spiner {
   @apply fill-cyan-600;
 }
-

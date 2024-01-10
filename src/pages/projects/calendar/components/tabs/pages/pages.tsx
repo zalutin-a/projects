@@ -34,15 +34,15 @@ export function PagesTab() {
   return (
     <>
       <PagesContext.Provider value={{actionService, dataService, state}}>
-        <Loader active={dataService.isLoading}>
-          <div className="flex justify-between flex-wrap items-center mx-auto box-content mt-8 px-2.5 md:px-10 max-w-4xl">
-            <MonthPicker></MonthPicker>
-            <ViewSwitcher setViewMode={setViewMode}></ViewSwitcher>
-          </div>
-          <div className="mx-8">
+        <div className="flex justify-between flex-wrap items-center mx-auto box-content mt-8 px-2.5 md:px-10 max-w-4xl">
+          <MonthPicker></MonthPicker>
+          <ViewSwitcher setViewMode={setViewMode}></ViewSwitcher>
+        </div>
+        <div className="min-h-[65svh] mx-8">
+          <Loader active={dataService.isLoading(dataService.http.getPages)}>
             <PagesContainer viewMode={viewMode}></PagesContainer>
-          </div>
-        </Loader>
+          </Loader>
+        </div>
       </PagesContext.Provider>
     </>
   )

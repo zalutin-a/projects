@@ -1,20 +1,19 @@
-import { FetchCalback } from "src/shared/index";
-import { setFunction } from "../index";
-
+import { FetchCalback, setFetchLoading } from "src/shared/index";
 
 export class HTTPService {
-  protected setIsLoading;
+  protected setIsLoading: setFetchLoading;
 
-  constructor(setIsLoading: setFunction<boolean>) {
+  constructor(setIsLoading: setFetchLoading) {
     this.setIsLoading = setIsLoading;
   }
 
-  GET(url: string, callbacks: FetchCalback, params: any = {}) {
-    this.fetchData(url, {method: 'GET'},callbacks, params);
+  GET(methodId: any, url: string, callbacks: FetchCalback, params: any = {}) {
+    this.fetchData(methodId, url, {method: 'GET'},callbacks, params);
   }
 
-  POST(url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
+  POST(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
     this.fetchData(
+      methodId,
       url,
       {
         method: 'POST',
@@ -26,8 +25,9 @@ export class HTTPService {
     );
   }
 
-  DELETE(url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
+  DELETE(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
     this.fetchData(
+      methodId,
       url,
       {
         method: 'DELETE',
@@ -39,8 +39,9 @@ export class HTTPService {
     );
   }
 
-  PATCH(url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
+  PATCH(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
     this.fetchData(
+      methodId,
       url,
       {
         method: 'PATCH',
@@ -52,10 +53,10 @@ export class HTTPService {
     );
   }
 
-  private async fetchData(url: string, fetchParams: RequestInit, callbacks: FetchCalback, params: any = {}) { //TODO: add error handling
+  private async fetchData(methodId: any, url: string, fetchParams: RequestInit, callbacks: FetchCalback, params: any = {}) { //TODO: add error handling
     const urlWithParams = this.getURL(url, params);
     try {
-      this.setIsLoading(true);
+      this.setIsLoading((map) => new Map(map.set(methodId, true)));
       const res = await fetch(urlWithParams, fetchParams);
       if(res.status >= 300) {
         throw (await res.json())
@@ -67,10 +68,11 @@ export class HTTPService {
       if(callbacks.onSuccess) {
         callbacks.onSuccess(data);
       }
-      this.setIsLoading(false);
+      this.setIsLoading((map) => new Map(map.set(methodId, false)));
+
     } catch (error: any) {
       if(callbacks.onError) {
-        this.setIsLoading(false);
+        this.setIsLoading((map) => new Map(map.set(methodId, false)));
         callbacks.onError(error);
       }
     }
