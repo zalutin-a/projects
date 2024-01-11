@@ -1,11 +1,14 @@
+import { BackdropComponent } from "src/shared/index";
 import { ProjectCardModalProps } from "./types";
 
-export function ProjectCardModal({imgSrc}: ProjectCardModalProps) {
+export function ProjectCardModal({imgSrc, closeModal}: ProjectCardModalProps) {
   return (
     <>
-    <div className="px-5">
-      <img src={imgSrc} alt="project preview" />
-    </div>
+      <BackdropComponent closeModal={closeModal}>
+        <div className="my-20 px-5">
+          <img src={imgSrc} alt="project preview" />
+        </div>
+      </BackdropComponent>
     </>
   )
 }

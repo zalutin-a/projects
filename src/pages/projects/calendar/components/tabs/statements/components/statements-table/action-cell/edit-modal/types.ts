@@ -5,9 +5,3 @@ export interface EditModalProps {
   statement?: CalendarStatementModel;
   isNewMode?: boolean;
 }
-
-//todo use notificTION map
-export enum editStatementError {
-  'date' = 1,
-  'image',
-}
