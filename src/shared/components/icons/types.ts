@@ -26,7 +26,9 @@ export type iconType = 'filter'
   | 'success'
   | 'warning'
   | 'info'
-  
+  | 'selectAction'
+  | 'delete'
+
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 
 export type iconSize =

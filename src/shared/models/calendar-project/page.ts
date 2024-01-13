@@ -1,4 +1,5 @@
 import { IdValue } from "src/shared/index";
+import { Comment } from "src/shared/types/comment";
 
 export interface CalendarPageModel {
   id: string,
@@ -8,7 +9,7 @@ export interface CalendarPageModel {
   day: number;
   statement: IdValue,
   img: string,
-  comment: string,
+  comments: Comment[],
   holiday: string,
 }
 

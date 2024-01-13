@@ -53,6 +53,7 @@ export class HTTPService {
     );
   }
 
+  //TODO: finish error handling
   private async fetchData(methodId: any, url: string, fetchParams: RequestInit, callbacks: FetchCalback, params: any = {}) { //TODO: add error handling
     const urlWithParams = this.getURL(url, params);
     try {
@@ -62,7 +63,7 @@ export class HTTPService {
         throw (await res.json())
       }
       let data = {};
-      if (fetchParams.method === 'GET') {
+      if (res.status === 200) {
         data = await res.json();
       }
       if(callbacks.onSuccess) {

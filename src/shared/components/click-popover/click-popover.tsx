@@ -5,7 +5,7 @@ import { PopoverBase } from "../index";
 import { ClockPopoverProps } from "./types";
 
 
-export function ClickPopover({rendredComponent, children, gap = 10}: ClockPopoverProps) {
+export function ClickPopover({rendredComponent, children, className = '', gap = 10}: ClockPopoverProps) {
   const container = useRef(null);
   const [visible, clickHandler ] = useClickHandler(() => true);
 
@@ -15,7 +15,7 @@ export function ClickPopover({rendredComponent, children, gap = 10}: ClockPopove
 
   return (
     <>  
-      <div ref={container} onClickCapture={clickHandler}>
+      <div className={className} ref={container} onClickCapture={clickHandler}>
         {children}
       </div>
       {getPopup()}

@@ -20,3 +20,4 @@ export * from './pagination';
 export * from './dropdown';
 export * from './hint';
 export * from './loader';
+export * from './actions-list';

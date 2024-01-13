@@ -23,3 +23,5 @@ export * from './error-icon';
 export * from './success-icon';
 export * from './warning-icon';
 export * from './info-icon';
+export * from './select-action';
+export * from './delete';

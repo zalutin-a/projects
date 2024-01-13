@@ -5,4 +5,5 @@ export interface ClockPopoverProps {
   children: ReactNode,
   rendredComponent: ReactElement,
   gap?: number;
+  className?: string;
 }

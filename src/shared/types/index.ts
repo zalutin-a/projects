@@ -14,3 +14,4 @@ export * from './server-error';
 export * from './id-value';
 export * from './fetch-service';
 export * from './set-function';
+export * from './comment';

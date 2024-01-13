@@ -47,6 +47,9 @@ module.exports = {
       'head': ['Inter','Roboto', "cursive", 'sans-serif'],
       'body': ['Roboto','Inter','sans-serif'],
     },
+    dropShadow: {
+      'rounded': '0px 0px 10px rgba(0, 0, 0, 0.27)',
+    },
   },
   plugins: [],
 };
