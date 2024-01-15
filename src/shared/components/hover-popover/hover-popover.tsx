@@ -1,31 +1,30 @@
 import { useRef, useState } from "react";
-
 import { PopoverBase } from "../index";
 import { HoverPopoverProps } from "./types";
 
 
-export function HoverPopover({rendredComponent, children, gap = 10}: HoverPopoverProps) {
+export function HoverPopover({rendredComponent, children, outerGap, gap, className = '', positionRelative = true}: HoverPopoverProps) {
   const [visible, setVisible] = useState(false);
   const container = useRef(null);
+  const timeoutId = useRef(null);
 
   const onMouseEnter = () => {
-    setVisible(true)
+    timeoutId.current = setTimeout(() => {
+      setVisible(true)
+    }, 70)
   }
 
   const onMouseLeave = () => {
+    clearTimeout(timeoutId.current)
     setVisible(false)
-  }
-
-  const getPopup = () => {
-    return visible ? <PopoverBase gap={gap} target={container} rendredComponent={rendredComponent}></PopoverBase> : <></>
   }
 
   return (
     <>  
-      <div ref={container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div className={`${positionRelative ? 'relative' : ''} ${className}`} ref={container} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         {children}
+        {visible ? <PopoverBase trigger={container} rendredComponent={rendredComponent} gap={gap} outerGap={outerGap}></PopoverBase> : null}
       </div>
-      {getPopup()}
     </>
   )
 }

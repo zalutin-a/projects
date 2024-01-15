@@ -1,73 +1,116 @@
-import ReactDOM from 'react-dom';
 import { useEffect, useState, useRef } from 'react';
-import { PopoverBaseProps } from "./types";
+import { PopoverBaseProps, popoverYPosition } from "./types";
 
 
-export function PopoverBase({rendredComponent, target, gap, outerGap = 10 }: PopoverBaseProps) {
-  const [containerHeight, setContainerHeight] = useState(null);
-  const [containerWidth, setContainerWidth] = useState(null);
+export function PopoverBase({rendredComponent, trigger, gap = 10, outerGap = 10}: PopoverBaseProps) {
+  const [popoverHeight, setPopoverHeight] = useState(null);
+  const [popoverWidth, setPopoverWidth] = useState(null);
   const container = useRef(null);
-  const targetPosition = target.current?.getBoundingClientRect();
-
-  //TODO: change it
-  const viewportWidth = document.documentElement.clientWidth;
-  const scrollbarWidth = window.innerWidth - viewportWidth;
-  const widthWithoutScrollbar = viewportWidth - scrollbarWidth;
+  const triggerPosition = trigger.current?.getBoundingClientRect();
+  const closestRelative = trigger.current?.closest('.relative')?.getBoundingClientRect();
+  const widthWithoutScrollbar = document.documentElement.clientWidth;
 
   useEffect(() => {
-    setContainerHeight(container.current?.clientHeight)
-    setContainerWidth(container.current?.clientWidth)
+    setPopoverHeight(container.current?.clientHeight);
+    setPopoverWidth(container.current?.clientWidth);
   },[]);
   
-  const getX = () => {
-    if (!containerWidth) {  //to avoid of posibile apearing of horisontal scroll bar
-      return 0
+  const getTopPosition = (): {top: number, y: popoverYPosition} => {
+    if (!popoverHeight) {
+      return {top: 0, y: 'top'}
     }
-    const centerPosition = targetPosition.x + (target.current?.clientWidth / 2) - (containerWidth / 2);
+
+    const popoverFullHeight = popoverHeight + gap + outerGap;
+    const availableSpaceAbove = triggerPosition.y;
+    const availableSpaceBelow = window.innerHeight - triggerPosition.bottom;
+
+    /** Need correction when use popover in container with overflow = auto | scroll (e.g. sliderComponent), so popover is croping
+    *  acording to slider size. To fix it we need to add wrapper with position = relative around slider and this should be closest 
+    *  parent with position = relative. For other cases just add position = relative to high-level popover. 
+    *  Usage examples:
+    *  --- for slider cases ----
+    *     <div className="relative">
+    *       <Slider>
+    *         <ClickPopover rendredComponent={<PopoverComponent></PopoverComponent>}>
+    *           <Icon type='selectAction'></Icon>
+    *         </ClickPopover>
+    *         <ClickPopover rendredComponent={<PopoverComponent></PopoverComponent>}>
+    *           <Icon type='selectAction'></Icon>
+    *         </ClickPopover>
+    *       </Slider>
+    *     </div>
+    *  
+    *   --- for other cases ----
+    *     <div>
+    *       <ClickPopover className="relative" rendredComponent={<PopoverComponent></PopoverComponent>}>
+    *         <Icon type='selectAction'></Icon>
+    *       </ClickPopover>
+    *     </div>
+    **/
+    const correction = closestRelative?.top ? triggerPosition.top - closestRelative.top : 0;
 
     switch(true) {
-      case window.matchMedia('(max-width: 768px)').matches:   //md in tailwind
-        return (widthWithoutScrollbar - containerWidth) / 2;
-      case centerPosition < 0:
-        return outerGap;
-      case (centerPosition + containerWidth) > widthWithoutScrollbar:
-        return widthWithoutScrollbar - containerWidth - outerGap;
+      case popoverFullHeight < availableSpaceAbove:
+        return {top: -popoverFullHeight + correction, y: 'top'}
+      case popoverFullHeight < availableSpaceBelow:
+        return {top: triggerPosition.height + gap + correction, y: 'bottom'}
       default:
-        return centerPosition;
+        return {top: -((popoverHeight - triggerPosition.height) / 2) + correction, y: 'middle'};
     }
   }
 
-  const getY = () => {
-    if (!containerHeight) {
-      return 0
+  const getLeftPosition = (y: popoverYPosition) => {
+    if (!popoverWidth) { //To avoid apearing of horisontal scroll bar
+      return 0;
     }
-    const abovePosition = window.scrollY + targetPosition.y - gap - containerHeight;
 
-    if (abovePosition < window.scrollY + outerGap) {
-      return window.scrollY + targetPosition.y + target.current?.clientHeight + gap;
+    const popoverFullWidth = popoverWidth + gap + outerGap;
+    const availableSpaceLeft = triggerPosition.left;
+    const availableSpaceRight = widthWithoutScrollbar - triggerPosition.right;
+
+    const correction = closestRelative?.left ? triggerPosition.left - closestRelative.left : 0
+
+    if(y === "middle") {
+      if(popoverFullWidth < availableSpaceLeft) {
+        return -popoverFullWidth + correction
+      }
+      if(popoverFullWidth < availableSpaceRight) {
+        return triggerPosition.width + gap + correction
+      }
+      const screenCenter = widthWithoutScrollbar / 2
+      const distanceToCenter = screenCenter - triggerPosition.left
+      return (distanceToCenter - popoverWidth / 2 ) + correction
     }
-    return abovePosition;
+
+    const popoverOffset = (popoverWidth - triggerPosition.width) / 2
+    const position = -(popoverOffset) + correction;
+    
+    if(popoverOffset > availableSpaceRight) {
+      return position - (popoverOffset - availableSpaceRight) - outerGap
+    }
+    if(popoverOffset > availableSpaceLeft) {
+      return position + (popoverOffset - availableSpaceLeft) + outerGap
+    }
+
+    return position;
   }
 
-  const containerPosition = {  
-    top: getY(),
-    left: getX(),
-    visibility: !containerHeight ? "hidden" : "visible" as any,
+  const getPositions = () => {
+    const topPosition = getTopPosition()
+    const leftPosition = getLeftPosition(topPosition.y)
+    return {top: topPosition.top, left: leftPosition}
   }
 
-  const component = () => {
-      return (
-        <>
-          <div ref={container} style={containerPosition} className='z-50 absolute'>
-            {rendredComponent}
-          </div>
-        </>
-      )
+  const containerStyle = {  
+    ...getPositions(),
+    visibility: !popoverHeight ? "hidden" : "visible" as any,
   }
-  
-  const root = document.getElementById('app')
-  return ReactDOM.createPortal(
-    component(),
-    root
-  );
+
+  return (
+    <>
+      <div ref={container} style={containerStyle} className='z-50 absolute'>
+        {rendredComponent}
+      </div>
+    </>
+  )
 }

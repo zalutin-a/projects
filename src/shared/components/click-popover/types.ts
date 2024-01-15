@@ -1,9 +1,4 @@
-import { ReactElement } from "react";
-import { ReactNode } from "react";
+import { HighLevelPopoverProps } from "../index";
 
-export interface ClockPopoverProps {
-  children: ReactNode,
-  rendredComponent: ReactElement,
-  gap?: number;
-  className?: string;
+export interface ClockPopoverProps extends HighLevelPopoverProps {
 }

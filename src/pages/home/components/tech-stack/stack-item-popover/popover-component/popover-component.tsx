@@ -9,8 +9,8 @@ export function StackItemPopoverComponent({data}: StackItemPopoverComponentProps
   const { theme } = useContext(AppContext);
   return (
     <>
-      <div className="drop-shadow-md animated_opasity bg-white dark:bg-app-dark flex gap-5 md:gap-7 rounded-md flex-col max-w-4xl max-h-[65vh] w-[250px] overflow-y-scroll md:overflow-y-auto md:w-[375px] md:max-h-fit items-center">
-        <div className="flex flex-col p-7 items-center">
+      <div className="drop-shadow-md w-max animated_opasity bg-white dark:bg-app-dark flex gap-5 p-7 md:gap-7 rounded-md flex-col max-h-[65vh] max-w-[250px] overflow-y-scroll md:overflow-y-auto md:max-w-[375px] md:max-h-fit items-center">
+        <div className="flex flex-col items-center">
           <div>
             <h3>{data.name}</h3>
             <p className="mt-2 md:mt-3">{data.description}</p>

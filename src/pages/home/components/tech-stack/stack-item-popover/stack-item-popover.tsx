@@ -5,7 +5,7 @@ import { StackItemPopoverProps } from "./types";
 export function StackItemPopover({children, data}: StackItemPopoverProps) {
   return (
     <>
-      <ClickPopover rendredComponent={<StackItemPopoverComponent data={data}></StackItemPopoverComponent>}>
+      <ClickPopover positionRelative={false} rendredComponent={<StackItemPopoverComponent data={data} ></StackItemPopoverComponent>}>
         {children}
       </ClickPopover>
     </>

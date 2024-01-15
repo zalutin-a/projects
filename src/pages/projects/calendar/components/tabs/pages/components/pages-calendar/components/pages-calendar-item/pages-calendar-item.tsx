@@ -27,7 +27,7 @@ export function PagesCalendarItem({page}: pagesCalendarItemProps) {
             <div className="flex justify-center grow">
               <h3 className="text-4xl">{page.date}</h3>
             </div>
-            <div className={`${iconsVisible ? 'translate-y-[45px] visible' : 'invisible'} z-0 transition-all absolute -top-[40px] left-[105px] flex gap-1`}>
+            <div className={`${iconsVisible ? 'translate-y-[45px] visible z-20' : 'invisible'} z-0 transition-all absolute -top-[40px] left-[105px] flex gap-1`}>
               <HoverPopover rendredComponent={<Hint message="Edit Page"></Hint>}>
                 <Icon onClick={openEditModal} type='edit' size={5} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
               </HoverPopover>

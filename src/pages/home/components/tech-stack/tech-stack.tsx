@@ -24,7 +24,7 @@ export function TechStack() {
           <h2>My Tech Stack</h2>
           <p className="adaptive-col-item_12">Technologies I`ve been working with recently</p>
         </div>
-        <div className="w-full mt-10 md:mt-14">
+        <div className="w-full mt-10 md:mt-14 relative">
           <Slider slidingOffset={2} showArrow={true}>
             {data?.map(stackItem => {
               return (

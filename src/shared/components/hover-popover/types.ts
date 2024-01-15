@@ -1,8 +1,4 @@
-import { ReactElement } from "react";
-import { ReactNode } from "react";
+import { HighLevelPopoverProps } from "../index";
 
-export interface HoverPopoverProps  {
-  children: ReactNode,
-  rendredComponent: ReactElement,
-  gap?: number;
+export interface HoverPopoverProps extends HighLevelPopoverProps {
 }
