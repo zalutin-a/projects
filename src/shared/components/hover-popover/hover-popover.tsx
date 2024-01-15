@@ -3,7 +3,7 @@ import { PopoverBase } from "../index";
 import { HoverPopoverProps } from "./types";
 
 
-export function HoverPopover({rendredComponent, children, outerGap, gap, className = '', positionRelative = true}: HoverPopoverProps) {
+export function HoverPopover({rendredComponent, children, outerGap, gap = 7, className = '', positionRelative = true}: HoverPopoverProps) {
   const [visible, setVisible] = useState(false);
   const container = useRef(null);
   const timeoutId = useRef(null);

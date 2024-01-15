@@ -51,7 +51,7 @@ export function PopoverBase({rendredComponent, trigger, gap = 10, outerGap = 10}
 
     switch(true) {
       case popoverFullHeight < availableSpaceAbove:
-        return {top: -popoverFullHeight + correction, y: 'top'}
+        return {top: -popoverFullHeight + outerGap + correction, y: 'top'}
       case popoverFullHeight < availableSpaceBelow:
         return {top: triggerPosition.height + gap + correction, y: 'bottom'}
       default:
