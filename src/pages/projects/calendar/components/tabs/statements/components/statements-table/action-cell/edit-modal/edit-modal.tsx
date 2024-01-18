@@ -1,5 +1,5 @@
 import { useContext, SyntheticEvent, useState } from "react";
-import { BackdropComponent, Button, CloseButton, errors, ServerError} from "src/shared/index";
+import { AppError, BackdropComponent, Button, ClientErrors, CloseButton, NOTIFICATIONS_MAP, ServerError, ServerErrors} from "src/shared/index";
 import { AppContext } from "src/App";
 import { CalendarContext, CategoryForm } from "src/pages/projects/index";
 import { EditModalProps } from "./types";
@@ -7,7 +7,7 @@ import { EditModalProps } from "./types";
 
 export function EditModal({statement, closeModal, isNewMode = false}: EditModalProps) {
   const {notificationService} = useContext(AppContext);
-  const [error, setError] = useState<errors>(null);
+  const [error, setError] = useState<AppError>(null);
   const [editedStatement, setEditedStatement] = useState(isNewMode ? '' : statement.value);
   const [editedDate, setEditedDate] = useState(isNewMode ? '' : statement.date ?? '');
   const [editedImgLink, setEditedImgLink] = useState(isNewMode ? '' : statement.imgSrc ?? '');
@@ -16,24 +16,29 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
 
   const onStatementsChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
     setEditedStatement(e.currentTarget.value);
-    if(error === errors.statementCantBeEmpty) { //TODO: think about better way to reset error
+    if(error === ClientErrors.statementCantBeEmpty) { //TODO: think about better way to reset error
       setError(null);
     }
   }
   const onDateChange = (e: SyntheticEvent<HTMLInputElement>) => {
     setEditedDate(e.currentTarget.value);
-    if(error === errors.usingAssignedDate) { //TODO: think about better way to reset error
+    if(error === ServerErrors.usingAssignedDate) { //TODO: think about better way to reset error
       setError(null);
     }
   }
   const onImgLinkChange = (e: SyntheticEvent<HTMLInputElement>) => {
     setEditedImgLink(e.currentTarget.value);
-    if(error === errors.usingAssignedImage) { //TODO: think about better way to reset error
+    if(error === ServerErrors.usingAssignedImage) { //TODO: think about better way to reset error
       setError(null);
     }
   }
 
   const onConfirm = () => {
+    if(!editedStatement) {
+      setError(ClientErrors.statementCantBeEmpty)
+      notificationService.show({...NOTIFICATIONS_MAP[ClientErrors.statementCantBeEmpty], onClose: () => setError(null)})
+      return
+    }
     const method = isNewMode ? actionService.http.addStatement.bind(actionService.http) : actionService.http.updateStatement.bind(actionService.http);
     method(
       {
@@ -69,13 +74,13 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
             <CloseButton clickHandler={closeModal}></CloseButton>
           </div>
           <div className="mt-8">
-            <fieldset className={`${error === errors.statementCantBeEmpty ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
+            <fieldset className={`${error === ClientErrors.statementCantBeEmpty ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
               <textarea placeholder="add statement ..." rows={4} className="w-full min-w-[400px] dark:bg-app-dark p-3" onChange={onStatementsChange} value={editedStatement}></textarea>
            </fieldset>
             <h4 className="mt-6">Date</h4>
-            <input className={`${error === errors.usingAssignedDate? 'outline outline-3 outline-offset-2 outline-red-400' : ''} mt-4 dark:bg-app-dark p-3`} onChange={onDateChange} value={editedDate} min="2024-01-01" max="2024-12-31" type="date"/>
+            <input className={`${error === ServerErrors.usingAssignedDate? 'outline outline-3 outline-offset-2 outline-red-400' : ''} mt-4 dark:bg-app-dark p-3`} onChange={onDateChange} value={editedDate} min="2024-01-01" max="2024-12-31" type="date"/>
             <h4 className="mt-6">Image</h4>
-            <input onChange={onImgLinkChange} value={editedImgLink} className={`${error === errors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
+            <input onChange={onImgLinkChange} value={editedImgLink} className={`${error === ServerErrors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
             <h4 className="mt-6">Categories</h4>
             <CategoryForm className="mt-4" isEditMode={true} setSelected={setEditedCategories} selected={editedCategories}></CategoryForm>
           </div>

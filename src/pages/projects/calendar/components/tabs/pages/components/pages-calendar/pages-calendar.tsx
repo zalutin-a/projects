@@ -23,7 +23,7 @@ export function PagesCalendar() {
       {/* max-w-4xl w-11/12 min-[890px]:w-[220px] */}
         {DAYS.map(day => <div className="z-20 sticky top-0 flex justify-center p-6 bg-white dark:bg-app-dark border-b-8 border-b-app-gray-300 dark:border-b-app-gray-800">{day}</div>)} 
         {fillEmptyDays(state.curent.pages[0].day)}
-        {state.curent.pages.map(page => <PagesCalendarItem page={page}></PagesCalendarItem>)}
+        {state.curent.pages.map((page, index) => <PagesCalendarItem key={page.id} index={index} page={page}></PagesCalendarItem>)}
       </div>
     </>
   )

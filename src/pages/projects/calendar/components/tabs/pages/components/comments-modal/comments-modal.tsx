@@ -1,11 +1,11 @@
 import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
 
-import { BackdropComponent, Button, CalendarPageModel, CloseButton, ServerError } from "src/shared/index";
+import { BackdropComponent, Button, CalendarPageModel, ClientErrors, CloseButton, NOTIFICATIONS_MAP, ServerError } from "src/shared/index";
 import { Comment, Roles, UserShort } from "src/shared/types/comment";
 import { PagesContext } from "../../pages";
 import { CommentItem } from "./index";
-import { commentsModalProps } from "./types";
+import { commentsModalProps, updateCommentsFunction } from "./types";
 
 const mockUser: UserShort = {
   name: "Andrii",
@@ -14,7 +14,7 @@ const mockUser: UserShort = {
   _id: "testId",
 }
 
-export function CommentsModal({page, closeModal}: commentsModalProps) {
+export function CommentsModal({page, index, closeModal}: commentsModalProps) {
   const [comment, setComment] = useState('')
   const { notificationService } = useContext(AppContext);
   const { actionService, state} = useContext(PagesContext);
@@ -23,28 +23,17 @@ export function CommentsModal({page, closeModal}: commentsModalProps) {
     setComment(e.currentTarget.value)
   }
 
-  const onConfirm = () => {
-    if(!comment) {
-      return
-    }
-  const newComment: Comment = {
-    id: null,
-    value: comment,
-    author: mockUser,
-    date: new Date(Date.now()) // use UTC
-  }
-
+  const updateComments: updateCommentsFunction = (comments, onSuccess = () => {}) => { //TODO: use Promises in httpService instead of callbacks, do it before userService implementation!!!
     actionService.http.updatePage(
       {
         ...page,
-        comments: [...page.comments, newComment]
+        comments
       },
       {
         onSuccess: (updatedPage: CalendarPageModel) => {
-          const index = state.curent.pages.findIndex(page => page.id === updatedPage.id);
           const payload = [...state.curent.pages].toSpliced(index, 1, updatedPage);
           state.dispatch({type: 'pages', payload});
-          setComment('')
+          onSuccess();
         },
         onError: (error: ServerError) => {
           notificationService.show(error.payload);
@@ -53,14 +42,41 @@ export function CommentsModal({page, closeModal}: commentsModalProps) {
     )
   }
 
+  const onAddComment = () => {
+    if(!comment) {
+      notificationService.show(NOTIFICATIONS_MAP[ClientErrors.commetCantBeEmpty]);
+      return
+    }
+    const newComment: Comment = {
+      id: null,
+      value: comment,
+      author: mockUser,
+      date: new Date(Date.now()) // use UTC
+    }
+
+    // TODO add method to actionService .addComment(page.id, callbacks) and use it instead
+    updateComments([...page.comments, newComment], () => setComment(''))
+  }
+
   const onCancel = () => {
-    closeModal()
+    if (comment) {
+      notificationService.show({
+        type: 'Warning',
+        message: "If you close the window changes will be lost. Click OK to continue.",
+        action: {
+          name: "Ok",
+          onAction: closeModal,
+        }
+      });
+    } else {
+      closeModal();
+    }
   }
 
   return (
     <>
       <BackdropComponent closeModal={closeModal}>
-        <div className="flex flex-col my-20 p-6 max-w-[640px] min-h-[432px] dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-500 rounded-lg ">
+        <div className="flex flex-col my-20 p-6 w-[640px] min-h-[432px] dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-500 rounded-lg ">
           <div className="flex justify-between">
             <h3>Comments</h3>
             <CloseButton clickHandler={closeModal}></CloseButton>
@@ -69,11 +85,11 @@ export function CommentsModal({page, closeModal}: commentsModalProps) {
             <textarea placeholder="add comment" rows={3} className="w-full min-w-[400px] dark:bg-app-dark p-3" onChange={onChange} value={comment}></textarea>
           </div>
           <div className="divide-y">
-            {[...page.comments].reverse().map(comment => <CommentItem comment={comment}></CommentItem>)}
+            {[...page.comments].map((comment,i) => <CommentItem updateComments={updateComments} comments={page.comments} index={i} comment={comment}></CommentItem>)}
           </div>
           <div className="flex justify-end mt-8 gap-x-5 dark:text-zinc-600">
             <Button color='gray-300' clickHandler={onCancel}>Close</Button>
-            <Button color='blue-400' clickHandler={onConfirm}>Add comment</Button>
+            <Button color='blue-400' clickHandler={onAddComment}>Add comment</Button>
           </div>
         </div>
       </BackdropComponent>

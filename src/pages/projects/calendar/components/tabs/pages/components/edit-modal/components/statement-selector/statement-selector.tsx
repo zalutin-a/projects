@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { AppContext } from 'src/App';
 import { PagesContext } from '../../../../pages';
-import { CalendarPageModel, Dropdown, errors, Hint, HoverPopover, Icon, ServerError } from 'src/shared/index';
+import { CalendarPageModel, Dropdown, Hint, HoverPopover, Icon, ServerError, ServerErrors } from 'src/shared/index';
 import { StatementSelectorProps } from './types';
 
 export function StatementSelector({page, setEditMode, setPage, statements, isCategorySelected, setError, error}: StatementSelectorProps) {
@@ -40,7 +40,7 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
   }
 
   const onStatementSelect = (statement) => {
-    if(error === errors.usingAssignedStatement) {
+    if(error === ServerErrors.usingAssignedStatement) {
       setError(null);
     }
     setSelectedStatement(statement)

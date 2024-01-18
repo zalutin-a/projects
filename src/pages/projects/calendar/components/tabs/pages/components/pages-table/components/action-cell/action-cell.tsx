@@ -6,10 +6,10 @@ import { CommentsModal } from "../../../comments-modal/comments-modal";
 import { EditModal } from "../../../edit-modal/index";
 import { pagesActionCellProps } from "./types";
 
-export function PagesActinCell({page}: pagesActionCellProps) {
+export function PagesActinCell({page, index}: pagesActionCellProps) {
   const { theme } = useContext(AppContext);
   const [ openEditModal, editModal ] = UseModal(<EditModal page={page}></EditModal>);
-  const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal page={page}></CommentsModal>)
+  const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal index={index} page={page}></CommentsModal>)
 
   const onEditClick = () => {
     openEditModal();

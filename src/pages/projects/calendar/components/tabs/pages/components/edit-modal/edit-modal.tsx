@@ -1,7 +1,7 @@
 import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
 import { PagesContext } from "src/pages/projects/index";
-import { BackdropComponent, Button, CloseButton, errors, Loader, NOTIFICATIONS_MAP, ServerError, } from "src/shared/index";
+import { BackdropComponent, Button, CloseButton, ServerErrors, ClientErrors, Loader, NOTIFICATIONS_MAP, ServerError, AppError } from "src/shared/index";
 import { EditStatementForm } from "./index";
 import { editModalProps } from "./types";
 
@@ -10,13 +10,13 @@ export function EditModal({page, closeModal}: editModalProps) {
   const { notificationService } = useContext(AppContext);
   const { actionService, dataService } = useContext(PagesContext);
   const [editedPage, setEditedPage] = useState({...page});
-  const [error, setError] = useState<errors>(null);
+  const [error, setError] = useState<AppError>(null);
   const [image, setImage] = useState(editedPage.img)
   const [holiday, setHoliday] = useState(editedPage.holiday)
   const [statementEditMode, setStatementEditMode ] = useState(false)
 
   const onImageChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    if(error === errors.usingAssignedImage) { //TODO: think about better way to reset error
+    if(error === ServerErrors.usingAssignedImage) { //TODO: think about better way to reset error
       setError(null);
     }
     setImage(e.currentTarget.value)
@@ -27,7 +27,7 @@ export function EditModal({page, closeModal}: editModalProps) {
   }
 
   const updateStatementEditMode = (state: boolean) => {
-    if(error === errors.statementEditMode && !state) { //TODO: think about better way to reset error
+    if(error === ClientErrors.statementEditMode && !state) { //TODO: think about better way to reset error
       setError(null);
     }
     setStatementEditMode(state)
@@ -35,8 +35,8 @@ export function EditModal({page, closeModal}: editModalProps) {
 
   const beforeClose = () =>{
     if (statementEditMode) {
-      setError(errors.statementEditMode);
-      notificationService.show({...NOTIFICATIONS_MAP[errors.statementEditMode], onClose: () => setError(null)});
+      setError(ClientErrors.statementEditMode);
+      notificationService.show({...NOTIFICATIONS_MAP[ClientErrors.statementEditMode], onClose: () => setError(null)});
       return false;
     }
     return true;
@@ -99,7 +99,7 @@ export function EditModal({page, closeModal}: editModalProps) {
           </div>
           <div className="mt-8">
             <img className="object-cover w-full" src={editedPage.img || "/images/blank-image.jpg"} alt="project preview" />
-            <input onChange={onImageChange} value={image} className={`${error === errors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
+            <input onChange={onImageChange} value={image} className={`${error === ServerErrors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
           </div>
           <div className="mt-8">
             <h4>Holiday</h4>
@@ -109,7 +109,7 @@ export function EditModal({page, closeModal}: editModalProps) {
             <h4 className="mb-4">Statement</h4>
             <div className="min-h-[95px]">
               <Loader active={dataService.isLoading(dataService.http.getStatements) || actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
-                <fieldset className={`${error === errors.statementEditMode || error === errors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
+                <fieldset className={`${error === ClientErrors.statementEditMode || error === ServerErrors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
                   <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
                 </fieldset>
               </Loader>

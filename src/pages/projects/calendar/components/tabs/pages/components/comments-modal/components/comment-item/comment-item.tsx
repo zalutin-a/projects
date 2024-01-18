@@ -1,20 +1,43 @@
+import { useContext, useState } from "react";
+import { AppContext } from "src/App";
 import { Icon, ClickPopover, ActionsList } from "src/shared/index";
+import { EditCommentForm } from "../index";
 import { commentItemProps } from "./types";
 
-export function CommentItem({comment}: commentItemProps) {
+export function CommentItem({updateComments, comments, comment, index}: commentItemProps) {
+  const { notificationService } = useContext(AppContext);
+  const [editMode, setEditMode] = useState(false);
+
   const getUserAvatar = () => {
     //TODO : implement after userServise implementation
     return null
   }
 
   const onDelete = () => {
-    //TODO: to be implemented
-    console.log('delete')
+    if (comment) {
+      notificationService.show({
+        type: 'Warning',
+        message: "You are trying to delete this comment. This action cannot be undone. Click Delete to continue.",
+        action: {
+          name: "Delete",
+          onAction: () => updateComments(comments.toSpliced(index, 1)),
+        }
+      });
+    }
   }
 
   const onEdit = () => {
-    //TODO: to be implemented
+    setEditMode(true)
     console.log('edit')
+  }
+
+  const onEditedCommentSave = (value: string) => {
+    if(!value) {
+      setEditMode(false);
+      return
+    }
+
+    updateComments(comments.toSpliced(index, 1, {...comment, value}), () => setEditMode(false));
   }
 
   return (
@@ -36,7 +59,10 @@ export function CommentItem({comment}: commentItemProps) {
             </ClickPopover>
           </div>
         </div>
-        <div className="py-2 px-3">{comment.value}</div>
+          {editMode 
+            ? <EditCommentForm comment={comment.value} onSave={onEditedCommentSave}></EditCommentForm>
+            : <div className="py-2 px-3">{comment.value}</div>
+          }
       </div>
     </>
   )

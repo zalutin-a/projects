@@ -1,4 +1,4 @@
-import { CalendarPageModel, CalendarStatementModel, errors } from "src/shared/index"
+import { AppError, CalendarPageModel, CalendarStatementModel } from "src/shared/index"
 
 
 export type StatementSelectorProps = {
@@ -6,7 +6,7 @@ export type StatementSelectorProps = {
   isCategorySelected: boolean;
   setEditMode: (state: boolean) => void;
   page: CalendarPageModel;
-  setError: (error: errors) => void;
-  error: errors;
+  setError: (error: AppError) => void;
+  error: AppError;
   setPage: (page: CalendarPageModel) => void;
 }

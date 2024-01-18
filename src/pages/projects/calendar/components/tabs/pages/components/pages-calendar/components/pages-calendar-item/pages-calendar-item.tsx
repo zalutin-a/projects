@@ -6,10 +6,10 @@ import { EditModal } from "../../../edit-modal/edit-modal";
 import { PageModal } from "../../../page-modal/page-modal";
 import { pagesCalendarItemProps } from "./types";
 
-export function PagesCalendarItem({page}: pagesCalendarItemProps) {
+export function PagesCalendarItem({page, index}: pagesCalendarItemProps) {
   const [iconsVisible, setIconsVisible ] = useState(false)
   const [ openPageModal, pageModal ] = UseModal(<PageModal page={page}></PageModal>);
-  const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal page={page}></CommentsModal>);
+  const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal index={index} page={page}></CommentsModal>);
   const [ openEditModal, editModal ] = UseModal(<EditModal page={page}></EditModal>);
 
   const { theme } = useContext(AppContext);

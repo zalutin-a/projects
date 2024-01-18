@@ -1,6 +1,6 @@
-import { AppNotification, errors } from "../index";
+import { AppNotification, ServerErrors } from "../index";
 
 export interface ServerError {
-  code: errors;
+  code: ServerErrors;
   payload: AppNotification;
 }

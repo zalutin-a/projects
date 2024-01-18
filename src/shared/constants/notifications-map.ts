@@ -1,10 +1,12 @@
 import { AppNotification } from "../index";
-import { errors } from "./error_enum";
+import { ClientErrors } from "./client-errors-enum";
 
 export type notificationMap = {
-  [key in errors]?: AppNotification;
+  [key in ClientErrors]: AppNotification;
 };
 
 export const NOTIFICATIONS_MAP: notificationMap = {
-  [errors.statementEditMode]: {type: 'Warning', message: "Please Save Statement before continue!"},
+  [ClientErrors.commetCantBeEmpty]: {type: 'Warning', message: "Comment cannot be Empty!"},
+  [ClientErrors.statementEditMode]: {type: 'Warning', message: "Please Save Statement before continue!"},
+  [ClientErrors.statementCantBeEmpty]: {type: 'Warning', message: "Statement cannot be Empty!"},
 }

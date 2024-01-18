@@ -1,10 +1,10 @@
-import { CalendarPageModel, errors } from "src/shared/index";
+import { AppError, CalendarPageModel,  } from "src/shared/index";
 
 export type editStatementFormProps = {
   page: CalendarPageModel;
-  setEditMode: (state: boolean) => void;
   editMode: boolean;
-  setError: (error: errors) => void;
-  error: errors;
+  error: AppError;
   setPage: (page: CalendarPageModel) => void;
+  setEditMode: (state: boolean) => void;
+  setError: (error: AppError) => void;
 }

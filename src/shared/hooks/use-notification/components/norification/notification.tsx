@@ -21,7 +21,7 @@ export function NotificationComponent({type, message, close, action, onClose}: N
 
   const onAction = () => {
     !action.onAction || action.onAction();
-    onClose();
+    onNotificationClose();
   }
 
   useEffect(() => {

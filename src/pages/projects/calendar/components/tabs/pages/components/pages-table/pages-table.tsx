@@ -25,7 +25,7 @@ export function PagesTable() {
               <span>Actions</span>
             </TableCell>
           </div>
-        {state.curent.pages.map((page) => {
+        {state.curent.pages.map((page, i) => {
             return (
               <div key={page.id} className={`grid grid-cols-pages border-b-2 border-x-2 border-gray-400`}>
                 <TableCell x="center">
@@ -38,7 +38,7 @@ export function PagesTable() {
                 <TableCell>
                   <span>{page.holiday}</span>
                 </TableCell>
-                <PagesActinCell page={page}></PagesActinCell>
+                <PagesActinCell index={i} page={page}></PagesActinCell>
               </div>
             )
           })}

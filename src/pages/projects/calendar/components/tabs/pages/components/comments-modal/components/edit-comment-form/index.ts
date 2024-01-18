@@ -1,2 +1,2 @@
-export * from './comment-item';
 export * from './edit-comment-form';
+export * from './types';
