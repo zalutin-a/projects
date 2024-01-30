@@ -1,8 +1,8 @@
 import { Comment } from "src/shared/index";
-import { updateCommentsFunction } from "../../types";
+import { commentActionFunction } from "../../types";
 
 export type commentItemProps = {
-  updateComments: updateCommentsFunction,
+  onAction: commentActionFunction,
   comments: Comment[];
   comment: Comment;
   index: number;

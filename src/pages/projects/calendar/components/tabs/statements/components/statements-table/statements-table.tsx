@@ -4,9 +4,8 @@ import { ActionCell } from "./action-cell";
 import { CategoryItem, StatementsContext, TableCell } from "../../../../index";
 
 export function StatementsTable({data, className}: StatementsTableProp) {
-  const { categories } = useContext(StatementsContext).state.curent;
+  const { categories } = useContext(StatementsContext).store.current;
 
-  
   return (
     <>
       <div className={`${className} bg-white dark:bg-app-dark`}>

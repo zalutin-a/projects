@@ -1,11 +1,9 @@
 import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
-
-import { BackdropComponent, Button, CalendarPageModel, ClientErrors, CloseButton, NOTIFICATIONS_MAP, ServerError } from "src/shared/index";
-import { Comment, Roles, UserShort } from "src/shared/types/comment";
+import { BackdropComponent, Button, CalendarPageModel, ClientErrors, CloseButton, ErrorReason, NOTIFICATIONS_MAP, Comment, Roles, UserShort} from "src/shared/index";
 import { PagesContext } from "../../pages";
 import { CommentItem } from "./index";
-import { commentsModalProps, updateCommentsFunction } from "./types";
+import { commentActionFunction, commentsModalProps } from "./types";
 
 const mockUser: UserShort = {
   name: "Andrii",
@@ -17,29 +15,37 @@ const mockUser: UserShort = {
 export function CommentsModal({page, index, closeModal}: commentsModalProps) {
   const [comment, setComment] = useState('')
   const { notificationService } = useContext(AppContext);
-  const { actionService, state} = useContext(PagesContext);
+  const { actionService, store} = useContext(PagesContext);
 
   const onChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
     setComment(e.currentTarget.value)
   }
 
-  const updateComments: updateCommentsFunction = (comments, onSuccess = () => {}) => { //TODO: use Promises in httpService instead of callbacks, do it before userService implementation!!!
-    actionService.http.updatePage(
-      {
-        ...page,
-        comments
-      },
-      {
-        onSuccess: (updatedPage: CalendarPageModel) => {
-          const payload = [...state.curent.pages].toSpliced(index, 1, updatedPage);
-          state.dispatch({type: 'pages', payload});
-          onSuccess();
-        },
-        onError: (error: ServerError) => {
-          notificationService.show(error.payload);
-        }
-      }
-    )
+  const onAction: commentActionFunction = (action) => {
+    let method;
+    switch (action.type) {
+      case 'add':
+        method = actionService.http.addComment
+        break;
+      case 'update':
+        method = actionService.http.updateComment
+        break;
+      case 'delete':
+        method = actionService.http.deleteComment
+        break;
+    }
+    return method.bind(actionService.http)({
+      pageId: page.id,
+      comment: action.type === 'delete' ? action.payload.id : action.payload,
+    })
+    .then((updatedPage: CalendarPageModel) => {
+      const payload = [...store.current.pages].toSpliced(index, 1, updatedPage);
+      store.dispatch({type: 'pages', payload});
+      return true;
+    })
+    .catch((error: ErrorReason) => {
+      notificationService.show(error.cause.payload);
+    })
   }
 
   const onAddComment = () => {
@@ -51,11 +57,10 @@ export function CommentsModal({page, index, closeModal}: commentsModalProps) {
       id: null,
       value: comment,
       author: mockUser,
-      date: new Date(Date.now()) // use UTC
+      date: new Date(Date.now())
     }
 
-    // TODO add method to actionService .addComment(page.id, callbacks) and use it instead
-    updateComments([...page.comments, newComment], () => setComment(''))
+    onAction({type: 'add', payload: newComment}).then((isSuccess) => isSuccess ? setComment('') : isSuccess)
   }
 
   const onCancel = () => {
@@ -85,7 +90,7 @@ export function CommentsModal({page, index, closeModal}: commentsModalProps) {
             <textarea placeholder="add comment" rows={3} className="w-full min-w-[400px] dark:bg-app-dark p-3" onChange={onChange} value={comment}></textarea>
           </div>
           <div className="divide-y">
-            {[...page.comments].map((comment,i) => <CommentItem updateComments={updateComments} comments={page.comments} index={i} comment={comment}></CommentItem>)}
+            {[...page.comments].map((comment,i) => <CommentItem onAction={onAction} comments={page.comments} index={i} comment={comment}></CommentItem>)}
           </div>
           <div className="flex justify-end mt-8 gap-x-5 dark:text-zinc-600">
             <Button color='gray-300' clickHandler={onCancel}>Close</Button>

@@ -1,32 +1,37 @@
-import { useContext, useEffect } from "react";
-
-import { Button, Loader, useAppState, UseModal } from "src/shared/index";
-import { CategoriesState, categoriesStateConfig} from "../../index";
-import { CalendarContext } from "../../../index";
+import { createContext } from "react";
+import { useLoaderData, useNavigation } from "react-router-dom";
+import { Button, DataFetchService, FetchService, Loader, State, storeDispatch, useActionService, useAppStore, useDataService, UseModal } from "src/shared/index";
+import { CategoriesActionService, CategoriesDataService, CategoriesStore, categoriesStoreConfig} from "../../index";
 import { CategoriesTable, EditModal } from "./components/index";
 
+export type categoriesContext = {
+  actionService: FetchService<CategoriesActionService>,
+  dataService: DataFetchService<CategoriesDataService>,
+  store: State<CategoriesStore, storeDispatch<CategoriesStore>>,
+}
+export const CategoriesContext = createContext<categoriesContext>({} as categoriesContext)
+
 export function CategoriesTab() {
-  const { dataService } = useContext(CalendarContext);
-  const [ state ] = useAppState<CategoriesState>(categoriesStateConfig);
+  const data = useLoaderData()
+  const navigation = useNavigation();
+  const store = useAppStore<CategoriesStore>(categoriesStoreConfig, data);
+  const dataService = useDataService<CategoriesDataService>(CategoriesDataService);
+  const actionService = useActionService<CategoriesActionService>(CategoriesActionService);
   const [ openEditModal, editModal ] = UseModal(<EditModal isNewMode={true}></EditModal>);
-  useEffect(() => {
-    dataService.http.getCategories({onSuccess: (data) => state.dispatch({type: 'categories', payload: data})}, {
-      page: state.curent.page || 1,
-      itemPerPage: state.curent.itemPerPage || 20,
-    });
-  },[state.curent.page]);  // todo separete data and action services with statements tab
 
   return (
     <>
-      <div className="min-h-[65svh]">
-        <Loader active={dataService.isLoading(dataService.http.getCategories)}>
-          <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
-            <Button color='blue-400' className="dark:text-zinc-600 mt-8" clickHandler={openEditModal}>Add category</Button>
-            <CategoriesTable className="mt-8" data={state.curent.categories}></CategoriesTable>
-            {editModal}
-          </div>
-        </Loader>
-      </div>
+      <CategoriesContext.Provider value={{store, dataService, actionService}}>
+        <div className="min-h-[65svh]">
+          <Loader active={navigation.state !== 'idle' || dataService.isLoading(dataService.http.getCategories)}>
+            <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
+              <Button color='blue-400' className="dark:text-zinc-600 mt-8" clickHandler={openEditModal}>Add category</Button>
+              <CategoriesTable className="mt-8" data={store.current.categories}></CategoriesTable>
+              {editModal}
+            </div>
+          </Loader>
+        </div>
+      </CategoriesContext.Provider>
     </>
   )
 }

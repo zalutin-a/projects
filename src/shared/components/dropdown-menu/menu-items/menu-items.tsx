@@ -11,7 +11,7 @@ export function MenuItems({config, itemComponent, itemWithChildren, dropdownPosi
         ? cloneElement(
           itemWithChildren,
           {
-            key: item.path || '' + Math.random(), // TODO: remove MATH when finish testing(every item will has unique path)
+            key: item.path,
             positionType: dropdownPosition,
             config: item,
           }

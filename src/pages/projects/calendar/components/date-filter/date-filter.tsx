@@ -18,14 +18,14 @@ const DATE_FILTER_OPTIONS = [
 
 export function DateFilter({onFilterChange, selected, className = ""}: DateFilterProps) {  
   const onChange = (selectedCategories: calendarDateFilter[]) => {
-    onFilterChange({date: selectedCategories[0]})
+    onFilterChange({type: 'date', payload: selectedCategories[0]})
   }
 
   return (
     <>
       <div className={`${className} flex justify-between flex-wrap items-center gap-2 w-[420px]`}>
         <span>Filter by assigned date: </span>
-        <Dropdown<calendarDateFilter> onSelect={onChange} selectedVlues={[selected]} options={DATE_FILTER_OPTIONS} placeholder="All"></Dropdown>
+        <Dropdown<calendarDateFilter> onSelect={onChange} selectedVlues={[+selected]} options={DATE_FILTER_OPTIONS} placeholder="All"></Dropdown>
       </div>
     </>
   )

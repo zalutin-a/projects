@@ -4,3 +4,7 @@ export interface ServerError {
   code: ServerErrors;
   payload: AppNotification;
 }
+
+export interface ErrorReason extends Error {
+  cause: ServerError;
+}

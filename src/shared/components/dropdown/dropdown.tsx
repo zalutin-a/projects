@@ -7,7 +7,7 @@ export function Dropdown<D>({onSelect, children, options, itemComponent = null, 
   const itemRef = useRef(null);
   const listRef = useRef(null);
   const [ openState, updateOpenState ] = useClickHandler((e) => {
-    if(isMultiple) { //TODO fix bug when click on dropdown input (should close dropdown)
+    if(isMultiple) {
       if (listRef.current?.contains(e.target)) {
         return false;
       } else {
@@ -18,7 +18,7 @@ export function Dropdown<D>({onSelect, children, options, itemComponent = null, 
     }
   })
 
-  const getSelectedNames = () => { //TODO improve performance
+  const getSelectedNames = () => {
     return selectedVlues.map(value => options.find(item => item.value === value)?.name);
   }
   
@@ -29,6 +29,9 @@ export function Dropdown<D>({onSelect, children, options, itemComponent = null, 
       selectedSet.has(value) ? selectedSet.delete(value) : selectedSet.add(value);
       selected = Array.from(selectedSet.values());
     } else {
+      if(value === selectedVlues[0]) {
+        return
+      }
       selected = [value];
     }
     onSelect(selected);

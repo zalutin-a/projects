@@ -1,27 +1,25 @@
 import { useContext, useState, SyntheticEvent} from "react";
 import { BackdropComponent, Button, CloseButton } from "src/shared/index";
-import { CalendarContext } from "src/pages/projects/index";
+import { CategoriesContext } from "src/pages/projects/index";
 import { EditModalProps } from "./types";
 
 export function EditModal({category, closeModal, isNewMode = false}: EditModalProps) {
   const [editedCategory, setEditedCategory] = useState(isNewMode ? '' : category.name);
-  const { dataService, actionService, } = useContext(CalendarContext);
+  const { dataService, actionService } = useContext(CategoriesContext);
 
   const onChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
     setEditedCategory(e.currentTarget.value)
   }
 
   const onConfirm = () => {
-    const method = isNewMode ? actionService.http.addCategory.bind(actionService) : actionService.http.updateCategory.bind(actionService);
-    method(
-      {...(isNewMode ? {} : {id: category.id} ), name: editedCategory},
-      {
-        onSuccess: () => {
-          dataService.http.reloadData();
-          closeModal();
-        }
-      }
-    );
+    const method = isNewMode ? actionService.http.addCategory.bind(actionService.http) : actionService.http.updateCategory.bind(actionService.http);
+    method({
+      ...(isNewMode ? {} : {id: category.id} ), name: editedCategory
+    })
+    .then(() => {
+      closeModal();
+      dataService.reloadPageData();
+    })
   }
 
   const onCancel = () => {

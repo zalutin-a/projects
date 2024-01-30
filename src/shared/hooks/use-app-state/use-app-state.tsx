@@ -1,43 +1,69 @@
-import { useReducer, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useMemo, useCallback } from "react";
+import { State, filterEmptyValues, stateDispatch, StateConfigItem, StateConfig } from "src/shared/index";
 
-import { getParamsFromUrl, getQueryParamsFromObj, StateConfig } from "src/shared/index";
-import { State, stateAction, stateDispatch } from "./types";
 
-function validateValue<S>(config: StateConfig[], actionName: keyof S, actionValue: any ) {
-  const actionConfig = config.find(item => item.name === actionName);
-  if (actionConfig?.validator) {
-    return actionConfig.validator(actionValue) ? actionValue : actionConfig.initValue;
+function validateValue(value: any, config: StateConfigItem) {
+  if(!value || value === 'null') {
+    return null
   }
-  return actionValue
+  const parsedValue = typeof value === 'string' ? config.parse(value) : value;
+  return config.validator(parsedValue) ? parsedValue : null;
 }
 
-function initState<S>(config: StateConfig[]): S {
-  const state = {} as S;
-  const params = getParamsFromUrl<any>(window.location.href);
-  config.forEach(item => {
-    state[item.name] = item.fromUrl && !!params[item.name] ? validateValue(config, item.name, params[item.name]) : item.initValue;
-  });
-  return state;
+function transformValue(value: any, config: StateConfigItem, state){
+  if(config.transform) {
+    return config.transform(value, state);
+  }
+  return value;
 }
 
-export function useAppState<S>(config: StateConfig[]): [State<S>] {
-  const navigate = useNavigate();
-  const initializer = () => initState<S>(config);
-  let location = useLocation();
-  console.log('state init')
+function applyConfigActions(config: StateConfigItem, value: any, state){
+  const validValue = validateValue(value, config);
+  const transformendValue = transformValue(validValue, config, state);
+  return transformendValue
+}
 
-  const [state, dispatch] = useReducer((state: S, action: stateAction<keyof S>): S => {
-    return {...state, [action.type]: validateValue(config, action.type, action.payload) }
-  }, null, initializer)
 
-  const urlDependsValues = useMemo(() => config.filter(item => item.fromUrl).map(item => item.name),[config]);
+export function useAppState<S>( config: StateConfig<S>): State<S> {
+  const [searchParams, setSearchParams] = useSearchParams()
+  
+  const current: S = useMemo(() => {
+    let store = {} as S;
+    for (const [key, value] of Object.entries<StateConfigItem>(config)) {
+      Object.defineProperty(store, key, {
+        get() {
+          const param = searchParams.get(key);
+          if(!param) {
+            return null
+          } else {
+            const parsedValue = value.parse(param)
+            return parsedValue ? parsedValue : null;
+          }
+        }
+      })
+    }
+    return store;
+  }, [searchParams]) //change it maybe use state.current('key')
+  
 
-  useEffect(() => {
-    const params = {}
-    urlDependsValues.forEach(name => params[name] = state[name]);
-    navigate('?' + getQueryParamsFromObj(params))
-  }, [...urlDependsValues.map(name => state[name]), location.search]);
+  const dispatch: stateDispatch<S> = useCallback((...actions) => {
+    const newParams = new URLSearchParams(searchParams);
+    const par = new URLSearchParams()
+    for (const action of actions) {
+      const param = applyConfigActions(config[action.type], action.payload, current )
+      newParams.set(action.type as string, param)
+    }
+    for (const [key, value] of newParams.entries()) {
+      if(key in config) {
+        const validParam = validateValue(value, config[key])
+        if(filterEmptyValues(validParam) && validParam !== 'null' && validParam !== 'undefined') { //change it
+          par.set(key, validParam)
+        }
+      }
+    }
+    setSearchParams(par)
+  }, [searchParams])
 
-  return [{curent: state, dispatch}];
+  return {current, dispatch}
 }

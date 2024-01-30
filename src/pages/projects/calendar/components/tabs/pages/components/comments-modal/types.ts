@@ -1,4 +1,4 @@
-import { CalendarPageModel, Comment } from "src/shared/index";
+import { Action, CalendarPageModel, Comment } from "src/shared/index";
 
 export type commentsModalProps = {
   page: CalendarPageModel;
@@ -6,4 +6,4 @@ export type commentsModalProps = {
   index: number;
 }
 
-export type updateCommentsFunction = (comments: Comment[], onSuccess?: () => void) => void
+export type commentActionFunction = (action: Action<'add' | 'update' | 'delete',Comment>) => Promise<any>

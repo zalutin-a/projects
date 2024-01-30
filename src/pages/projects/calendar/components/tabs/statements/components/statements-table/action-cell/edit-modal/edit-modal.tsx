@@ -1,18 +1,18 @@
 import { useContext, SyntheticEvent, useState } from "react";
-import { AppError, BackdropComponent, Button, ClientErrors, CloseButton, NOTIFICATIONS_MAP, ServerError, ServerErrors} from "src/shared/index";
+import { AppError, BackdropComponent, Button, ClientErrors, CloseButton, ErrorReason, NOTIFICATIONS_MAP, ServerErrors} from "src/shared/index";
 import { AppContext } from "src/App";
-import { CalendarContext, CategoryForm } from "src/pages/projects/index";
+import { CategoryForm, StatementsContext } from "src/pages/projects/index";
 import { EditModalProps } from "./types";
 
 
 export function EditModal({statement, closeModal, isNewMode = false}: EditModalProps) {
   const {notificationService} = useContext(AppContext);
+  const { dataService, actionService } = useContext(StatementsContext)
   const [error, setError] = useState<AppError>(null);
   const [editedStatement, setEditedStatement] = useState(isNewMode ? '' : statement.value);
   const [editedDate, setEditedDate] = useState(isNewMode ? '' : statement.date ?? '');
   const [editedImgLink, setEditedImgLink] = useState(isNewMode ? '' : statement.imgSrc ?? '');
   const [editedCategories, setEditedCategories] = useState(isNewMode ? [] : statement.categories);
-  const { dataService, actionService, } = useContext(CalendarContext);
 
   const onStatementsChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
     setEditedStatement(e.currentTarget.value);
@@ -40,25 +40,19 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
       return
     }
     const method = isNewMode ? actionService.http.addStatement.bind(actionService.http) : actionService.http.updateStatement.bind(actionService.http);
-    method(
-      {
+    method({
         ...(isNewMode ? {} : {id: statement.id} ),
         value: editedStatement,
         categories: editedCategories,
         date: editedDate,
         imgSrc: editedImgLink,
-      },
-      {
-        onSuccess: () => {
-          dataService.http.reloadData();
-          closeModal();
-        },
-        onError: (e: ServerError) => {
-          setError(e.code);
-          notificationService.show({...e.payload, onClose: () => setError(null)})
-        },
-      }
-    );
+    }).then(() => {
+      closeModal();
+      dataService.reloadPageData()
+    }).catch((e: ErrorReason) => {
+      setError(e.cause.code);
+      notificationService.show({...e.cause.payload, onClose: () => setError(null)})
+    });
   }
 
   const onCancel = () => {

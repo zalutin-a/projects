@@ -3,7 +3,7 @@ import { PagesContext, TableCell } from "../../../../index"
 import { PagesActinCell, PagesImageCell } from "./components";
 
 export function PagesTable() {
-  const { state } = useContext(PagesContext);
+  const { store } = useContext(PagesContext);
 
   return (
     <>
@@ -25,7 +25,7 @@ export function PagesTable() {
               <span>Actions</span>
             </TableCell>
           </div>
-        {state.curent.pages.map((page, i) => {
+        {store.current.pages.map((page, i) => {
             return (
               <div key={page.id} className={`grid grid-cols-pages border-b-2 border-x-2 border-gray-400`}>
                 <TableCell x="center">

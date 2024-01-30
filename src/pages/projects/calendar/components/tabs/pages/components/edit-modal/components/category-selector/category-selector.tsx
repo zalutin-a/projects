@@ -4,7 +4,7 @@ import { Slider } from 'src/shared/index';
 import { categorySelectorProps } from "./types";
 
 export function CategorySelector({onCategorySelect, selectedCategory}: categorySelectorProps) {
-  const {categories} = useContext(PagesContext).state.curent;
+  const {categories} = useContext(PagesContext).store.current;
 
   return (
     <>

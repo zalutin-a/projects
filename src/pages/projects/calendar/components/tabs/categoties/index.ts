@@ -1,3 +1,4 @@
 export * from './categories';
-export * from './state';
+export * from './store';
 export * from './types';
+export * from './services';

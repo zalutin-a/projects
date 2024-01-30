@@ -1,4 +1,4 @@
-import { FetchCalback, setFetchLoading } from "src/shared/index";
+import { setFetchLoading } from "src/shared/index";
 
 export class HTTPService {
   protected setIsLoading: setFetchLoading;
@@ -7,77 +7,102 @@ export class HTTPService {
     this.setIsLoading = setIsLoading;
   }
 
-  GET(methodId: any, url: string, callbacks: FetchCalback, params: any = {}) {
-    this.fetchData(methodId, url, {method: 'GET'},callbacks, params);
+  GET(methodId: any, url: string, params: string) {
+    const urlWithParams = url + (!params ? '' : `?${params}` );
+    return this.fetchData(methodId, urlWithParams, {method: 'GET'});
   }
 
-  POST(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
-    this.fetchData(
+
+  POST(methodId: any, url: string, body: any = {}) {
+    return this.fetchData(
       methodId,
       url,
       {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
-      },
-      callbacks,
-      params
+      }
     );
   }
 
-  DELETE(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
-    this.fetchData(
+  PUT(methodId: any, url: string, body: any = {}) {
+    return this.fetchData(
       methodId,
       url,
       {
-        method: 'DELETE',
+        method: 'PUT',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
-      },
-      callbacks,
-      params
+      }
     );
   }
 
-  PATCH(methodId: any, url: string, body: any = {}, callbacks: FetchCalback, params: any = {}) {
-    this.fetchData(
+  PATCH(methodId: any, url: string, body: any = {}) {
+    return this.fetchData(
       methodId,
       url,
       {
         method: 'PATCH',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
-      },
-      callbacks,
-      params
+      }
     );
   }
 
-  //TODO: finish error handling
-  private async fetchData(methodId: any, url: string, fetchParams: RequestInit, callbacks: FetchCalback, params: any = {}) { //TODO: add error handling
-    const urlWithParams = this.getURL(url, params);
-    try {
+  DELETE(methodId: any, url: string, body: any = {}) {
+    return this.fetchData(
+      methodId,
+      url,
+      {
+        method: 'DELETE',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body),
+      }
+    );
+  }
+
+  private async fetchData(methodId: any, url: string, fetchParams: RequestInit) {
+    if (this.setIsLoading) {
       this.setIsLoading((map) => new Map(map.set(methodId, true)));
-      const res = await fetch(urlWithParams, fetchParams);
-      if(res.status >= 300) {
-        throw (await res.json())
-      }
-      let data = {};
-      if (res.status === 200) {
-        data = await res.json();
-      }
-      if(callbacks.onSuccess) {
-        callbacks.onSuccess(data);
-      }
-      this.setIsLoading((map) => new Map(map.set(methodId, false)));
-
-    } catch (error: any) {
-      if(callbacks.onError) {
-        this.setIsLoading((map) => new Map(map.set(methodId, false)));
-        callbacks.onError(error);
-      }
     }
-
+    return fetch(url, fetchParams)
+      .then(async (res) => {
+        if(!res.ok) {
+          throw new Error('', {cause: {res}})
+        }
+        if (res.status === 200) {
+          return await res.json();
+        }
+      }).catch(async (error) => {
+        switch (error.cause?.res?.status) {
+          case 500:
+            // show notification with error message
+            console.log('Server error')
+            break
+          case 404:
+            //redirect to 404 page
+            console.log('Page 404');
+            break
+          case 403:
+            // show notification with error message
+            console.log('Forbidden');
+            break
+          case 401:
+            //redirect to login page
+            console.log('Unauthorized');
+            break
+          case 400:
+            // code 400 reserved for server side VALIDATION errors
+            // and body should containe ServerError to handle it in a catch() block
+            // in the place where we are doing request
+            throw new Error('', {cause: await error.cause.res?.json()})
+    
+        }
+      }).finally(() => {
+        if (this.setIsLoading) {
+          this.setIsLoading((map) => new Map(map.set(methodId, false)));
+        }
+      })
   }
 
   protected getURL(base: string, params: any = {}): string {

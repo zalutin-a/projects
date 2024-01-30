@@ -1,26 +1,17 @@
 import { StateConfig } from "src/shared/index";
+import { PagesState } from "./state";
 
-export const pagesStateConfig: StateConfig[] = [
-  {
-    name: "pages",
-    fromUrl: false,
-    initValue: [],
-  },
-  {
-    name: "year",
-    fromUrl: true,
-    initValue: 2024,
+export const pagesStateConfig: StateConfig<PagesState> = {
+  year: {
     validator: (value) => !isNaN(+value),
+    parse: (value) => !isNaN(+value),
   },
-  {
-    name: "month",
-    fromUrl: true,
-    initValue: 0,
+  month: {
     validator: (value) => !isNaN(+value),
+    parse: (value) => +value,
   },
-  {
-    name: "id",
-    fromUrl: true,
-    initValue: null,
-  }
-];
+  id: {
+    validator: (value) => true,
+    parse: (value: string) => value,
+  },
+}

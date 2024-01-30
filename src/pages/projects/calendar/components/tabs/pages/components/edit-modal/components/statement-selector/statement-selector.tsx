@@ -21,18 +21,14 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
         }
       }
       actionService.http.checkPageFields(
-        updatedPage,
-        {
-          onSuccess: () => {
-              setPage(updatedPage)
-              setEditMode(false)
-            },
-            onError: (error: ServerError) => {
-              setError(error.code);
-              notificationService.show({...error.payload, onClose: () => setError(null)})
-            }
-        },
-      )
+        updatedPage
+      ).then(() => {
+        setPage(updatedPage)
+        setEditMode(false)
+      }).catch((reason) => {
+        setError(reason.cause?.code);
+        notificationService.show({...reason.cause?.payload || {}, onClose: () => setError(null)})
+      })
     } else {
       setPage({...page, statement: null})
       setEditMode(false)

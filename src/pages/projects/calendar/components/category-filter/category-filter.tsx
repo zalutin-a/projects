@@ -13,12 +13,12 @@ const categoryMaper = item => {
 }
 
 export function CategoryFilter({onFilterChange, selected, className = ""}: CategoryFilterProps) {  
-  const { categories } = useContext(StatementsContext).state.curent;
+  const { categories } = useContext(StatementsContext).store.current;
 
-  const mapedCategories = categories.map(categoryMaper)
+  const mapedCategories = categories?.map(categoryMaper)
 
   const onChange = (selectedCategories: CalendarCategory[]) => {
-    onFilterChange({category: selectedCategories})
+    onFilterChange({type: 'category', payload: selectedCategories})
   }
 
   const getSelectedView = () => {

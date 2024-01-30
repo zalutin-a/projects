@@ -36,8 +36,11 @@ export function getParamsFromUrl<P>(url: string): P {
 
   return params;
 }
-
-export function getQueryParamsFromObj(obj, parentKey = '') {
+/*
+  TODO: change search params format after new API implementation
+    fcategory=winter,general&fdate=with,without
+*/
+export function getQueryParamsFromObj(obj, parentKey = '') { 
   const queryParams = [];
   for (const key of Object.keys(obj)) {
     const value = obj[key];
