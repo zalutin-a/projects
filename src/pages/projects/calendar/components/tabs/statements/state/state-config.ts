@@ -1,31 +1,27 @@
 import { StateConfig } from "src/shared/index";
+import { StatementsState } from "./state";
 
-export const statementsStateConfig: StateConfig[] = [
-  {
-    name: "statement",
-    fromUrl: false,
-    initValue: [],
-  },
-  {
-    name: "categories",
-    fromUrl: false,
-    initValue: [],
-  },
-  {
-    name: "page",
-    fromUrl: true,
-    initValue: 1,
+export const statementsStateConfig: StateConfig<StatementsState> = {
+  page: {
     validator: (value) => !isNaN(+value),
+    parse: (value) => +value,
   },
-  {
-    name: "itemPerPage",
-    fromUrl: true,
-    initValue: +localStorage.getItem('countPerPage') || 10,
+  pageSize: {
     validator: (value) => !isNaN(+value),
+    parse: (value) => +value,
   },
-  {
-    name: "filter",
-    fromUrl: true,
-    initValue: {},
+  date: {
+    validator: (value: string) => {
+      return !isNaN(+value);
+    },
+    parse: (value) => +value,
   },
-]
+  category: {
+    validator: (value: number[]) => {
+      return value.every(item => !isNaN(+item));
+    },
+    parse: (value) => {
+      return value.split(',').map(item => +item)
+    }
+  }
+}

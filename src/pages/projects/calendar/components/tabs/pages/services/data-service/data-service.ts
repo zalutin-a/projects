@@ -1,30 +1,28 @@
-import { API_URL, CalendarCategory, DataServiceBase, FetchCalback, setFetchLoading } from "src/shared/index";
-import { CalendarPagesParams } from "./types";
+import { API_URL, CalendarCategory, DataServiceBase, setFetchLoading } from "src/shared/index";
 
 export class PagesDataService extends DataServiceBase {
   baseUrl = API_URL + 'calendar/';
-  setUrl = (url:string) => {};
 
-  constructor(setIsLoading: setFetchLoading, setUrl: (url: string) => void) {
+  constructor(setIsLoading?: setFetchLoading) {
     super(setIsLoading)
-    this.setUrl = setUrl;
     console.log('dataservice-constructor ');
   }
 
-  public getPages(params: CalendarPagesParams, callbacks: FetchCalback,) {
-    this.getData(this.getPages, this.baseUrl + 'pages', callbacks, params);
-    this.setUrl('?' + this.http.getQueryParams(params))
-    this.lastFetch = () => this.getData(this.getPages, this.baseUrl + 'pages', callbacks, params);
+  public async loadFirstData(params: string) {
+    const res = await Promise.all([this.getPages(params), this.getAllCategories()]);
+    return {pages: res[0], categories: res[1]}
+  };
+
+  public getPages(params: string) {
+    return this.getData(this.getPages, 'pages', params);
   }
 
-  public getAllCategories(callbacks: FetchCalback) {
-    this.getData(this.getAllCategories, this.baseUrl + 'categories', callbacks);
+  public getAllCategories() {
+    return this.getData(this.getAllCategories, 'categories');
   }
 
-  public getStatements(callbacks: FetchCalback, category: CalendarCategory) {
-    const params = {
-      filter: { category: [category]},
-    }
-    this.getData(this.getStatements, this.baseUrl + 'statements', callbacks, params);
+  public getStatements(category: CalendarCategory) {
+    const params = new URLSearchParams({category: category.toString()})
+    return this.getData(this.getStatements, 'statements', params.toString());
   }
 }

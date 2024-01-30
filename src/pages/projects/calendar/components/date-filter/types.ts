@@ -1,9 +1,8 @@
-import { CalendarCategory } from "src/shared/index";
-import { CalendarTableFilters } from "../../types";
-import { calendarDateFilter } from "../index";
+import { Action } from "src/shared/index";
+import { calendarDateFilter, StatementsState } from "../index";
 
 export interface DateFilterProps {
-  onFilterChange: (selected: Partial<CalendarTableFilters>) => void;
+  onFilterChange: (selected: Action<keyof StatementsState>) => void;
   selected: calendarDateFilter;
   className?: string;
 }

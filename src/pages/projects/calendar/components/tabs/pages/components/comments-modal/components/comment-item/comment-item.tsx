@@ -4,7 +4,7 @@ import { Icon, ClickPopover, ActionsList } from "src/shared/index";
 import { EditCommentForm } from "../index";
 import { commentItemProps } from "./types";
 
-export function CommentItem({updateComments, comments, comment, index}: commentItemProps) {
+export function CommentItem({onAction, comments, comment, index}: commentItemProps) {
   const { notificationService } = useContext(AppContext);
   const [editMode, setEditMode] = useState(false);
 
@@ -20,7 +20,7 @@ export function CommentItem({updateComments, comments, comment, index}: commentI
         message: "You are trying to delete this comment. This action cannot be undone. Click Delete to continue.",
         action: {
           name: "Delete",
-          onAction: () => updateComments(comments.toSpliced(index, 1)),
+          onAction: () => onAction({type: 'delete', payload: comment}),
         }
       });
     }
@@ -28,7 +28,6 @@ export function CommentItem({updateComments, comments, comment, index}: commentI
 
   const onEdit = () => {
     setEditMode(true)
-    console.log('edit')
   }
 
   const onEditedCommentSave = (value: string) => {
@@ -36,8 +35,8 @@ export function CommentItem({updateComments, comments, comment, index}: commentI
       setEditMode(false);
       return
     }
-
-    updateComments(comments.toSpliced(index, 1, {...comment, value}), () => setEditMode(false));
+    onAction({type: 'update', payload: {...comment, value}})
+      .then(() => setEditMode(false));
   }
 
   return (

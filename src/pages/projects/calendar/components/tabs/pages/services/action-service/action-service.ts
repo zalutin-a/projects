@@ -1,4 +1,5 @@
-import { ActionServiceBase, API_URL, CalendarPageModel, FetchCalback, setFetchLoading } from "src/shared/index";
+import { ActionServiceBase, API_URL, CalendarPageModel, setFetchLoading } from "src/shared/index";
+import { commentParams } from "./types";
 
 export class PagesActionService extends ActionServiceBase{
   baseUrl = API_URL + 'calendar/';
@@ -8,21 +9,42 @@ export class PagesActionService extends ActionServiceBase{
     console.log('Actionservice constructor')
   }
 
-  public updatePage(data: CalendarPageModel, callbacks: FetchCalback) {
-    this.http.PATCH(
+  public updatePage(data: CalendarPageModel) {
+    return this.http.PATCH(
       this.updatePage,
       this.baseUrl + 'pages',
-      data,
-      callbacks
+      data
     );
   }
 
-  public checkPageFields(data: CalendarPageModel, callbacks: FetchCalback) {
-    this.http.POST(
+  public checkPageFields(data: CalendarPageModel) {
+    return this.http.POST(
       this.checkPageFields,
       this.baseUrl + 'pages/fields',
-      data,
-      callbacks
+      data
     );
+  }
+
+  public addComment(data: commentParams) {
+    return this.http.POST(
+      this.addComment,
+      this.baseUrl + 'pages/comments',
+      data
+    )
+  }
+
+  public updateComment(data: commentParams) {
+    return this.http.PUT(
+      this.addComment,
+      this.baseUrl + 'pages/comments',
+      data
+    )
+  }
+  public deleteComment(data: commentParams<string>) {
+    return this.http.DELETE(
+      this.addComment,
+      this.baseUrl + 'pages/comments',
+      data
+    )
   }
 }

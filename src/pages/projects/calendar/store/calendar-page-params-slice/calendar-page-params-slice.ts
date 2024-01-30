@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PayloadAction } from '@reduxjs/toolkit'
 import { CalendarPageParamsSlice } from './types'
-import { CalendarTableParams } from '../../index';
 import { getParamsFromUrl } from 'src/shared/index';
 
 const INITIAL_PAGE = 1;
 const INITIAL_ITEM_PRE_PAGE = +localStorage.getItem('countPerPage') || 10;
 
 function getPageParams(): CalendarPageParamsSlice  {
-  const params = getParamsFromUrl<CalendarTableParams>(window.location.href);
+  const params = getParamsFromUrl<any>(window.location.href);
   return {
     page: params.page || INITIAL_PAGE,
-    itemPerPage: params.itemPerPage || INITIAL_ITEM_PRE_PAGE,
+    pageSize: params.pageSize || INITIAL_ITEM_PRE_PAGE,
   }
 }
 
@@ -25,7 +24,7 @@ export const calendarPageParamsSlice = createSlice({
       state.page = action.payload;
     },
     setItemPerPage: (state: CalendarPageParamsSlice, action: PayloadAction<number>) => {
-      state.itemPerPage = action.payload;
+      state.pageSize = action.payload;
     }
   },
 })

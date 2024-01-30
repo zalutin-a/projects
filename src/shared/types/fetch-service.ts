@@ -8,3 +8,7 @@ export interface FetchService<T> {
   http: T;
   isLoading: isLoading;
 }
+
+export interface DataFetchService<T> extends FetchService<T> {
+  reloadPageData: () => void;
+}

@@ -12,15 +12,9 @@ export function BackdropComponent({children, closeModal, backdropBlur = true, ba
     }
   }
 
-  const onBackdropClick = (e: SyntheticEvent) => {
-    if (e.target === backdrop.current) {
-      onClose();
-    }
-  }
-
   return (
     <>
-      <div onClick={onBackdropClick} ref={backdrop} className={`${ backdropBlur ? 'backdrop-blur-sm' : ''} ${backdropShadow ? 'bg-black/20' : ''} overflow-auto modal-container_backdrop flex justify-center items-start relative w-full`}>
+      <div ref={backdrop} className={`${ backdropBlur ? 'backdrop-blur-sm' : ''} ${backdropShadow ? 'bg-black/20' : ''} overflow-auto modal-container_backdrop flex justify-center items-start relative w-full`}>
         {cloneElement(modalComponent, {
           ...modalComponent.props,
           closeModal,

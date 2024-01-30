@@ -10,7 +10,7 @@ const NOTIFICATION_COLORS: notificationColors = {
   Warning: 'orange',
 }
 
-export function NotificationComponent({type, message, close, action, onClose}: NotificationProps) {
+export function NotificationComponent({type = 'Error', message = 'Unknown error', close, action, onClose}: NotificationProps) {
   const color = NOTIFICATION_COLORS[type];
   const [didMount, setDidMount ] = useState(false)
 

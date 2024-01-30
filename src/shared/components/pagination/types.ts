@@ -1,9 +1,8 @@
-import { PageCountParams } from "src/shared/index";
+import { PagesCount, PaginationParams, Action, stateDispatch } from "src/shared/index";
 
-export interface PaginationProps {
-  onChange: (config: PageCountParams) => void;
-  calssName?: string;
-  pagesCount: number;
+export interface PaginationProps extends PagesCount {
+  onChange: stateDispatch<PaginationParams>;
+  className?: string;
   currentPage: number;
-  currentCountPerPage: number;
+  currentPageSize: number;
 }

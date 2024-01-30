@@ -1,20 +1,17 @@
 import { useContext } from "react";
-import { CalendarContext } from "src/pages/projects/index";
+import { StatementsContext } from "src/pages/projects/index";
 import { BackdropComponent, Button, CloseButton } from "src/shared/index";
 import { DeleteModalProps } from "./types";
 
 export function DeleteModal({id, closeModal}: DeleteModalProps) {
-  const { dataService, actionService } = useContext(CalendarContext);
+  const { dataService, actionService } = useContext(StatementsContext)
+
   const onConfirm = () => {
-    actionService.http.deleteStatement(
-      { id: id },
-      {
-        onSuccess: () => {
-          dataService.http.reloadData();
-          closeModal();
-        }
-      }
-    );
+    actionService.http.deleteStatement({ id: id })
+      .then(() => {
+        closeModal()
+        dataService.reloadPageData();
+      });
   }
   const onCancel = () => {
     closeModal()

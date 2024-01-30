@@ -1,4 +1,4 @@
-import { PageCountParams } from "src/shared/index";
+import { PaginationParams } from "src/shared/index";
 
-export interface CalendarPageParamsSlice extends PageCountParams {
+export interface CalendarPageParamsSlice extends PaginationParams {
 }

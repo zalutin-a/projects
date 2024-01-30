@@ -6,7 +6,7 @@ import { CategoryFormProps } from "./types";
 
 
 export function CategoryForm({isEditMode = false, selected = [], setSelected, className = ""}: CategoryFormProps) {
-  const { categories } = useContext(StatementsContext).state.curent;
+  const { categories } = useContext(StatementsContext).store.current;
   const onRemoveCategory = (removedCategoryId: CalendarCategory) => {
     setSelected(selected => {
       return selected.filter(id => id !== removedCategoryId);

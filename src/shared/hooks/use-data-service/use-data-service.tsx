@@ -1,21 +1,20 @@
 import { useState, useMemo } from "react";
-import { DataServiceBase, FetchService, setFetchLoading } from "src/shared/index";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { DataServiceBase, DataFetchService, setFetchLoading } from "src/shared/index";
 
-export function useDataService<C extends DataServiceBase>(dataService: new (setLoadingMap: setFetchLoading, setUrl: (url: string) => void) => C ): FetchService<C> {
+export function useDataService<C extends DataServiceBase>(dataService: new (setLoadingMap: setFetchLoading) => C ): DataFetchService<C> {
+  let [searchParams, setSearchParams] = useSearchParams();
   const [loadingMap, setLoadingMap ] = useState(new Map());
-  const navigate = useNavigate();
   
   const isLoading = (...methods: any[]): boolean => {
-    const a = methods.some((method) => loadingMap.get(method))
-    return a
-  } 
+    return methods.some((method) => loadingMap.get(method))
+  }
 
-  const setUrl = (fullUrl: string) => {
-    navigate(fullUrl)
-  };
+  const reloadPageData = () => {
+    setSearchParams(searchParams.toString())
+  }
 
-  const service = useMemo(() => new dataService(setLoadingMap, setUrl), [])
+  const service = useMemo(() => new dataService(setLoadingMap), [])
   console.log('dataservice init')
-  return {http: service, isLoading};
+  return {http: service, isLoading, reloadPageData};
 }

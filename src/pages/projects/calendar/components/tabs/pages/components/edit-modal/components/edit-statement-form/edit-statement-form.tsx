@@ -6,16 +6,13 @@ import { CategorySelector, editStatementFormProps, StatementSelector } from "../
 
 export function EditStatementForm({page, editMode, setEditMode, setError, setPage, error}: editStatementFormProps) {
   const { dataService } = useContext(PagesContext);
-  const [ category, setCategory ] = useState<CalendarCategory>(0)
+  const [ category, setCategory ] = useState<CalendarCategory>(1)
   const [ filteredStatements, setFilteredStatements ] = useState<CalendarStatementModel[]>([])
   const { theme } = useContext(AppContext);
 
-
   useEffect(() => {
-    dataService.http.getStatements({
-      onSuccess: (data: CalendarStatements) => setFilteredStatements(data.statements)},
-      category
-    )
+    dataService.http.getStatements(category)
+      .then((data: CalendarStatements) => setFilteredStatements(data.statements))
   }, [category])
 
   const onCategorySelect = (id:number) => {
@@ -33,7 +30,7 @@ export function EditStatementForm({page, editMode, setEditMode, setError, setPag
           setError={setError}
           setEditMode={setEditMode}
           statements={filteredStatements}
-          isCategorySelected={category >= 0}//todo: change category(start from 1)
+          isCategorySelected={!!category}
         ></StatementSelector>
       </div>
     ) : (
