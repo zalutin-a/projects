@@ -1,3 +1,4 @@
+import { redirect } from "react-router-dom";
 import { setFetchLoading } from "src/shared/index";
 
 export class HTTPService {
@@ -63,7 +64,7 @@ export class HTTPService {
 
   private async fetchData(methodId: any, url: string, fetchParams: RequestInit) {
     if (this.setIsLoading) {
-      this.setIsLoading((map) => new Map(map.set(methodId, true)));
+      this.setIsLoading((map) => new Map(map.set(methodId, true))); //TODO: move this logic to the dataserviceBase, leave just this.setIsLoading(true) 
     }
     return fetch(url, fetchParams)
       .then(async (res) => {
@@ -81,8 +82,7 @@ export class HTTPService {
             break
           case 404:
             //redirect to 404 page
-            console.log('Page 404');
-            break
+            throw new Error('', {cause: redirect(location.origin + "/404")}) //TODO: 
           case 403:
             // show notification with error message
             console.log('Forbidden');
@@ -90,12 +90,18 @@ export class HTTPService {
           case 401:
             //redirect to login page
             console.log('Unauthorized');
-            break
+            throw new Error('', {cause: redirect(location.origin + "/login?redirect_to=" + window.location.href)})
           case 400:
             // code 400 reserved for server side VALIDATION errors
             // and body should containe ServerError to handle it in a catch() block
             // in the place where we are doing request
             throw new Error('', {cause: await error.cause.res?.json()})
+          // case 302:
+          //   const url = new URL(new URLSearchParams(location.search).get('redirect_to')) //TODO sanitize url
+
+          //   throw new Error('', {cause: redirect(url?.protocol === 'https:' ? url?.toString() : '/')})
+          // default: 
+          //   return null
     
         }
       }).finally(() => {

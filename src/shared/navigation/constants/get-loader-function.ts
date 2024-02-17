@@ -1,9 +1,20 @@
+import { getAuth } from "firebase/auth";
+import { redirect } from "react-router-dom";
 import { CategoriesDataService,  PagesDataService, StatementsDataService} from "src/pages/projects/index";
 import { DataServiceBase} from "src/shared/index";
 
 function loaderFunction<D extends DataServiceBase>(dataService: D, request: Request) {
   const url = new URL(request.url);
-  return dataService.loadFirstData(new URLSearchParams(url.search).toString())
+  const auth = getAuth();
+  if(!auth.currentUser) {
+    return redirect(location.origin + "/login")
+  }
+  return dataService.loadFirstData(new URLSearchParams(url.search).toString()).catch((reason) => {
+    // if(reason.cause === 401) {
+    //   return redirect(location.origin + "/login")
+    // }
+    return reason.cause
+  })
 }
 
 export type LoaderFunctionKeys = 'pages' | 'statements' | 'categories'

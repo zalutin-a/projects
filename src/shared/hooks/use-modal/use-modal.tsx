@@ -18,15 +18,16 @@ export function UseModal(...[component, backdropBlur, backdropShadow]: UseModalP
     setIsOpen(false);
   }
 
-  const modal = ReactDOM.createPortal(
-    isOpen ? (
+  let modal = null;
+
+  if(modalPortal.current && isOpen) {
+    modal = ReactDOM.createPortal(
       <ModalWindow {...{children, closeModal, backdropBlur, backdropShadow}}>
         {children}
-      </ModalWindow>
-    )
-    : null,
-    modalPortal.current
-  );
+      </ModalWindow>,
+      modalPortal.current
+    );
+  }
 
   return [openModal, modal];
 }

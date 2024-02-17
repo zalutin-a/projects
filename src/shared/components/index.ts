@@ -21,3 +21,4 @@ export * from './dropdown';
 export * from './hint';
 export * from './loader';
 export * from './actions-list';
+export * from './login-signup-btn';

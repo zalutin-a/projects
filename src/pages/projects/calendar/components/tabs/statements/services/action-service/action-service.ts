@@ -24,7 +24,7 @@ export class StatementsActionService extends ActionServiceBase{
     );
   }
 
-  public deleteStatement(data: {id: string}) {
+  public deleteStatement(data: {id: string, user: string}) {
     return this.http.DELETE(
       this.deleteStatement,
       this.baseUrl + 'statements',
