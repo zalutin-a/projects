@@ -13,7 +13,11 @@ export function DeleteModal({id, closeModal}: DeleteModalProps) {
       .then(() => {
         closeModal()
         dataService.reloadPageData();
-      });
+      }).catch((error => {
+        if(error.message === "INVALID") {
+          console.log(error)
+        }
+      }));
   }
   const onCancel = () => {
     closeModal()

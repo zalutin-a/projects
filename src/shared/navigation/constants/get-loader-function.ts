@@ -5,14 +5,15 @@ import { API_URL, getHTTPService} from "src/shared/index";
 function loaderFunction(loadData: (params?: string) => Promise<any>, request: Request) {
   const url = new URL(request.url);
   const auth = getAuth();
-  if(!auth.currentUser) {
-    return redirect(location.origin + "/login")
-  }
+  // if(!auth.currentUser) {
+  //   return redirect(location.origin + "/login")
+  // }
   return loadData(new URLSearchParams(url.search).toString()).catch((reason) => {
-    // if(reason.cause === 401) {
-    //   return redirect(location.origin + "/login")
-    // }
-    return reason.cause
+    if(reason.message === "REDIRECT") {
+      return redirect(reason.cause);
+    } else {
+      return null
+    }
   })
 }
 

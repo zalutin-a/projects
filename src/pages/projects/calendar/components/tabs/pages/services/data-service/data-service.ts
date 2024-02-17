@@ -1,10 +1,10 @@
-import { API_URL, CalendarCategory, DataServiceBase, setFetchLoading } from "src/shared/index";
+import { API_URL, CalendarCategory, DataServiceBase, redirectFunction, setFetchLoading } from "src/shared/index";
 
 export class PagesDataService extends DataServiceBase {
   baseUrl = API_URL + 'calendar/';
 
-  constructor(setIsLoading?: setFetchLoading) {
-    super(setIsLoading)
+  constructor(setIsLoading: setFetchLoading, redirect: redirectFunction) {
+    super(setIsLoading, redirect)
     console.log('dataservice-constructor ');
   }
 

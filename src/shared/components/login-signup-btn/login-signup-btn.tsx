@@ -11,7 +11,7 @@ export function LoginSignupBtn() {
   }
   const auth = getAuth()
   const onSignOut = () => {
-    signOut(auth)
+    signOut(auth).then(() => console.log('logout'))
   }
   return (
     <>
