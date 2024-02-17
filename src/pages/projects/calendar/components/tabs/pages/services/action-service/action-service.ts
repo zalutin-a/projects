@@ -11,7 +11,7 @@ export class PagesActionService extends ActionServiceBase{
 
   public updatePage(data: CalendarPageModel) {
     return this.http.PATCH(
-      this.updatePage,
+      this.getChangeLoadingStateFunction(this.updatePage),
       this.baseUrl + 'pages',
       data
     );
@@ -19,7 +19,7 @@ export class PagesActionService extends ActionServiceBase{
 
   public checkPageFields(data: CalendarPageModel) {
     return this.http.POST(
-      this.checkPageFields,
+      this.getChangeLoadingStateFunction(this.checkPageFields),
       this.baseUrl + 'pages/fields',
       data
     );
@@ -27,7 +27,7 @@ export class PagesActionService extends ActionServiceBase{
 
   public addComment(data: commentParams) {
     return this.http.POST(
-      this.addComment,
+      this.getChangeLoadingStateFunction(this.addComment),
       this.baseUrl + 'pages/comments',
       data
     )
@@ -35,14 +35,14 @@ export class PagesActionService extends ActionServiceBase{
 
   public updateComment(data: commentParams) {
     return this.http.PUT(
-      this.addComment,
+      this.getChangeLoadingStateFunction(this.updateComment),
       this.baseUrl + 'pages/comments',
       data
     )
   }
   public deleteComment(data: commentParams<string>) {
     return this.http.DELETE(
-      this.addComment,
+      this.getChangeLoadingStateFunction(this.deleteComment),
       this.baseUrl + 'pages/comments',
       data
     )

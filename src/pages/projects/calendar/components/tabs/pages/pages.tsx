@@ -32,7 +32,7 @@ export function PagesTab() {
           <ViewSwitcher setViewMode={setViewMode}></ViewSwitcher>
         </div>
         <div className="min-h-[65svh] mx-8">
-          <Loader active={navigation.state !== 'idle' || dataService.isLoading(dataService.http.getPages)}>
+          <Loader active={navigation.state !== 'idle'}>
             <PagesContainer viewMode={viewMode}></PagesContainer>
           </Loader>
         </div>

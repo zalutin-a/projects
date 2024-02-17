@@ -39,7 +39,7 @@ export function StatementsTab() {
             <CategoryFilter onFilterChange={onFilterChange} selected={state.current.category || []}></CategoryFilter>
           </div>
           <div className='min-h-[65svh]'>
-            <Loader active={navigation.state !== 'idle' || dataService.isLoading(dataService.http.getStatements, dataService.http.getAllCategories)}>
+            <Loader active={navigation.state !== 'idle'}>
               <div className="flex items-center mt-8 justify-between">
                 <h3>Found {store.current.statementsCount} statement{`${store.current.statementsCount > 1 ? 's' : ''}`}</h3>
                 <Button color='blue-400' className="dark:text-zinc-600" clickHandler={openEditModal}>Add statement</Button>

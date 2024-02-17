@@ -1,6 +1,7 @@
 import { setFunction } from "./set-function";
 
-export type setFetchLoading = setFunction<Map<any, boolean>>
+export type setLoadingState = (state: boolean) => void;
+export type setFetchLoading = setFunction<Map<any, boolean>>;
 
 export type isLoading = (...methods) => boolean;
 

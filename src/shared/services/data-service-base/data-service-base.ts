@@ -1,17 +1,21 @@
 import { setFetchLoading } from "src/shared/index";
-import { HTTPService } from "../index";
+import { getHTTPService, HTTPService } from "../index";
 
 export abstract class DataServiceBase {
   protected http: HTTPService;
   protected abstract baseUrl: string;
-  
+  private setIsLoading: setFetchLoading;
+
   constructor(setIsLoading: setFetchLoading) {
-    this.http = new HTTPService(setIsLoading); //TODO: create a function getHTTPService to return instance of httpService, and instansiate http in index file
+    this.http = getHTTPService();
+    this.setIsLoading = setIsLoading;
   }
 
-  abstract loadFirstData(params: string): Promise<any>; //TODO: move it as separete function for each page
+  protected getData(method: any, url: string, params: string = '') { 
+    return this.http.GET(this.getChangeLoadingStateFunction(method), this.baseUrl + url, params);
+  }
 
-  protected getData(methodId: any, url: string, params: string = '') {
-    return this.http.GET(methodId, this.baseUrl + url, params);
+  protected getChangeLoadingStateFunction(method) {
+    return (state: boolean) => {this.setIsLoading((map) => new Map(map.set(method, state)))}
   }
 }

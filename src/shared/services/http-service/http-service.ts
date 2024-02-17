@@ -1,22 +1,16 @@
 import { redirect } from "react-router-dom";
-import { setFetchLoading } from "src/shared/index";
+import { setLoadingState } from "src/shared/index";
 
 export class HTTPService {
-  protected setIsLoading: setFetchLoading;
-
-  constructor(setIsLoading: setFetchLoading) {
-    this.setIsLoading = setIsLoading;
-  }
-
-  GET(methodId: any, url: string, params: string) {
+  GET(setLoadingState: setLoadingState, url: string, params?: string) {
     const urlWithParams = url + (!params ? '' : `?${params}` );
-    return this.fetchData(methodId, urlWithParams, {method: 'GET'});
+    return this.fetchData(setLoadingState, urlWithParams, {method: 'GET'});
   }
 
 
-  POST(methodId: any, url: string, body: any = {}) {
+  POST(setLoadingState: setLoadingState, url: string, body: any = {}) {
     return this.fetchData(
-      methodId,
+      setLoadingState,
       url,
       {
         method: 'POST',
@@ -26,9 +20,9 @@ export class HTTPService {
     );
   }
 
-  PUT(methodId: any, url: string, body: any = {}) {
+  PUT(setLoadingState: setLoadingState, url: string, body: any = {}) {
     return this.fetchData(
-      methodId,
+      setLoadingState,
       url,
       {
         method: 'PUT',
@@ -38,9 +32,9 @@ export class HTTPService {
     );
   }
 
-  PATCH(methodId: any, url: string, body: any = {}) {
+  PATCH(setLoadingState: setLoadingState, url: string, body: any = {}) {
     return this.fetchData(
-      methodId,
+      setLoadingState,
       url,
       {
         method: 'PATCH',
@@ -50,9 +44,9 @@ export class HTTPService {
     );
   }
 
-  DELETE(methodId: any, url: string, body: any = {}) {
+  DELETE(setLoadingState: setLoadingState, url: string, body: any = {}) {
     return this.fetchData(
-      methodId,
+      setLoadingState,
       url,
       {
         method: 'DELETE',
@@ -62,10 +56,8 @@ export class HTTPService {
     );
   }
 
-  private async fetchData(methodId: any, url: string, fetchParams: RequestInit) {
-    if (this.setIsLoading) {
-      this.setIsLoading((map) => new Map(map.set(methodId, true))); //TODO: move this logic to the dataserviceBase, leave just this.setIsLoading(true) 
-    }
+  private async fetchData(setLoadingState: setLoadingState, url: string, fetchParams: RequestInit) {
+    setLoadingState(true)
     return fetch(url, fetchParams)
       .then(async (res) => {
         if(!res.ok) {
@@ -105,9 +97,7 @@ export class HTTPService {
     
         }
       }).finally(() => {
-        if (this.setIsLoading) {
-          this.setIsLoading((map) => new Map(map.set(methodId, false)));
-        }
+        setLoadingState(false)
       })
   }
 

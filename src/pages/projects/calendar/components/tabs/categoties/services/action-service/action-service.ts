@@ -10,7 +10,7 @@ export class CategoriesActionService extends ActionServiceBase{
 
   public updateCategory(data: CalendarCategoryModel) {
     return this.http.PATCH(
-      this.updateCategory,
+      this.getChangeLoadingStateFunction(this.updateCategory),
       this.baseUrl + 'categories',
       data
     );
@@ -18,7 +18,7 @@ export class CategoriesActionService extends ActionServiceBase{
 
   public addCategory(data: Partial<CalendarCategoryModel>) {
     return this.http.POST(
-      this.addCategory,
+      this.getChangeLoadingStateFunction(this.addCategory),
       this.baseUrl + 'categories',
       data
     );
@@ -26,7 +26,7 @@ export class CategoriesActionService extends ActionServiceBase{
 
   public deleteCategory(data: {id: string}) {
     return this.http.DELETE(
-      this.deleteCategory,
+      this.getChangeLoadingStateFunction(this.deleteCategory),
       this.baseUrl + 'categories',
       data
     );

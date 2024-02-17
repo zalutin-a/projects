@@ -10,7 +10,7 @@ export class StatementsActionService extends ActionServiceBase{
 
   public updateStatement(data: CalendarStatementModel) {
     return this.http.PATCH(
-      this.updateStatement,
+      this.getChangeLoadingStateFunction(this.updateStatement),
       this.baseUrl + 'statements',
       data
     );
@@ -18,7 +18,7 @@ export class StatementsActionService extends ActionServiceBase{
 
   public addStatement(data: Partial<CalendarStatementModel>) {
     return this.http.POST(
-      this.addStatement,
+      this.getChangeLoadingStateFunction(this.addStatement),
       this.baseUrl + 'statements',
       data
     );
@@ -26,7 +26,7 @@ export class StatementsActionService extends ActionServiceBase{
 
   public deleteStatement(data: {id: string, user: string}) {
     return this.http.DELETE(
-      this.deleteStatement,
+      this.getChangeLoadingStateFunction(this.deleteStatement),
       this.baseUrl + 'statements',
       data
     );

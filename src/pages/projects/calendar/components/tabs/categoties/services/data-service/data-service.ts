@@ -8,12 +8,4 @@ export class CategoriesDataService extends DataServiceBase {
     console.log('dataservice-constructor ')
   }
 
-  public async loadFirstData(params = '') {
-    return {categories: await this.getCategories()};
-  };
-
-
-  public getCategories() {
-    return this.getData(this.getCategories, 'categories');
-  }
 }

@@ -8,19 +8,6 @@ export class StatementsDataService extends DataServiceBase {
     console.log('dataservice-constructor ')
   }
 
-  public async loadFirstData(params: string) {
-    const res = await Promise.all([this.getStatements(params), this.getAllCategories()]);
-    return {...res[0], categories: res[1]}
-  };
-
-  public getStatements(params: string) {
-    return this.getData(this.getStatements, 'statements', params);
-  }
-
-  public getAllCategories() {
-    return this.getData(this.getAllCategories, 'categories');
-  }
-
   public getCount() {
     return this.getData(this.getCount, 'statements/count');
   }
