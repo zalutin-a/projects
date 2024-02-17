@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useMemo } from "react";
 import { State, Action, StateConfig, StoreConfigItem } from "src/shared/index";
 import { storeDispatch } from "./types";
 
@@ -49,5 +49,9 @@ export function useAppStore<S>(config: StateConfig<S, StoreConfigItem>, initialD
     }
   }, [initialData]);
 
-  return {current: state, dispatch};
+  const stateObject = useMemo(() => {
+    return {current: state, dispatch}
+  }, [state, dispatch]);
+
+  return stateObject;
 }

@@ -23,7 +23,7 @@ export function CategoriesTab() {
     <>
       <CategoriesContext.Provider value={{store, dataService, actionService}}>
         <div className="min-h-[65svh]">
-          <Loader active={navigation.state !== 'idle' || dataService.isLoading(dataService.http.getCategories)}>
+          <Loader active={navigation.state !== 'idle'}>
             <div className="mx-auto box-content pb-8 mt-8 px-2.5 md:px-10 lg:mt-10 lg:pb-16 max-w-4xl">
               <Button color='blue-400' className="dark:text-zinc-600 mt-8" clickHandler={openEditModal}>Add category</Button>
               <CategoriesTable className="mt-8" data={store.current.categories}></CategoriesTable>

@@ -51,7 +51,7 @@ const data = [
 export const Dashboard = () => {
   return (
     <div className="bg-stone-200">
-      {/* <APIChart data={data}></APIChart> */}
+      <APIChart data={data}></APIChart>
     </div>
   )
 }

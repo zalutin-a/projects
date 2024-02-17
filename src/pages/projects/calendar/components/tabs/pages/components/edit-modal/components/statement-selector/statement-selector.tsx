@@ -25,9 +25,11 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
       ).then(() => {
         setPage(updatedPage)
         setEditMode(false)
-      }).catch((reason) => {
-        setError(reason.cause?.code);
-        notificationService.show({...reason.cause?.payload || {}, onClose: () => setError(null)})
+      }).catch((error) => {
+        if(error.message === "INVALID") {
+          setError(error.cause?.code);
+          notificationService.show({...error.cause?.payload || {}, onClose: () => setError(null)})
+        }
       })
     } else {
       setPage({...page, statement: null})

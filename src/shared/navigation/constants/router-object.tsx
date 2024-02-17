@@ -1,5 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import App from "src/App";
+import { ClientErrorPage } from "src/pages/404/404";
 import { About } from "src/pages/about/about";
 import { Contacts } from "src/pages/contacts/Contacts";
 import { Home } from "src/pages/home/Home";
@@ -39,11 +40,35 @@ export const ROUTER_OBJECT: RouteObject[] =
           path: '/projects/dashboard',
         },
         {
+          // @ts-ignore
+          async lazy() {
+            // @ts-ignore
+            let {LoginPage}  = await import("../../../pages/login/login.tsx");
+            return { Component: LoginPage };
+          },
+          // element: <LoginPage></LoginPage>,
+          path: '/login',
+        },
+        {
+          // @ts-ignore
+          async lazy() {
+            // @ts-ignore
+            let {LoginPage}  = await import("../../../pages/login/login.tsx");
+            return { Component: LoginPage };
+          },
+          // element: <LoginPage></LoginPage>,
+          path: '/signup'
+        },
+        {
+          element: <ClientErrorPage></ClientErrorPage>,
+          path: '/404',
+        },
+        {
+          
           element: <CalendarProject></CalendarProject>,
           path: 'projects/calendar/',
           children: [
             {
-              index: true,
               element: <StatementsTab></StatementsTab>,
               loader: getLoaderFunction('statements'),
               path: 'statements',

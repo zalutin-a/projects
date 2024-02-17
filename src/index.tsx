@@ -1,16 +1,27 @@
+import { firebaseApp } from './firebase';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ROUTER_OBJECT } from './shared/navigation/constants/router-object';  
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Loader } from './shared/index';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const router = createBrowserRouter(ROUTER_OBJECT);
+const unsubscribe = onAuthStateChanged(getAuth(firebaseApp), () => {
+    root.render(
+      <RouterProvider router={createBrowserRouter(ROUTER_OBJECT)}/>
+    );
+  unsubscribe()
+})
 
 root.render(
-  <RouterProvider router={router}/>
+  <div className="min-h-[100svh]">
+    <Loader active={true}> </Loader>
+  </div>
 );
 
 // If you want to start measuring performance in your app, pass a function

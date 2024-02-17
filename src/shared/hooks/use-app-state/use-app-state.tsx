@@ -65,5 +65,9 @@ export function useAppState<S>( config: StateConfig<S>): State<S> {
     setSearchParams(par)
   }, [searchParams])
 
-  return {current, dispatch}
+  const returnObject = useMemo(() => {
+    return {current, dispatch}
+  }, [searchParams])
+  
+  return returnObject;
 }

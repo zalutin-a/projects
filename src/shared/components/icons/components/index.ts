@@ -25,3 +25,4 @@ export * from './warning-icon';
 export * from './info-icon';
 export * from './select-action';
 export * from './delete';
+export * from './google';

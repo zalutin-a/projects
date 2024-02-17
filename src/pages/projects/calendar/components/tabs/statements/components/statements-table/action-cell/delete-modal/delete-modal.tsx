@@ -2,16 +2,22 @@ import { useContext } from "react";
 import { StatementsContext } from "src/pages/projects/index";
 import { BackdropComponent, Button, CloseButton } from "src/shared/index";
 import { DeleteModalProps } from "./types";
+import { getAuth } from "firebase/auth";
+
 
 export function DeleteModal({id, closeModal}: DeleteModalProps) {
   const { dataService, actionService } = useContext(StatementsContext)
-
-  const onConfirm = () => {
-    actionService.http.deleteStatement({ id: id })
+  const auth = getAuth(); //TODO: use from appProvider
+  const onConfirm = async () => {
+    actionService.http.deleteStatement({ id, user: await auth.currentUser?.getIdToken()})
       .then(() => {
         closeModal()
         dataService.reloadPageData();
-      });
+      }).catch((error => {
+        if(error.message === "INVALID") {
+          console.log(error)
+        }
+      }));
   }
   const onCancel = () => {
     closeModal()

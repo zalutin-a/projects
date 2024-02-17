@@ -1,25 +1,22 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 
 import { themeMode } from './types';
 
 export function useThemeMode() {
-  const [theme, setTheme] = useState<themeMode>(null);
-  useEffect (() => {
+  const [theme, setTheme] = useState<themeMode>(() => {
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setThemeMode('dark');
+      return 'dark'
     } else {
-      setThemeMode('light');
+      return 'light'
     }
-  }, []);
+  });
 
-  const setThemeMode = useMemo(() => {
-    return (themeMode: themeMode) => {
-      localStorage.theme = themeMode;
-      document.body.classList.remove(`${theme}`)
-      document.body.classList.add(themeMode);
-      setTheme(themeMode); 
-    }
-  }, [theme]);
+  const setThemeMode = useCallback((themeMode: themeMode) => {
+    localStorage.theme = themeMode;
+    document.body.classList.remove(`${theme}`)
+    document.body.classList.add(themeMode);
+    setTheme(themeMode);
+  }, [theme])
 
   return {theme, setThemeMode};
 }

@@ -44,7 +44,9 @@ export function CommentsModal({page, index, closeModal}: commentsModalProps) {
       return true;
     })
     .catch((error: ErrorReason) => {
-      notificationService.show(error.cause.payload);
+      if(error.message === "INVALID") {
+        notificationService.show(error.cause.payload);
+      }
     })
   }
 

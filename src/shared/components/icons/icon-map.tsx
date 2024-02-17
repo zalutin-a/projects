@@ -2,7 +2,7 @@ import { iconType } from "./types"
 import { ArrowDown, ArrowLeft, ArrowRight, CallingIcon, CheckIcon, CrossIcon, DocumentIcon, EditIcon,
   ErrorIcon, FacebookIcon, FilterIcon, GitHubIcon, GraphIcon, InfoIcon, InstagramIcon, LinkedinIcon,
   LinkIcon, ListIcon, Menu, SelectAction, SuccessIcon, ThemeDayIcon, ThemeNightIcon, TilesIcon, UsersIcon,
-  WarningIcon, DeleteIcon} from './components';
+  WarningIcon, DeleteIcon, GoogleIcon} from './components';
 
 export const ICON_MAP = {
   filter: <FilterIcon></FilterIcon>,
@@ -32,5 +32,6 @@ export const ICON_MAP = {
   info: <InfoIcon></InfoIcon>,
   selectAction: <SelectAction></SelectAction>,
   delete: <DeleteIcon></DeleteIcon>,
+  google: <GoogleIcon></GoogleIcon>,
   get: (type: iconType) => ICON_MAP[type],
 }

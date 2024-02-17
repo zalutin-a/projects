@@ -49,9 +49,11 @@ export function EditModal({statement, closeModal, isNewMode = false}: EditModalP
     }).then(() => {
       closeModal();
       dataService.reloadPageData()
-    }).catch((e: ErrorReason) => {
-      setError(e.cause.code);
-      notificationService.show({...e.cause.payload, onClose: () => setError(null)})
+    }).catch((error: ErrorReason) => {
+      if(error.message === "INVALID") {
+        setError(error.cause.code);
+        notificationService.show({...error.cause.payload, onClose: () => setError(null)})
+      }
     });
   }
 

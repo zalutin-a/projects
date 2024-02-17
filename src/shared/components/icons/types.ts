@@ -28,6 +28,7 @@ export type iconType = 'filter'
   | 'info'
   | 'selectAction'
   | 'delete'
+  | 'google'
 
 export type iconColor = `${colorsTypes}-${colorValues}` | `hover-${colorsTypes}-${colorValues}`
 

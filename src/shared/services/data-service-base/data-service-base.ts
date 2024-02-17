@@ -1,17 +1,28 @@
-import { setFetchLoading } from "src/shared/index";
-import { HTTPService } from "../index";
+import { redirectFunction, setFetchLoading } from "src/shared/index";
+import { getHTTPService, HTTPService } from "../index";
 
 export abstract class DataServiceBase {
   protected http: HTTPService;
   protected abstract baseUrl: string;
-  
-  constructor(setIsLoading: setFetchLoading) {
-    this.http = new HTTPService(setIsLoading);
+  private setIsLoading: setFetchLoading;
+  private redirect: redirectFunction;
+
+  constructor(setIsLoading: setFetchLoading, redirect: redirectFunction) {
+    this.http = getHTTPService();
+    this.setIsLoading = setIsLoading;
   }
 
-  abstract loadFirstData(params: string): Promise<any>;
+  protected getData(method: any, url: string, params: string = '') { 
+    return this.http.GET(this.getChangeLoadingStateFunction(method), this.baseUrl + url, params)
+      .catch((reason: Error) => {
+        if(reason.message === "REDIRECT") {
+          this.redirect(reason.cause as string);
+        }
+        throw reason;
+      });
+  }
 
-  protected getData(methodId: any, url: string, params: string = '') {
-    return this.http.GET(methodId, this.baseUrl + url, params);
+  protected getChangeLoadingStateFunction(method) {
+    return (state: boolean) => {this.setIsLoading((map) => new Map(map.set(method, state)))}
   }
 }

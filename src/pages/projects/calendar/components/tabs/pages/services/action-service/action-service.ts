@@ -1,50 +1,30 @@
-import { ActionServiceBase, API_URL, CalendarPageModel, setFetchLoading } from "src/shared/index";
+import { ActionServiceBase, API_URL, CalendarPageModel, redirectFunction, setFetchLoading } from "src/shared/index";
 import { commentParams } from "./types";
 
 export class PagesActionService extends ActionServiceBase{
   baseUrl = API_URL + 'calendar/';
 
-  constructor(setIsLoading: setFetchLoading) {
-    super(setIsLoading);
+  constructor(setIsLoading: setFetchLoading, redirect: redirectFunction) {
+    super(setIsLoading, redirect);
     console.log('Actionservice constructor')
   }
 
-  public updatePage(data: CalendarPageModel) {
-    return this.http.PATCH(
-      this.updatePage,
-      this.baseUrl + 'pages',
-      data
-    );
+  public updatePage(body: CalendarPageModel) {
+    return this.executeAction('PATCH', this.updatePage, 'pages', body)
   }
 
-  public checkPageFields(data: CalendarPageModel) {
-    return this.http.POST(
-      this.checkPageFields,
-      this.baseUrl + 'pages/fields',
-      data
-    );
+  public checkPageFields(body: CalendarPageModel) {
+    return this.executeAction('POST', this.checkPageFields, 'pages/fields', body)
   }
 
-  public addComment(data: commentParams) {
-    return this.http.POST(
-      this.addComment,
-      this.baseUrl + 'pages/comments',
-      data
-    )
+  public addComment(body: commentParams) {
+    return this.executeAction('POST', this.addComment, 'pages/comments', body)
   }
 
-  public updateComment(data: commentParams) {
-    return this.http.PUT(
-      this.addComment,
-      this.baseUrl + 'pages/comments',
-      data
-    )
+  public updateComment(body: commentParams) {
+    return this.executeAction('PUT', this.updateComment, 'pages/comments', body)
   }
-  public deleteComment(data: commentParams<string>) {
-    return this.http.DELETE(
-      this.addComment,
-      this.baseUrl + 'pages/comments',
-      data
-    )
+  public deleteComment(body: commentParams<string>) {
+    return this.executeAction('PUT', this.deleteComment, 'pages/comments', body)
   }
 }

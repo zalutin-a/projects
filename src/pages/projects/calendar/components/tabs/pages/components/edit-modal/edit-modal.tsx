@@ -62,8 +62,10 @@ export function EditModal({page, closeModal}: editModalProps) {
           closeModal();
         })
         .catch((error: ErrorReason) => {
-          setError(error.cause.code);
-          notificationService.show({...error.cause.payload, onClose: () => setError(null)})
+          if(error.message === "INVALID") {
+            setError(error.cause.code);
+            notificationService.show({...error.cause.payload, onClose: () => setError(null)})
+          }
         })
     }
   }
