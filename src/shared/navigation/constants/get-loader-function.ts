@@ -1,20 +1,17 @@
-import { getAuth } from "firebase/auth";
 import { redirect } from "react-router-dom";
 import { API_URL, getHTTPService} from "src/shared/index";
 
 function loaderFunction(loadData: (params?: string) => Promise<any>, request: Request) {
   const url = new URL(request.url);
-  const auth = getAuth();
-  // if(!auth.currentUser) {
-  //   return redirect(location.origin + "/login")
-  // }
-  return loadData(new URLSearchParams(url.search).toString()).catch((reason) => {
-    if(reason.message === "REDIRECT") {
-      return redirect(reason.cause);
-    } else {
-      return null
-    }
-  })
+
+  return loadData(new URLSearchParams(url.search).toString())
+    .catch((reason) => {
+      if(reason.message === "REDIRECT") {
+        return redirect(reason.cause);
+      } else {
+        return null
+      }
+    })
 }
 
 export type LoaderFunctionKeys = 'pages' | 'statements' | 'categories'

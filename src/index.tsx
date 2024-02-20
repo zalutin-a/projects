@@ -1,20 +1,20 @@
-import { firebaseApp } from './firebase';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ROUTER_OBJECT } from './shared/navigation/constants/router-object';  
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Loader } from './shared/index';
+import { getUserService } from './shared/services/user-service/get-user-service';
 
 
+getUserService()
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const unsubscribe = onAuthStateChanged(getAuth(firebaseApp), () => {
-    root.render(
-      <RouterProvider router={createBrowserRouter(ROUTER_OBJECT)}/>
-    );
+const unsubscribe = getUserService().onUserChanged(() => {
+  root.render(
+    <RouterProvider router={createBrowserRouter(ROUTER_OBJECT)}/>
+  );
   unsubscribe()
 })
 

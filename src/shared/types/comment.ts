@@ -14,9 +14,9 @@ export type Role = IdName<number>
 
 export interface UserShort {
   name: string;
-  surname: string;
-  _id: string;
+  id: string;
   roles: Role[];
+  isRegistrationDone: boolean;
 }
 
 export interface Comment extends IdValue {

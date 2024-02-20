@@ -1,21 +1,23 @@
-import { getAuth, signOut } from "firebase/auth";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AppContext } from "src/App";
 import { Button } from "../index";
 
 
 
 export function LoginSignupBtn() {
+  const { userService } = useContext(AppContext);
   const getLink = (type: 'signup' | 'login') => {
     const redirectTo = location.pathname !== '/' && location.pathname !== '/' + type ? '?redirect_to=' + window.location.href : '';
     return `${type}${redirectTo}`
   }
-  const auth = getAuth()
+
   const onSignOut = () => {
-    signOut(auth).then(() => console.log('logout'))
+    userService.signOut()
   }
   return (
     <>
-      {!auth.currentUser 
+      {!userService.user 
         ? (
           <>
             <NavLink to={getLink('login')}>

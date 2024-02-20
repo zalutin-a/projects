@@ -1,20 +1,14 @@
 import { useContext, useState, SyntheticEvent } from "react";
 import { AppContext } from "src/App";
-import { BackdropComponent, Button, CalendarPageModel, ClientErrors, CloseButton, ErrorReason, NOTIFICATIONS_MAP, Comment, Roles, UserShort} from "src/shared/index";
+import { BackdropComponent, Button, CalendarPageModel, ClientErrors, CloseButton, ErrorReason, NOTIFICATIONS_MAP, Comment } from "src/shared/index";
 import { PagesContext } from "../../pages";
 import { CommentItem } from "./index";
 import { commentActionFunction, commentsModalProps } from "./types";
 
-const mockUser: UserShort = {
-  name: "Andrii",
-  surname: "Zalutin",
-  roles: [{id: Roles.admin, name: "Administrator"}],
-  _id: "testId",
-}
 
 export function CommentsModal({page, index, closeModal}: commentsModalProps) {
   const [comment, setComment] = useState('')
-  const { notificationService } = useContext(AppContext);
+  const { notificationService, userService } = useContext(AppContext);
   const { actionService, store} = useContext(PagesContext);
 
   const onChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
@@ -58,7 +52,7 @@ export function CommentsModal({page, index, closeModal}: commentsModalProps) {
     const newComment: Comment = {
       id: null,
       value: comment,
-      author: mockUser,
+      author: userService.userShort, //TODO: change to id
       date: new Date(Date.now())
     }
 

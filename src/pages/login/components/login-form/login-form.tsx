@@ -2,10 +2,6 @@ import { useState, SyntheticEvent } from "react";
 import { Button } from "src/shared/index";
 import { loginFormProps } from "./types";
 
-import { getAuth, sendEmailVerification } from "firebase/auth";
-
-const auth = getAuth();
-
 
 export function LoginForm({type, method}: loginFormProps) {
   const [password, setPasword] = useState('');
@@ -13,27 +9,7 @@ export function LoginForm({type, method}: loginFormProps) {
   const [passwordType, setPaswordType] = useState<"password" | "text">("password");
   
   const onAction = () => {
-    method(auth, email, password)
-      .then((userCredential) => {
-        // Signed up 
-        const user = userCredential.user;
-        if(user && !user.emailVerified) {
-          return user
-        }
-        console.log(userCredential)
-        // ...
-      })
-      .then(user => {
-        // sendEmailVerification(user)
-        if(user) {
-          console.log('verify email')
-        }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });;
+    method(email, password)
   }
 
   const showHidePassword = () => {

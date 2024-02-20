@@ -5,7 +5,7 @@ import { EditCommentForm } from "../index";
 import { commentItemProps } from "./types";
 
 export function CommentItem({onAction, comments, comment, index}: commentItemProps) {
-  const { notificationService } = useContext(AppContext);
+  const { notificationService, userService } = useContext(AppContext);
   const [editMode, setEditMode] = useState(false);
 
   const getUserAvatar = () => {
@@ -47,15 +47,21 @@ export function CommentItem({onAction, comments, comment, index}: commentItemPro
             <div className="w-9 h-9">
               <img className="rounded-full object-cover w-full h-full" src={getUserAvatar() || "/images/blank-image.jpg"} alt="user avatar" />
             </div>
-            <div className="text-sm">{`${comment.author.name} ${comment.author.surname}`}</div>
+            <div className="text-sm">{`${comment.author.name}`}</div>
             <div className="bg-gray-400 rounded-full w-1 h-1"></div>
             {/* TODO: use lib to work with date to show date in nice format (show it like 5min ago , 55min ago, 1h35min ago, 1day ago ...) */}
             <div className="text-xs">{new Date(comment.date).toDateString()}</div> 
           </div>
           <div className="flex items-center">
-            <ClickPopover className="flex" rendredComponent={<ActionsList onDelete={onDelete} onEdit={onEdit}></ActionsList>}>
-              <Icon type='selectAction' size={4}></Icon>
-            </ClickPopover>
+            {userService.userShort.id === comment.author.id 
+              ? (
+                  <ClickPopover className="flex" rendredComponent={<ActionsList onDelete={onDelete } onEdit={onEdit}></ActionsList>}>
+                    <Icon type='selectAction' size={4}></Icon>
+                  </ClickPopover>
+                )
+              : null
+            }
+
           </div>
         </div>
           {editMode 

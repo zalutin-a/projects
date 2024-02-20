@@ -2,9 +2,15 @@ import { getAuth, signOut } from "firebase/auth";
 import { setLoadingState } from "src/shared/index";
 
 export class HTTPService {
-  GET(setLoadingState: setLoadingState, url: string, params?: string) {
+  GET(setLoadingState: setLoadingState, url: string, params = '') {
     const urlWithParams = url + (!params ? '' : `?${params}` );
-    return this.fetchData(setLoadingState, urlWithParams, {method: 'GET'});
+    return this.fetchData(
+      setLoadingState,
+      urlWithParams,
+      {
+        method: 'GET',
+        headers: {"Content-Type": "application/json"},
+      });
   }
 
 
