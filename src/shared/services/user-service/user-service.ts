@@ -113,21 +113,19 @@ export class UserService {
   }
 
   async signUpWithPassword(email: string, password: string) {
-    this.changingState.emitValue('pending')
-
-    const credential = await createUserWithEmailAndPassword(getAuth(), email, password)
-    await this.setUser(credential.user, true);
-    
-    this.changingState.emitValue('done')
-    return credential
+    return this.doAction(async () => {
+      const credential = await createUserWithEmailAndPassword(getAuth(), email, password)
+      await this.setUser(credential.user, true);
+      return credential
+    })
   }
 
   async signInWithPassword(email: string, password: string) {
-    this.changingState.emitValue('pending')
-    const credential = await signInWithEmailAndPassword(getAuth(), email, password)
-    await this.setUser(credential.user);
-    this.changingState.emitValue('done')
-    return credential
+    return this.doAction(async () => {
+      const credential = await signInWithEmailAndPassword(getAuth(), email, password)
+      await this.setUser(credential.user);
+      return credential
+    })
   }
 
   signInWithProvider(provider: any) {
@@ -135,17 +133,26 @@ export class UserService {
   }
 
   async updateProfile(data: AppUserProfile) {
-    this.changingState.emitValue('pending')
-
-    await updateProfile(getAuth().currentUser, data)
-    this.userShort = await this.updateUser({
-      name: data.displayName,
-      id: this.user.uid,
-      roles: data.roles,
-      isRegistrationDone: true,
+    return this.doAction(async () => {
+      await updateProfile(getAuth().currentUser, data)
+      this.userShort = await this.updateUser({
+        name: data.displayName,
+        id: this.user.uid,
+        roles: data.roles,
+        isRegistrationDone: true,
+      })
+      await this.permissionService.setPermissions(this.user.getIdToken()) //TODO: to delete ?
+      this.userEmmiter.emitValue(this.user);
     })
-    await this.permissionService.setPermissions(this.user.getIdToken()) //TODO: to delete ?
-    this.userEmmiter.emitValue(this.user);
-    this.changingState.emitValue('done')
+  }
+
+  async doAction(action: () => Promise<any>) {
+    this.changingState.emitValue('pending')
+    return action().catch(error => {
+      console.log(error) //TODO: delete after testing
+      throw error //TODO:throw only user input errors
+    }).finally(() => {
+      this.changingState.emitValue('done')
+    })
   }
 }
