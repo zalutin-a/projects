@@ -1,0 +1,23 @@
+$colors: "gray", "zinc", "red", "amber", "green", "lime", "orange", "cyan", "teal", "purple", "rose";
+$color_values: 100, 200, 300, 400, 500, 600, 700, 800;
+
+@mixin icon-color($color, $value) {
+  .icon-#{$color}-#{$value} path {
+    @apply fill-#{$color}-#{$value};
+    @apply stroke-#{$color}-#{$value};
+  }
+  .icon-hover-#{$color}-#{$value} path {
+    @apply fill-#{$color}-#{$value};
+    @apply stroke-#{$color}-#{$value};
+  }
+  .icon-hover-#{$color}-#{$value}:hover path {
+    @apply fill-#{$color}-#{$value + 100};
+    @apply stroke-#{$color}-#{$value + 100};
+  }
+}
+
+@each $color in $colors {
+  @each $color_value in $color_values {
+    @include icon-color($color, $color_value);
+  }
+}

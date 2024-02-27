@@ -1,0 +1,42 @@
+$margin_values: 4, 6, 8, 10, 12, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36;
+
+@mixin item-margin($direction, $value) {
+  .adaptive-#{$direction}-item_#{$value},
+  .#{$direction}-item_#{$value} { 
+    @if $direction == row {
+      margin-left: #{$value}px;
+    } @else if $direction == col {
+      margin-top: #{$value}px;
+    }
+  }
+  .adaptive-#{$direction}-item_#{$value}:first-child,
+  .#{$direction}-item_#{$value}:first-child { 
+    @if $direction == row {
+      margin-left: 0px;
+    } @else if $direction == col {
+      margin-top: 0px;
+    }
+  }
+}
+
+@mixin adaptive-item-margin($direction, $value) {
+  .adaptive-#{$direction}-item_#{$value} { 
+    @if $direction == row {
+      margin-left: #{$value + 4}px;
+    } @else if $direction == col {
+      margin-top: #{$value + 4}px;
+    }
+  }
+}
+
+@each $margin in $margin_values {
+    @include item-margin(row, $margin);
+    @include item-margin('col', $margin);
+}
+
+@media (min-width: 768px) { //md size in tailwind
+  @each $margin in $margin_values {
+    @include adaptive-item-margin(row, $margin);
+    @include adaptive-item-margin(col, $margin);
+  }
+}

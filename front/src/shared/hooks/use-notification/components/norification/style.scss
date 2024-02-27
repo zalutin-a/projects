@@ -1,0 +1,28 @@
+div .notification {
+  @apply dark:text-neutral-50;
+  @apply dark:bg-app-dark;
+}
+
+.notification_error {
+  @apply bg-red-100;
+  @apply border-red-300;
+  @apply border-l-red-600;
+}
+
+.notification_warning {
+  @apply bg-orange-100;
+  @apply border-orange-300;
+  @apply border-l-orange-600;
+}
+
+.notification_success {
+  @apply bg-lime-100;
+  @apply border-lime-300;
+  @apply border-l-lime-600;
+}
+
+.notification_info {
+  @apply bg-white;
+  @apply border-cyan-300;
+  @apply border-l-cyan-600;
+}
