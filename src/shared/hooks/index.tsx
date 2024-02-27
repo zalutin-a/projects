@@ -8,3 +8,4 @@ export * from './use-app-store'
 export * from './use-notification';
 export * from './use-app-state';
 export * from './use-user-service';
+export * from './use-form-control';

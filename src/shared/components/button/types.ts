@@ -7,4 +7,5 @@ export interface ButtonProps extends ButtonBaseProps {
   color?: buttonColor;
   rounded?: boolean;
   className?: string;
+  disable?: boolean;
 }

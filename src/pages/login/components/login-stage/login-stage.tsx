@@ -14,9 +14,9 @@ export function LoginStage({}: loginStageProps) {
       <div className="flex w-full gap-6 items-center flex-col">
         <h1>{type}</h1>
         <p className="max-w-52 text-center">Hey, Enter your details to {type === 'Log in' ? 'login to' : 'create'} your account</p>
-        <Loader active={userService.updatingState !== 'done'}>
+        {/* <Loader active={userService.updatingState !== 'done'}> */}
           <LoginForm method={type === 'Log in' ? userService.signInWithPassword.bind(userService) : userService.signUpWithPassword.bind(userService)} type={type}></LoginForm>
-        </Loader>
+        {/* </Loader> */}
         <span>Or {type} with</span>
         <div className="flex w-full justify-around">
           <button className="inline-flex gap-2 items-center justify-center px-4 py-2 border-solid border-2 border-gray-600 rounded-full font-bold text-gray-800">

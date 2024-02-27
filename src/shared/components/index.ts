@@ -22,3 +22,4 @@ export * from './hint';
 export * from './loader';
 export * from './actions-list';
 export * from './login-signup-btn';
+export * from './input-with-error';

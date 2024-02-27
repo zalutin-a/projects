@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": [
-      "dom",
+      "DOM",
       "dom.iterable",
       "esnext"
     ],
