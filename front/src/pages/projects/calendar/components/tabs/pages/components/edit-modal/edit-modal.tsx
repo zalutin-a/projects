@@ -1,12 +1,12 @@
-import { useContext, useState, SyntheticEvent } from "react";
+import { useContext, useState, SyntheticEvent, useRef, useEffect } from "react";
 import { AppContext } from "src/App";
 import { PagesContext } from "src/pages/projects/index";
 import { BackdropComponent, Button, CloseButton, ServerErrors, ClientErrors, Loader, NOTIFICATIONS_MAP, AppError, ErrorReason } from "src/shared/index";
 import { EditStatementForm } from "./index";
 import { editModalProps } from "./types";
 
-
 export function EditModal({page, closeModal}: editModalProps) {
+  const inputref = useRef(null)
   const {notificationService} = useContext(AppContext);
   const {actionService, dataService} = useContext(PagesContext);
   const [editedPage, setEditedPage] = useState({...page});
@@ -14,6 +14,10 @@ export function EditModal({page, closeModal}: editModalProps) {
   const [image, setImage] = useState(editedPage.img)
   const [holiday, setHoliday] = useState(editedPage.holiday)
   const [statementEditMode, setStatementEditMode ] = useState(false)
+  
+  useEffect(() => {
+    inputref.current.focus()
+  },[])
 
   const onImageChange = (e: SyntheticEvent<HTMLInputElement>) => {
     if(error === ServerErrors.usingAssignedImage) { //TODO: think about better way to reset error
@@ -87,7 +91,7 @@ export function EditModal({page, closeModal}: editModalProps) {
           <Loader active={actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
             <div className="mt-8">
               <img className="object-cover w-full" src={editedPage.img || "/images/blank-image.jpg"} alt="project preview" />
-              <input onChange={onImageChange} value={image} className={`${error === ServerErrors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
+              <input ref={inputref} onChange={onImageChange} value={image} className={`${error === ServerErrors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
             </div>
             <div className="mt-8">
               <h4>Holiday</h4>

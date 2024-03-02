@@ -1,12 +1,10 @@
-import { useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { AppContext } from "src/App";
 import { Icon, Loader } from "src/shared/index";
 import { LoginForm } from "../index";
 import { loginStageProps } from "./types";
 
 export function LoginStage({}: loginStageProps) {
-  const { userService } = useContext(AppContext);
+
   const type = useLocation().pathname === '/login' ? 'Log in' : 'Sign up';
 
   return (
@@ -15,7 +13,7 @@ export function LoginStage({}: loginStageProps) {
         <h1>{type}</h1>
         <p className="max-w-52 text-center">Hey, Enter your details to {type === 'Log in' ? 'login to' : 'create'} your account</p>
         {/* <Loader active={userService.updatingState !== 'done'}> */}
-          <LoginForm method={type === 'Log in' ? userService.signInWithPassword.bind(userService) : userService.signUpWithPassword.bind(userService)} type={type}></LoginForm>
+          <LoginForm type={type}></LoginForm>
         {/* </Loader> */}
         <span>Or {type} with</span>
         <div className="flex w-full justify-around">

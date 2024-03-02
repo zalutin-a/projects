@@ -4,6 +4,7 @@ export type inputConfig<V = any> = {
   transform: (value: V) => V,
   isRequred: boolean,
   initialValue: V,
+  isCheckboxOrRadio?: boolean,
 }
 
 export interface ControlBase<T,C = any> {
@@ -11,46 +12,38 @@ export interface ControlBase<T,C = any> {
   isValid: boolean,
   ref: T,
   touched: boolean;
-  setIsValid: (value: boolean, message?: string) => C,
   setDisabled: (value: boolean) => C,
+  reset: () => void;
 }
 
-export interface inputControl<V = any> extends ControlBase<HTMLInputElement,inputControl<V>> {
+export interface InputControl<V = any> extends ControlBase<HTMLInputElement,InputControl<V>> {
   value: V
   errorMessage: string,
-  setValue: (value: V) => inputControl<V>
+  setValue: (value: V) => InputControl<V>,
+  setIsValid: (message?: string) => InputControl<V>,
+  validate: () => void;
+  onChange: (value: (value: V) => void) => () => void;
 }
-
 
 export type FormConfig<C> = {
   [name in keyof C]: inputConfig<C[name]>;
 }
 
 export type ChildrenControl<C> = {
-  [name in keyof C]: inputControl<C[name]>;
+  [name in keyof C]: InputControl<C[name]>;
 };
 
 export interface FormControl<C> extends ControlBase<HTMLFormElement> {
   children: ChildrenControl<C>,
+  registerInput: (name: keyof C) => {
+    inputRef: (e: any) => void,
+    onBlur: (e: any) => void,
+    onChange: (e: any) => void,
+    error: boolean,
+    value: C,
+    helperText: string,//TODO: to remove?
+    name: keyof C,
+  },
+  registerForm: () => any,
+  onSubmit: (value: (value: {[name in keyof C]: C[name]}) => void) => () => void;
 }
-
-
-type loginFormConfigType = {
-  pass: string,
-  email: string,
-}
-
-// const a: FormConfig<loginFormConfigType> = {
-//   pass: {
-//     isRequred: true,
-//     id: 'id',
-//     validator: (value) => true,
-//     transform: (value) => value
-//   },
-//   email: {
-//     isRequred: true,
-//     id: 'id',
-//     validator: (value) => true,
-//     transform: (value) => value
-//   }
-// }

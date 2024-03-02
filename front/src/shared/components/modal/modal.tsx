@@ -1,6 +1,5 @@
-import { useRef, SyntheticEvent, ReactElement, cloneElement, useEffect } from 'react';
+import { ReactElement, cloneElement, useEffect } from 'react';
 
-import { CloseButton } from '../index';
 import { ModalWindowProps } from "./types";
 
 
@@ -28,7 +27,7 @@ export function ModalWindow({children, closeModal}: ModalWindowProps) {
   useEffect(onModalOpen);
 
   return (
-    <div className='z-40 fixed top-0 left-0 flex justify-center w-screen h-screen bg-black/20'>
+    <div aria-modal="true" role="dialog" className='z-40 fixed top-0 left-0 flex justify-center w-screen h-screen bg-black/20'>
       {cloneElement(modalComponent, {
         ...modalComponent.props,
         closeModal,
