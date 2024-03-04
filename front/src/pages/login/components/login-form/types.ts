@@ -2,5 +2,9 @@ import { authType } from "../../types";
 
 export type loginFormProps = {
   type: authType;
-  method: (email: string, password: string) => Promise<any>;
+}
+
+export type loginForm = {
+  pass: string,
+  email: string,
 }

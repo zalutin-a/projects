@@ -53,7 +53,7 @@ export function CommentItem({onAction, comments, comment, index}: commentItemPro
             <div className="text-xs">{new Date(comment.date).toDateString()}</div> 
           </div>
           <div className="flex items-center">
-            {userService.userShort.id === comment.author.id 
+            {userService.userShort?.id === comment.author.id 
               ? (
                   <ClickPopover className="flex" rendredComponent={<ActionsList onDelete={onDelete } onEdit={onEdit}></ActionsList>}>
                     <Icon type='selectAction' size={4}></Icon>
