@@ -1,1 +1,1 @@
-# Personal Portfolio for Andrii Zalutin
+# Personal Projects for Andrii Zalutin
