@@ -1,18 +1,19 @@
 import { BehaviorEmitter, Emitter } from "src/shared/utils";
-import { ChildrenControl, FormConfig, FormControl, InputControl, inputConfig } from "./types";
+import { ChildrenControl, Form, FormConfig, FormControl, InputControl, inputConfig, submitCallback } from "./types";
 import { AppInputControl } from "./input-control";
 
 export class AppFormControl<C> implements FormControl<C> {
   children = {} as ChildrenControl<C>;
-  disabled: boolean = true;
+  disabled: boolean = false;
   touched = false;
-  ref: HTMLFormElement = null; 
+  ref: HTMLFormElement = null;
+  errorMessage: string = '';
   private formChange = new BehaviorEmitter({})
   private submitEmitter = new Emitter();
 
-  constructor(config: FormConfig<C>) {
+  constructor(config: FormConfig<C>, initialData: any = null) {
     Object.entries<inputConfig>(config).forEach(item => {
-      this.children[item[0]] = new AppInputControl(item[1], (v) => this.formChange.emitValue(v))
+      this.children[item[0]] = new AppInputControl(item[1], (v) => this.formChange.emitValue(v), initialData)
     })
   }
 
@@ -37,6 +38,13 @@ export class AppFormControl<C> implements FormControl<C> {
 
   onSubmit(callback: (value) => void) {
     return this.submitEmitter.subscribe(callback)
+  }
+
+  submit = (callback: submitCallback<C>) => {
+    const form = this.submitForm();
+    if(form) {
+      callback(form);
+    }
   }
 
   registerForm() {
@@ -69,6 +77,20 @@ export class AppFormControl<C> implements FormControl<C> {
     }
   }
 
+  setIsValid(error) {
+    if(!error) {
+      this.errorMessage = '';
+      this.formChange.emitValue({})
+      return
+    }
+    if(error.fields.length > 1) {
+      this.errorMessage = error.message;
+      this.formChange.emitValue({})
+    } else {
+      this.children[error.fields[0]].setIsValid(error.message);
+    }
+  }
+
   private setForm = (element: HTMLFormElement) => {
     this.ref = element;
   }
@@ -80,18 +102,20 @@ export class AppFormControl<C> implements FormControl<C> {
     return this.isValid
   }
 
-  private submitForm = (event: Event) => {
-    event.preventDefault();
+  private submitForm = (event?: Event) => {
+    if(event) {
+      event.preventDefault();
+    }
     this.touched = true;
     if(!this.disabled && this.checkIsValid()) {
-      this.submitEmitter.emitValue(
-        Object.entries<InputControl>(this.children).reduce((form, control) => {
-          form[control[0]] = control[1].value;
-          return form;
-        }, {})
-      );
+      const form = Object.entries<InputControl>(this.children).reduce((form, control) => {
+        form[control[0]] = control[1].value;
+        return form;
+      }, {})
+      this.submitEmitter.emitValue(form);
+      return form as Form<C>;
     }
-
+    return null
   }
 
   private onChange = (e: any) => {

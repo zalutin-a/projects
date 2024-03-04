@@ -5,21 +5,33 @@ export class AppInputControl<C> implements InputControl<C> {
   ref: HTMLInputElement = null;
   value: any = null;
   isValid: boolean = true;
-  disabled: boolean = true;
+  disabled: boolean = false;
   errorMessage: string = '';
   touched: boolean = false;
-  private config: inputConfig;
+  private config: Required<inputConfig>;
   private formChangeEmitter;
   private mounted = false;
   private changeEmmiter = new Emitter<C>();
+  private initialData;
 
-  constructor(config: inputConfig, formChangeEmitter: (v) => void) {
-    this.config = config;
+  constructor(config: inputConfig, formChangeEmitter: (v) => void, initialData: any = null) {
+    this.initConfig(config);
+    this.initialData = initialData;
     this.formChangeEmitter = formChangeEmitter;
-    this.value = config.initialValue;
+    this.value = this.config.initialValue(this.initialData);
   }
   onChange(callback: (value: C) => void) {
     return this.changeEmmiter.subscribe(callback);
+  }
+
+  initConfig(config: inputConfig) {
+    this.config = {
+      validator: config.validator ?? (() => ''),
+      transform: config.transform ?? ((value: C) => value),
+      isRequred: !!config.isRequred,
+      initialValue: config.initialValue,
+      isCheckboxOrRadio: !!config.isCheckboxOrRadio,
+    }
   }
 
   setValue(value: C) {
@@ -32,7 +44,6 @@ export class AppInputControl<C> implements InputControl<C> {
   setIsValid(message: string = '') {
     this.isValid = !message;
     this.errorMessage = message;
-    // this.ref.setCustomValidity(message);
     this.formChangeEmitter({});
     return this as InputControl<C>
   }
@@ -55,18 +66,17 @@ export class AppInputControl<C> implements InputControl<C> {
       this.errorMessage = this.config.validator(this.value);
     }
     this.isValid = !this.errorMessage;
-    // this.ref.setCustomValidity(error)
     this.formChangeEmitter({});
   }
 
   reset() {
-    this.value = this.config.initialValue;
+    this.value = this.config.initialValue(this.initialData);
     this.isValid = true;
     this.errorMessage = '';
     this.touched = false; //TODO: should reset?
     this.formChangeEmitter({})
   }
-///////
+
   onInput = (event: Event) => {
     const target = event.target as HTMLInputElement
     const transformedValue = this.config.transform(this.config.isCheckboxOrRadio ? target.checked : target.value)

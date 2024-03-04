@@ -3,8 +3,8 @@ import { FormConfig, FormControl } from "./types"
 import { AppFormControl } from "./form-control";
 
 
-export function useFormControl<C>(formConfig: FormConfig<C>): [FormControl<C>] {
-  const [formControl, setFormControl] = useState<AppFormControl<C>>(() => new AppFormControl<C>(formConfig))
+export function useFormControl<C>(formConfig: FormConfig<C>, initialData: any = null): [FormControl<C>] {
+  const [formControl, setFormControl] = useState<AppFormControl<C>>(() => new AppFormControl<C>(formConfig, initialData))
   const [shouldUpdate, setShouldUpdate] = useState({});
 
   useEffect(() => {

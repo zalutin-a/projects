@@ -1,18 +1,33 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from 'src/App';
 import { PagesContext } from '../../../../pages';
-import { CalendarPageModel, Dropdown, Hint, HoverPopover, Icon, ServerError, ServerErrors } from 'src/shared/index';
+import { CalendarPageModel, ErrorReason, Hint, HoverPopover, Icon } from 'src/shared/index';
 import { StatementSelectorProps } from './types';
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
+import { EDIT_PAGE_ERRORS, EditModalContext } from '../../constants';
 
-export function StatementSelector({page, setEditMode, setPage, statements, isCategorySelected, setError, error}: StatementSelectorProps) {
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+export function StatementSelector({page, setEditMode, setPage, statements, isCategorySelected, setError}: StatementSelectorProps) {
   const { notificationService } = useContext(AppContext);
   const { actionService } = useContext(PagesContext);
-  const [selectedStatement, setSelectedStatement] = useState<string[]>([]);
   const { theme } = useContext(AppContext);
+  const {formControl} = useContext(EditModalContext)
 
   const save = () => {
-    if (selectedStatement.length) {
-      const statement = statements.find(statement => statement.id === selectedStatement[0])
+    const value = formControl.children.statement.value;
+    if (value) {
+      const statement = statements.find(statement => statement.id === value)
       const updatedPage: CalendarPageModel = {
         ...page,
         statement: {
@@ -20,51 +35,56 @@ export function StatementSelector({page, setEditMode, setPage, statements, isCat
           id: statement.id,
         }
       }
-      actionService.http.checkPageFields(
-        updatedPage
-      ).then(() => {
-        setPage(updatedPage)
-        setEditMode(false)
-      }).catch((error) => {
-        if(error.message === "INVALID") {
-          setError(error.cause?.code);
-          notificationService.show({...error.cause?.payload || {}, onClose: () => setError(null)})
-        }
-      })
+      actionService.http.checkPageFields(updatedPage)
+        .then(() => {
+          setPage(updatedPage)
+          setEditMode(false)
+        })
+        .catch((error: ErrorReason) => {
+          if(error.message === "INVALID") {
+            formControl.setIsValid(EDIT_PAGE_ERRORS[error.cause.code])
+            notificationService.show({...error.cause?.payload, onClose: () => setError(null)})
+          }
+        })
     } else {
       setPage({...page, statement: null})
       setEditMode(false)
     }
   }
 
-  const onStatementSelect = (statement) => {
-    if(error === ServerErrors.usingAssignedStatement) {
-      setError(null);
-    }
-    setSelectedStatement(statement)
+  const revert = () => {
+    formControl.children.statement.reset();
+    setEditMode(false)
   }
 
   return (
     <>
-      <div className='flex justify-between'>
-        <HoverPopover rendredComponent={ !isCategorySelected ? <Hint message="Please select category"></Hint> : <></> }>
-          <fieldset className='disabled:opacity-50' disabled={!isCategorySelected}> 
-            <Dropdown<any>
-              width={500}
-              disable={!isCategorySelected}
-              onSelect={onStatementSelect}
-              selectedVlues={selectedStatement}
-              options={statements?.map(statement => ({value: statement.id, name: statement.value}))}
-              placeholder="Select Statement"
-            ></Dropdown>
-          </fieldset>
-        </HoverPopover>
+      <div className='flex justify-between gap-4'>
+        <div className='grow'>
+          <HoverPopover rendredComponent={ !isCategorySelected ? <Hint message="Please select category"></Hint> : <></> }>
+            <FormControl fullWidth sx={{maxWidth: 550}}>
+              <InputLabel id="select-tatement-label">Select Statement</InputLabel>
+              <Select
+                {...formControl.registerInput('statement')} 
+                labelId="select-tatement-label"
+                label="Select Statement"
+                MenuProps={MenuProps}
+              >
+                <MenuItem key={'none'} value={null}>None</MenuItem>
+                {statements.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
+                ))}
+              </Select>
+              <FormHelperText error={true}>{formControl.children.statement.errorMessage}</FormHelperText>
+            </FormControl>
+          </HoverPopover>
+        </div>
         <div className='flex'>
-          <HoverPopover rendredComponent={<Hint message="Save changes"></Hint>}>
+          <HoverPopover rendredComponent={<Hint message="Apply changes"></Hint>}>
             <Icon onClick={save} type='check' size={7} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
           </HoverPopover>
           <HoverPopover rendredComponent={<Hint message="Revert changes"></Hint>}>
-            <Icon onClick={() => setEditMode(false)} type='cross' size={7} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
+            <Icon onClick={revert} type='cross' size={7} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
           </HoverPopover>
         </div>
       </div>

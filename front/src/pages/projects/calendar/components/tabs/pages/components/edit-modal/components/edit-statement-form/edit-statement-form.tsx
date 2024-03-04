@@ -6,7 +6,7 @@ import { CategorySelector, editStatementFormProps, StatementSelector } from "../
 
 export function EditStatementForm({page, editMode, setEditMode, setError, setPage, error}: editStatementFormProps) {
   const { dataService } = useContext(PagesContext);
-  const [ category, setCategory ] = useState<CalendarCategory>(1)
+  const [ category, setCategory ] = useState<CalendarCategory>(1) //TODO: use page.statement.categories[0] after changes in DB
   const [ filteredStatements, setFilteredStatements ] = useState<CalendarStatementModel[]>([])
   const { theme } = useContext(AppContext);
 

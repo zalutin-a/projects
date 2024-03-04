@@ -1,34 +1,31 @@
-import { useContext, useState, SyntheticEvent, useRef, useEffect } from "react";
+import { useContext, useState, SyntheticEvent, useRef, useEffect, createContext } from "react";
 import { AppContext } from "src/App";
 import { PagesContext } from "src/pages/projects/index";
-import { BackdropComponent, Button, CloseButton, ServerErrors, ClientErrors, Loader, NOTIFICATIONS_MAP, AppError, ErrorReason } from "src/shared/index";
+import { BackdropComponent, Button, CloseButton, ServerErrors, ClientErrors, Loader, NOTIFICATIONS_MAP, AppError, ErrorReason, useFormControl, FormConfig, CalendarPageModel } from "src/shared/index";
+import { editModalForm, editModalProps } from "./types";
+import { TextField } from "@mui/material";
+import { EDIT_PAGE_ERRORS, EditModalContext } from "./constants";
 import { EditStatementForm } from "./index";
-import { editModalProps } from "./types";
+
+const formConfig: FormConfig<editModalForm> = {
+  img: {
+    initialValue: (page: CalendarPageModel) => page?.img || '',
+  },
+  holiday: {
+    initialValue: (page: CalendarPageModel) => page?.holiday || '',
+  },
+  statement: {
+    initialValue: (page: CalendarPageModel) => page?.statement?.id || ''
+  }
+}
 
 export function EditModal({page, closeModal}: editModalProps) {
-  const inputref = useRef(null)
   const {notificationService} = useContext(AppContext);
   const {actionService, dataService} = useContext(PagesContext);
   const [editedPage, setEditedPage] = useState({...page});
   const [error, setError] = useState<AppError>(null);
-  const [image, setImage] = useState(editedPage.img)
-  const [holiday, setHoliday] = useState(editedPage.holiday)
   const [statementEditMode, setStatementEditMode ] = useState(false)
-  
-  useEffect(() => {
-    inputref.current.focus()
-  },[])
-
-  const onImageChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    if(error === ServerErrors.usingAssignedImage) { //TODO: think about better way to reset error
-      setError(null);
-    }
-    setImage(e.currentTarget.value)
-  }
-
-  const onHolidayChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    setHoliday(e.currentTarget.value)
-  }
+  const [formControl] = useFormControl(formConfig, page)
 
   const updateStatementEditMode = (state: boolean) => {
     if(error === ClientErrors.statementEditMode && !state) { //TODO: think about better way to reset error
@@ -46,32 +43,28 @@ export function EditModal({page, closeModal}: editModalProps) {
     return true;
   }
 
-  const updatePage = () => {
-    return actionService.http.updatePage({
-      ...editedPage,
-      img: image,
-      holiday,
-    });
-  }
-
   const onConfirm = () => {
-    if (beforeClose()) {
-      actionService.http.checkPageFields({
-        ...editedPage,
-        img: image,
-        holiday,
-      }).then(() => updatePage())
-        .then(() => {
-          dataService.reloadPageData();
-          closeModal();
-        })
-        .catch((error: ErrorReason) => {
-          if(error.message === "INVALID") {
-            setError(error.cause.code);
-            notificationService.show({...error.cause.payload, onClose: () => setError(null)})
-          }
-        })
-    }
+    formControl.submit(({img, holiday}) => {
+      if (beforeClose()) {
+        const updatedPage = {
+          ...editedPage,
+          img,
+          holiday,
+        }
+        actionService.http.checkPageFields(updatedPage)
+          .then(() => actionService.http.updatePage(updatedPage))
+          .then(() => {
+            dataService.reloadPageData();
+            closeModal();
+          })
+          .catch((error: ErrorReason) => {
+            if(error.message === "INVALID") {
+              formControl.setIsValid(EDIT_PAGE_ERRORS[error.cause.code])
+              notificationService.show({...error.cause.payload, onClose: () => setError(null)})
+            }
+          })
+      }
+    })
   }
 
   const onCancel = () => {
@@ -82,38 +75,52 @@ export function EditModal({page, closeModal}: editModalProps) {
 
   return (
     <>
+    <EditModalContext.Provider value={{formControl}}>
       <BackdropComponent closeModal={closeModal} beforeClose={beforeClose}>
         <div className="flex flex-col p-12 w-[720px] min-h-[432px] dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-500 rounded-lg my-20">
           <div className="flex justify-between">
             <h3>Edit Page</h3>
             <CloseButton clickHandler={closeModal}></CloseButton>
           </div>
-          <Loader active={actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
-            <div className="mt-8">
-              <img className="object-cover w-full" src={editedPage.img || "/images/blank-image.jpg"} alt="project preview" />
-              <input ref={inputref} onChange={onImageChange} value={image} className={`${error === ServerErrors.usingAssignedImage ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} mt-4 dark:bg-app-dark p-3 w-full`} type="text" placeholder="add link ..."/>
-            </div>
-            <div className="mt-8">
-              <h4>Holiday</h4>
-              <input onChange={onHolidayChange} value={holiday} className='mt-4 dark:bg-app-dark p-3 w-full' type="text" placeholder="add holyday ..."/>
-            </div>
-            <div className="mt-8">
-              <h4 className="mb-4">Statement</h4>
-              <div className="min-h-[95px]">
-                <Loader active={dataService.isLoading(dataService.http.getStatements) || actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
-                  <fieldset className={`${error === ClientErrors.statementEditMode || error === ServerErrors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
-                    <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
-                  </fieldset>
-                </Loader>
+            <form>
+              <div className="mt-8">
+                  <img className="object-cover w-full" src={editedPage.img || "/images/blank-image.jpg"} alt="project preview" />
+                  <TextField
+                    sx={{marginTop: 2}}
+                    focused
+                    {...formControl.registerInput('img')}
+                    label="Image"
+                    variant="outlined"
+                    fullWidth
+                  />
+                </div>  
+              <div className="mt-8">
+                <h4>Holiday</h4>
+                <TextField
+                  sx={{marginTop: 2}}
+                  {...formControl.registerInput('holiday')}
+                  variant="outlined"
+                  fullWidth
+                />
               </div>
-            </div>
+              <div className="mt-8">
+                <h4 className="mb-4">Statement</h4>
+                <div className="min-h-[95px]">
+                  <Loader active={dataService.isLoading(dataService.http.getStatements) || actionService.isLoading(actionService.http.checkPageFields)} size='medium'>
+                    <fieldset className={`${error === ClientErrors.statementEditMode || error === ServerErrors.usingAssignedStatement ? 'outline outline-3 outline-offset-2 outline-red-500' : ''} min-w-full`}>
+                      <EditStatementForm editMode={statementEditMode} error={error} setPage={setEditedPage} setError={setError} setEditMode={updateStatementEditMode} page={editedPage}></EditStatementForm>
+                    </fieldset>
+                  </Loader>
+                </div>
+              </div>
+            </form>
             <div className="flex justify-end mt-8 gap-x-5 dark:text-zinc-600">
               <Button color='gray-300' clickHandler={onCancel}>Cancel</Button>
               <Button color='blue-400' clickHandler={onConfirm}>Save</Button>
             </div>
-          </Loader>
         </div>
       </BackdropComponent>
+      </EditModalContext.Provider>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useFormControl } from "src/shared/index";
-import { loginFormProps } from "./types";
+import { loginForm, loginFormProps } from "./types";
 import { Button, Chip, InputAdornment, TextField } from "@mui/material";
 import { AppContext } from "src/App";
 import { loginFormConfig } from "./form-config";
@@ -10,8 +10,7 @@ import { LOGIN_FORM_ERRORS } from "./errors-const";
 export function LoginForm({type}: loginFormProps) {
   const { userService } = useContext(AppContext);
   const [passwordType, setPaswordType] = useState<"password" | "text">("password");
-  const [formError, setFormError] = useState(null);
-  const [formControl] = useFormControl<{pass: string, email: string}>(loginFormConfig);
+  const [formControl] = useFormControl<loginForm>(loginFormConfig);
 
   useEffect(() => {
     formControl.reset()
@@ -19,18 +18,18 @@ export function LoginForm({type}: loginFormProps) {
       const method = type === 'Log in' ? userService.signInWithPassword.bind(userService) : userService.signUpWithPassword.bind(userService);
       method(email, pass)
         .catch(error => {
-          const affectedFields = LOGIN_FORM_ERRORS[error.code]?.fieldName;
-          if(!affectedFields) {
-            return
-          }
-          if(affectedFields?.length === 1) {
-            formControl.children[affectedFields[0]].setIsValid(LOGIN_FORM_ERRORS[error.code].message)
-          } else {
-            setFormError(LOGIN_FORM_ERRORS[error.code].message);
-          }
+          formControl.setIsValid(LOGIN_FORM_ERRORS[error.code]);
         })
    })
   }, [type])
+
+  useEffect(() => {
+    if(userService.updatingState !== 'done') {
+      formControl.setDisabled(true);
+    } else {
+      formControl.setDisabled(false);
+    }
+  }, [userService.updatingState])
 
   const showHidePassword = () => {
     setPaswordType((type) => {
@@ -38,10 +37,14 @@ export function LoginForm({type}: loginFormProps) {
     });
   }
 
+  const resetFormError = () => {
+    formControl.setIsValid(null)
+  }
+
   return (
     <>
       <div className="w-full">
-        {formError ? <Chip sx={{borderRadius: '4px'}} label={formError} variant="outlined" color="error" onDelete={() => setFormError(null)} /> : null}
+        {formControl.errorMessage ? <Chip sx={{borderRadius: '4px'}} label={formControl.errorMessage} variant="outlined" color="error" onDelete={resetFormError} /> : null}
       </div>
       <form {...formControl.registerForm()} className="flex gap-3 w-full flex-col">
         <TextField
@@ -65,7 +68,7 @@ export function LoginForm({type}: loginFormProps) {
             type: passwordType,
             endAdornment: (
               <InputAdornment position="end">
-                <Button color='inherit' onClick={showHidePassword} variant="text">{passwordType === "password" ? "Show" : "Hide"}</Button>
+                <Button disabled={formControl.children.pass.disabled} color='inherit' onClick={showHidePassword} variant="text">{passwordType === "password" ? "Show" : "Hide"}</Button>
               </InputAdornment>
             )
           }}

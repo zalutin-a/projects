@@ -13,7 +13,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{theme, setThemeMode, notificationService, userService}}> 
-      <div id='app' className={`app`}>
+      <div id='app' className={'app'}>
         <div className='bg-app-gray-300 dark:bg-app-gray-800 dark:text-neutral-400'>
           <Navigation config={NAVIGATION_ITEMS}></Navigation>
           <main>

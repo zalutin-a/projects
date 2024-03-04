@@ -1,9 +1,8 @@
 export type inputConfig<V = any> = {
-  id: string,
-  validator: (value: V) => string,
-  transform: (value: V) => V,
-  isRequred: boolean,
-  initialValue: V,
+  validator?: (value: V) => string,
+  transform?: (value: V) => V,
+  isRequred?: boolean,
+  initialValue: (value?: any) => V,
   isCheckboxOrRadio?: boolean,
 }
 
@@ -12,13 +11,13 @@ export interface ControlBase<T,C = any> {
   isValid: boolean,
   ref: T,
   touched: boolean;
+  errorMessage: string,
   setDisabled: (value: boolean) => C,
   reset: () => void;
 }
 
 export interface InputControl<V = any> extends ControlBase<HTMLInputElement,InputControl<V>> {
   value: V
-  errorMessage: string,
   setValue: (value: V) => InputControl<V>,
   setIsValid: (message?: string) => InputControl<V>,
   validate: () => void;
@@ -33,6 +32,9 @@ export type ChildrenControl<C> = {
   [name in keyof C]: InputControl<C[name]>;
 };
 
+export type Form<C> = {[name in keyof C]: C[name]}
+export type submitCallback<C> = (form: Form<C>) => void;
+export type FormValidationError<F> = {message: string, fields: (keyof F)[]}
 export interface FormControl<C> extends ControlBase<HTMLFormElement> {
   children: ChildrenControl<C>,
   registerInput: (name: keyof C) => {
@@ -45,5 +47,7 @@ export interface FormControl<C> extends ControlBase<HTMLFormElement> {
     name: keyof C,
   },
   registerForm: () => any,
-  onSubmit: (value: (value: {[name in keyof C]: C[name]}) => void) => () => void;
+  onSubmit: (callback: submitCallback<C>) => () => void;
+  submit: (callback: submitCallback<C>) => void;
+  setIsValid: (error: FormValidationError<C> | null) => void;
 }
