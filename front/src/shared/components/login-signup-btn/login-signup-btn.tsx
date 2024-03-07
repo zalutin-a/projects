@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AppContext } from "src/App";
-import { Button } from "../index";
+import { ClickPopover } from "../index";
+import { Avatar, Button, MenuItem, MenuList, Paper } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 
 
@@ -17,21 +19,38 @@ export function LoginSignupBtn() {
   }
   return (
     <>
-      {!userService.user 
+      {!userService.user
         ? (
           <>
             <NavLink to={getLink('login')}>
-              <Button clickHandler={() => {}}>Log in</Button>
+              <Button>Log in</Button>
             </NavLink>
             <NavLink to={getLink('signup')}>
-              <Button clickHandler={() => {}}>Sign up</Button>
+              <Button>Sign up</Button>
             </NavLink>
           </>
         )
         : (
-          <>
-            <Button clickHandler={onSignOut}>Log out</Button>
-          </>
+          <ClickPopover rendredComponent={(
+            <Paper>
+              <MenuList>
+                <MenuItem><Link to='/profile'>My account</Link></MenuItem>
+                <MenuItem onClick={onSignOut}>Logout</MenuItem>
+              </MenuList>
+            </Paper>
+          )}>
+            <Avatar
+
+              sx={{ 
+                bgcolor: grey[300],
+                cursor: 'pointer',
+              }}
+              alt="User"
+              src="/images/avatar.jpg" //userService.getUserPhoto()
+            >
+              {userService.userShort.name[0]}
+            </Avatar>
+          </ClickPopover>
         )
     }
 

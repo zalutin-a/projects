@@ -1,4 +1,4 @@
-import { RouteObject } from "react-router-dom";
+import { RouteObject, redirect } from "react-router-dom";
 import App from "src/App";
 import { ClientErrorPage } from "src/pages/404/404";
 import { About } from "src/pages/about/about";
@@ -10,6 +10,7 @@ import { Project2 } from "src/pages/projects/project-2/project-2";
 import { TechStack } from "src/pages/tech-stack/tech-stack";
 import { getLoaderFunction } from "./get-loader-function";
 import { PermissionsEnum } from "src/shared/types/permissions";
+import { getUserService } from "src/shared/services";
 
 export const ROUTER_OBJECT: RouteObject[] = 
   [
@@ -59,6 +60,18 @@ export const ROUTER_OBJECT: RouteObject[] =
           },
           // element: <LoginPage></LoginPage>,
           path: '/signup'
+        },
+        {
+          // @ts-ignore
+          async lazy() {
+            // @ts-ignore
+            let {ProfilePage}  = await import("../../../pages/profile/profile.tsx");
+            return { Component: ProfilePage };
+          },
+          loader: () => {
+            return !!getUserService().user ? null : redirect('/');
+          },
+          path: '/profile'
         },
         {
           element: <ClientErrorPage></ClientErrorPage>,
