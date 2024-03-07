@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
-import { AppContext } from "src/App";
-import { Hint, HoverPopover, Icon, UseModal } from "src/shared/index";
+import { useState } from "react";
+import { UseModal } from "src/shared/index";
 import { CommentsModal } from "../../../comments-modal/comments-modal";
 import { EditModal } from "../../../edit-modal/edit-modal";
 import { PageModal } from "../../../page-modal/page-modal";
 import { pagesCalendarItemProps } from "./types";
+import { TableActions, tableActionType } from "src/pages/projects/calendar/components/table-actions";
 
 export function PagesCalendarItem({page, index}: pagesCalendarItemProps) {
   const [iconsVisible, setIconsVisible ] = useState(false)
@@ -12,7 +12,16 @@ export function PagesCalendarItem({page, index}: pagesCalendarItemProps) {
   const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal index={index} page={page}></CommentsModal>);
   const [ openEditModal, editModal ] = UseModal(<EditModal page={page}></EditModal>);
 
-  const { theme } = useContext(AppContext);
+  const onAction = (type: tableActionType) => {
+    switch (type) {
+      case 'edit':
+        openEditModal();
+        break;
+      case 'comment':
+        openCommentsModal();
+        break;
+    }
+  }
 
   return (
     <>
@@ -27,13 +36,8 @@ export function PagesCalendarItem({page, index}: pagesCalendarItemProps) {
             <div className="flex justify-center grow">
               <h3 className="text-4xl">{page.date}</h3>
             </div>
-            <div className={`${iconsVisible ? 'translate-y-[45px] visible z-20' : 'invisible'} z-0 transition-all absolute -top-[40px] right-0 flex gap-1`}>
-              <HoverPopover className="flex" rendredComponent={<Hint message="Edit Page"></Hint>}>
-                <Icon onClick={openEditModal} type='edit' size={4} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
-              </HoverPopover>
-              <HoverPopover className="flex" rendredComponent={<Hint message="Comments"></Hint>}>
-                <Icon onClick={openCommentsModal} type='document' size={4} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon>
-              </HoverPopover>
+            <div className={`${iconsVisible ? 'translate-y-[45px] visible z-20' : 'invisible'} z-0 transition-all absolute -top-[40px] -right-[15px] flex gap-1`}>
+              <TableActions actions={['edit', 'comment']} onAction={onAction}></TableActions>
             </div>
           </div>
           <div className="flex w-full adaptive-col-item_8">

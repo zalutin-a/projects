@@ -10,6 +10,7 @@ export function useNotification(): [NotificationService, ReactElement] {
   }
 
   const close = (index: number) => {
+    //@ts-ignore
     setNotifications(notifications.toSpliced(index,1))
   }
 

@@ -1,29 +1,27 @@
-import { useContext } from "react";
-import { AppContext } from "src/App";
-import { TableCell } from "src/pages/projects/index";
-import { ButtonBase, Icon, UseModal } from "src/shared/index";
+import { TableActions, TableCell, tableActionType } from "src/pages/projects/index";
+import { UseModal } from "src/shared/index";
 import { CommentsModal } from "../../../comments-modal/comments-modal";
 import { EditModal } from "../../../edit-modal/index";
 import { pagesActionCellProps } from "./types";
 
 export function PagesActinCell({page, index}: pagesActionCellProps) {
-  const { theme } = useContext(AppContext);
   const [ openEditModal, editModal ] = UseModal(<EditModal page={page}></EditModal>);
   const [ openCommentsModal, commentsModal ] = UseModal(<CommentsModal index={index} page={page}></CommentsModal>)
 
-  const onEditClick = () => {
-    openEditModal();
+  const onAction = (type: tableActionType) => {
+    switch (type) {
+      case 'edit':
+        openEditModal();
+        break;
+      case 'comment':
+        openCommentsModal();
+        break;
+    }
   }
-
-  const onCommentsClick = () => {
-    openCommentsModal();
-  }
-
   return (
     <>
       <TableCell x="center">
-        <ButtonBase clickHandler={onEditClick}><Icon type='edit' size={6} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon></ButtonBase>
-        <ButtonBase clickHandler={onCommentsClick}><Icon type='document' size={6} color={theme === 'light' ? 'gray-800' : 'zinc-300'}></Icon></ButtonBase>
+        <TableActions actions={['edit', 'comment']} onAction={onAction}></TableActions>
       </TableCell>
       {editModal}
       {commentsModal}

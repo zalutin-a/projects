@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react"
-import { getUserService } from "src/shared/services/user-service/get-user-service";
+import { getUserService } from "src/shared";
 
 export function useUserService() {
   const [user, setUser] = useState(() => getUserService().user);

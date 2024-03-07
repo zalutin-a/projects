@@ -6,8 +6,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ROUTER_OBJECT } from './shared/navigation/constants/router-object';  
-import { Loader } from './shared/index';
-import { getUserService } from './shared/services/user-service/get-user-service';
+import { getUserService, Loader } from './shared';
 
 
 getUserService()

@@ -1,5 +1,6 @@
-import { NavigationProps } from "src/shared/index";
+// import { NavigationProps } from "src/shared/index";
 
-export interface FoterProps extends NavigationProps {
+// export interface FoterProps extends NavigationProps {
   
-}
+// }
+export {}

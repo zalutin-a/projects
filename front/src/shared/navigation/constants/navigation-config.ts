@@ -1,4 +1,7 @@
-export const NAVIGATION_ITEMS = [
+import { PermissionsEnum } from "src/shared/types/permissions";
+import { NavigationItemType } from "../types";
+
+export const NAVIGATION_ITEMS: NavigationItemType[] = [
   {
     name: 'Home',
     config: null,
@@ -21,6 +24,7 @@ export const NAVIGATION_ITEMS = [
     name: 'Projects',
     config: null,
     path: '',
+    neededPermisions: [PermissionsEnum.projects],
     children: [
       {
         name: 'Project 2',
@@ -37,6 +41,7 @@ export const NAVIGATION_ITEMS = [
       {
         name: 'Calendar',
         config: null,
+        neededPermisions: [PermissionsEnum.calendar],
         path: '/projects/calendar/pages',
         children: null,
       }
@@ -48,4 +53,4 @@ export const NAVIGATION_ITEMS = [
     path: '/contacts',
     children: null,
   },
-];
+]

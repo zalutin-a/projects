@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { AppContext } from "src/App";
 import { FooterLinkItem, SocIcons } from "../index";
-import { FoterProps } from "./types";
+import { useNavigationConfig } from "src/shared/navigation/hooks/use-navigation-config";
+import { NAVIGATION_ITEMS } from "src/shared/navigation";
 
-export function Footer({config}: FoterProps) {
+export function Footer() {
+  const config = useNavigationConfig(NAVIGATION_ITEMS)
   const { theme } = useContext(AppContext);
   return (
     <>

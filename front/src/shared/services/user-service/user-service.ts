@@ -1,6 +1,8 @@
 import { firebaseApp } from "src/firebase";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, User } from "firebase/auth";
-import { API_URL, AppUserProfile, BehaviorEmitter, Emitter, getHTTPService, PermissionService, UserShort } from "src/shared/index";
+import { API_URL, AppUserProfile, BehaviorEmitter, Emitter, getHTTPService, UserShort } from "src/shared/index";
+import { PermissionsEnum } from "src/shared/types/permissions";
+import { PermissionService } from './../permission-service';
 
 export class UserService {
   user: User = null;
@@ -29,32 +31,11 @@ export class UserService {
     })
   }
 
-  hasPermission(permission: string) {
+  hasPermission(permission: PermissionsEnum[]) {
     return this.permissionService.hasPermission(permission);
   }
 
   async setUser(user: User | null, isNewUser = false) {
-    // this.user = user;
-    // if (user) {
-    //   let [userShort] = await Promise.all([
-    //     this.getUser(user.uid),
-    //     this.permissionService.setPermissions(user.getIdToken()),
-    //   ]);
-    //   if(!userShort) {
-    //     userShort = await this.addNewUser({
-    //       name: user.displayName,
-    //       id: user.uid,
-    //       roles: [],
-    //     });
-    //     await this.permissionService.setPermissions(user.getIdToken())
-    //   }
-    //   this.userShort = userShort
-    //   this.userEmmiter.emitValue(this.user)
-    // } else {
-    //   this.userShort = null;
-    //   this.permissionService.setPermissions(null);
-    //   this.userEmmiter.emitValue(this.user);
-    // }
     this.user = user;
     if (this.user) {
       if(isNewUser) {
@@ -95,7 +76,7 @@ export class UserService {
     return getHTTPService().POST(() => {}, API_URL + "authentication/user", { user })
   }
 
-  private updateUser(user: UserShort) {
+  private updateUser(user) {
     return getHTTPService().PUT(() => {}, API_URL + "authentication/user", { user })
   }
 

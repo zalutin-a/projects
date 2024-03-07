@@ -1,8 +1,5 @@
-export interface CalendarTab {
-  path: string;
-  name: string;
-}
+import { NavigationItemType } from "src/shared";
 
 export interface TabsProps {
-  config: CalendarTab[];
+  config: NavigationItemType[];
 }

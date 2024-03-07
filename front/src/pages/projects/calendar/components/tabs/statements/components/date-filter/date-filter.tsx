@@ -1,6 +1,6 @@
 import { Dropdown } from "src/shared/index";
-import { calendarDateFilter } from "../index";
 import { DateFilterProps } from "./types";
+import { calendarDateFilter } from "../../types";
 
 const DATE_FILTER_OPTIONS = [
   {
