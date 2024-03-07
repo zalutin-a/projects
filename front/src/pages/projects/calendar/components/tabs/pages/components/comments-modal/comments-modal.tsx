@@ -33,6 +33,7 @@ export function CommentsModal({page, index, closeModal}: commentsModalProps) {
       comment: action.type === 'delete' ? action.payload.id : action.payload,
     })
     .then((updatedPage: CalendarPageModel) => {
+      //@ts-ignore
       const payload = [...store.current.pages].with(index, updatedPage);
       store.dispatch({type: 'pages', payload});
       return true;

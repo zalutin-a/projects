@@ -16,3 +16,4 @@ export * from './set-function';
 export * from './comment';
 export * from './app-error';
 export * from './state';
+export * from './permissions';

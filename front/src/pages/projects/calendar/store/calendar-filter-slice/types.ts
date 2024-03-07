@@ -1,4 +1,6 @@
-import { CalendarTableFilters } from "../../types";
+// import { CalendarTableFilters } from "../../types";
 
-export interface calendarFilterSlice extends CalendarTableFilters {
+export interface calendarFilterSlice 
+// extends CalendarTableFilters
+ {
 }

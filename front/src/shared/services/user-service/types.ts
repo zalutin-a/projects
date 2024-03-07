@@ -1,4 +1,4 @@
-import { Role } from "src/shared/index";
+import { Roles } from "src/shared/index";
 
 export interface UserProfile {
   displayName?: string | null;
@@ -6,5 +6,5 @@ export interface UserProfile {
 }
 
 export interface AppUserProfile extends UserProfile {
-  roles?: Role[]
+  roles?: Roles[]
 }

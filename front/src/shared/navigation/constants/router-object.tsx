@@ -9,6 +9,7 @@ import {  CalendarProject, CategoriesTab, PagesTab, StatementsTab } from "src/pa
 import { Project2 } from "src/pages/projects/project-2/project-2";
 import { TechStack } from "src/pages/tech-stack/tech-stack";
 import { getLoaderFunction } from "./get-loader-function";
+import { PermissionsEnum } from "src/shared/types/permissions";
 
 export const ROUTER_OBJECT: RouteObject[] = 
   [
@@ -72,16 +73,34 @@ export const ROUTER_OBJECT: RouteObject[] =
               element: <StatementsTab></StatementsTab>,
               loader: getLoaderFunction('statements'),
               path: 'statements',
+              handle: {
+                permissions: {
+                  edit: PermissionsEnum.editStatement,
+                  delete:  PermissionsEnum.deleteStatement,
+                }
+              }
             },
             {
               element: <CategoriesTab></CategoriesTab>,
               loader: getLoaderFunction('categories'),
               path: 'categories',
+              handle: {
+                permissions: {
+                  edit: PermissionsEnum.editCategory,
+                  delete:  PermissionsEnum.deleteCategory,
+                }
+              }
             },
             {
               element: <PagesTab></PagesTab>,
               loader: getLoaderFunction('pages'),
               path: 'pages',
+              handle: {
+                permissions: {
+                  edit: PermissionsEnum.editPage,
+                  comment:  PermissionsEnum.commentPage,
+                }
+              }
             },
           ], 
         },
