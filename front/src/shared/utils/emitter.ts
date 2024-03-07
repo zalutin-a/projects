@@ -10,7 +10,9 @@ export class Emitter<T = any> {
     const key = {}
     this.subscribers.set(key, callback)
 
-    return () => {this.subscribers.delete(key)};
+    return () => {
+      this.subscribers.delete(key)
+    };
   }
 
   emitValue(value: T) {
