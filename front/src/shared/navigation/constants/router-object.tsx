@@ -77,7 +77,6 @@ export const ROUTER_OBJECT: RouteObject[] =
                 permissions: {
                   edit: PermissionsEnum.editStatement,
                   delete:  PermissionsEnum.deleteStatement,
-                  // actions: [PermissionsEnum.editStatement, PermissionsEnum.deleteStatement],
                 }
               }
             },
@@ -89,7 +88,6 @@ export const ROUTER_OBJECT: RouteObject[] =
                 permissions: {
                   edit: PermissionsEnum.editCategory,
                   delete:  PermissionsEnum.deleteCategory,
-                  // actions: [PermissionsEnum.editCategory, PermissionsEnum.deleteCategory],
                 }
               }
             },
@@ -101,7 +99,6 @@ export const ROUTER_OBJECT: RouteObject[] =
                 permissions: {
                   edit: PermissionsEnum.editPage,
                   comment:  PermissionsEnum.commentPage,
-                  // actions: [PermissionsEnum.editPage, PermissionsEnum.commentPage],
                 }
               }
             },
